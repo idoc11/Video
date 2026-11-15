@@ -1,0 +1,111 @@
+{
+  "title": "438 дней в океане",
+  "output": "ocean438.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "СИЛЫ", "invert": true },
+  "narrator": { "speaker": "ruslan", "ls": 0.92, "pitch": 1.0, "range": 1.3, "humanize": true },
+  "music": {
+    "bpm": 88, "level": 0.18,
+    "roots": [110.0, 87.31, 130.81, 98.0],
+    "arps": [[220.0, 261.63, 329.63, 440.0], [174.61, 220.0, 261.63, 349.23], [261.63, 329.63, 392.0, 523.25], [196.0, 246.94, 293.66, 392.0]]
+  },
+  "wipe": "#1fb6ff",
+  "gap_in_scene": 0.22,
+  "gap_between_scenes": 0.26,
+  "lead_in": 0.1,
+  "tail": 0.9,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "friend",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 50
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 438, "meter": 5, "hudTone": "red",
+      "segments": [
+        { "voice": "Четыреста тридцать восемь дней в открытом океане.", "caption": "[438 ДНЕЙ] В ОКЕАНЕ", "range": 1.5 },
+        { "voice": "Один. На крошечной лодке.", "caption": "ОДИН. НА {КРОШЕЧНОЙ ЛОДКЕ}", "ls": 1.0, "pitch": 0.96, "range": 1.55, "gap": 0.3 }
+      ],
+      "views": [{ "name": "hookSea", "seg": 0, "sfx": [["water", 0, 0.3, "end"], ["wind", 0, 0.2, "end"], ["stinger", "s1", 0.35]] }]
+    },
+    {
+      "id": "start", "day": 1, "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "Мексика, конец двенадцатого года.", "caption": "МЕКСИКА, [2012]" },
+        { "voice": "Рыбак Сальвадор выходит в море с напарником. Всего на тридцать часов.", "caption": "РЫБАЛКА НА [30 ЧАСОВ]", "range": 1.4 }
+      ],
+      "views": [{ "name": "dock", "seg": 0, "sfx": [["water", 0, 0.2, "end"], ["birds", 0.3, 0.15, 2]] }]
+    },
+    {
+      "id": "storm", "day": 2, "meter": 85, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Шторм. Мотор глохнет.", "caption": "ШТОРМ. МОТОР {ЗАГЛОХ}", "range": 1.55 },
+        { "voice": "А рация замолкает навсегда.", "caption": "РАЦИЯ {ЗАМОЛКЛА}", "ls": 0.98, "pitch": 0.95, "range": 1.5 }
+      ],
+      "views": [{ "name": "storm", "seg": 0, "sfx": [["wind", 0, 0.45, "end"], ["water", 0, 0.3, "end"], ["thunder", 0.25, 0.6], ["glitch", "s1+0.5", 0.35], ["glitch", "s1+0.75", 0.3]] }]
+    },
+    {
+      "id": "drift", "day": 0, "dayText": "ДЕНЬ ???", "meter": 70, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Течение уносит лодку в Тихий океан.", "caption": "ЛОДКУ УНОСИТ [В ОКЕАН]", "range": 1.4 }
+      ],
+      "views": [{ "name": "map", "seg": 0, "sfx": [["rise_whoosh", 0.1, 0.25, 1.2], ["drone", 0, 0.15, "end"]] }]
+    },
+    {
+      "id": "survive", "day": 0, "dayText": "ДЕНЬ ???", "meter": 55, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Он ловит рыбу голыми руками.", "caption": "РЫБА [ГОЛЫМИ РУКАМИ]", "range": 1.4 },
+        { "voice": "Пьёт дождевую воду... и кровь черепах.", "caption": "ПЬЁТ {КРОВЬ ЧЕРЕПАХ}", "range": 1.6, "pitch": 0.95, "gap": 0.25 }
+      ],
+      "views": [
+        { "name": "catch", "seg": 0, "sfx": [["splash", 0.3, 0.45], ["splash", 0.9, 0.35], ["water", 0, 0.15, "end"]] },
+        { "name": "turtle", "seg": 1, "sfx": [["drone", 0, 0.2, "end"], ["stinger", "e1-0.5", 0.3]] }
+      ]
+    },
+    {
+      "id": "friend", "day": 0, "dayText": "ДЕНЬ ???", "meter": 40, "hudTone": "red",
+      "segments": [
+        { "voice": "Напарник не может есть сырое... и умирает.", "caption": "НАПАРНИК {УМИРАЕТ}", "range": 1.5, "pitch": 0.95 },
+        { "voice": "Шесть дней Сальвадор разговаривает с его телом.", "caption": "6 ДНЕЙ ГОВОРИТ [С ТЕЛОМ]", "ls": 1.0, "pitch": 0.93, "range": 1.45, "gap": 0.3 },
+        { "voice": "А потом отпускает его в море.", "caption": "…И ОТПУСКАЕТ {В МОРЕ}", "ls": 1.04, "pitch": 0.9, "range": 1.5, "fx": "air", "gap": 0.35 }
+      ],
+      "views": [
+        { "name": "night", "seg": 0, "sfx": [["water", 0, 0.2, "end"], ["drone", 0, 0.2, "end"], ["heartbeat", "s1", 0.25, "end"]] },
+        { "name": "release", "seg": 2, "sfx": [["splash", 0.6, 0.35], ["shimmer", 0, 0.12, "end"]] }
+      ]
+    },
+    {
+      "id": "ship", "day": 0, "dayText": "ДЕНЬ ???", "meter": 25, "hudTone": "red",
+      "segments": [
+        { "voice": "Однажды мимо проходит огромный корабль.", "caption": "МИМО ИДЁТ [КОРАБЛЬ]", "range": 1.4 },
+        { "voice": "Он кричит, машет руками... Корабль не останавливается.", "caption": "КОРАБЛЬ {НЕ ОСТАНОВИЛСЯ}", "range": 1.6, "pitch": 1.03 }
+      ],
+      "views": [{ "name": "ship", "seg": 0, "sfx": [["plane", 0, 0.25, "end"], ["water", 0, 0.2, "end"], ["stinger", "e1-0.6", 0.3]] }]
+    },
+    {
+      "id": "land", "day": 438, "meter": 5, "hudTone": "green",
+      "segments": [
+        { "voice": "День четыреста тридцать восьмой. На горизонте — пальмы!", "caption": "ДЕНЬ 438. [ПАЛЬМЫ]!", "range": 1.55, "pitch": 1.05 },
+        { "voice": "Маршалловы острова. Больше десяти тысяч километров от дома.", "caption": "[10 000+ КМ] ОТ ДОМА", "range": 1.4 }
+      ],
+      "views": [
+        { "name": "island", "seg": 0, "sfx": [["water", 0, 0.25, "end"], ["birds", 0.2, 0.2, 2], ["bell", 0.5, 0.2]] },
+        { "name": "mapEnd", "seg": 1, "sfx": [["rise_whoosh", 0.1, 0.25, 1.0], ["bell", 1.2, 0.2]] }
+      ]
+    },
+    {
+      "id": "cta", "day": 438, "meter": 5, "hudTone": "red",
+      "segments": [
+        { "voice": "Четыреста тридцать восемь дней.", "caption": "[438 ДНЕЙ]" },
+        { "voice": "А ты продержался бы хоть неделю?", "caption": "А ТЫ ПРОДЕРЖАЛСЯ БЫ {НЕДЕЛЮ}?", "range": 1.5, "pitch": 1.04, "gap": 0.25 }
+      ],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["boom", 0, 0.3]] }]
+    }
+  ]
+}

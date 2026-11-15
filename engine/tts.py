@@ -83,7 +83,9 @@ def trim(a, thr=0.012, tail_thr=None):
 
 
 def synth(seg, dflt, cache, fresh):
-    o = {k: seg.get(k, dflt.get(k)) for k in ("speaker", "ls", "pitch", "range", "fx", "ns", "nw")}
+    o = {k: seg.get(k, dflt.get(k)) for k in ("speaker", "ls", "pitch", "range", "fx", "ns", "nw", "humanize")}
+    if o["humanize"]:  # живой чтец не говорит с одинаковой скоростью
+        o["ls"] = round(o["ls"] * (1 + ((int(hashlib.md5(seg["voice"].encode()).hexdigest(), 16) % 9) - 4) / 100), 3)
     key = hashlib.md5(json.dumps([seg["voice"], o], sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
     out = cache / f"{key}.wav"
     if fresh or not out.exists():
@@ -116,10 +118,30 @@ def render_take(seg, o, cache, key):
         snd.scale_peak(0.9)
         snd.save(str(pr), "WAV")
         chain = "highpass=f=90,equalizer=f=3200:t=q:w=1.2:g=3,acompressor=threshold=-20dB:ratio=3:attack=5:release=80:makeup=4"
+        if o["humanize"]:
+            chain = ("highpass=f=70,lowpass=f=9500,equalizer=f=170:t=q:w=1:g=2.5,equalizer=f=2800:t=q:w=1.4:g=2,"
+                     "acompressor=threshold=-22dB:ratio=2.5:attack=8:release=120:makeup=4,aecho=0.85:0.3:17|29:0.1|0.07")
         if o["fx"]:
             chain += "," + FX[o["fx"]]
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(pr), "-af", chain, "-ar", str(SR), "-ac", "1", str(out)], check=True)
     return trim(load(out), tail_thr=0.003 if o["fx"] else None)
+
+
+def breath(seed):
+    """Тихий вдох: шум с формантой около 1 кГц и плавной огибающей."""
+    r = np.random.default_rng(seed); d = .26 + .1 * r.random(); n = int(d * SR)
+    X = np.fft.rfft(r.normal(0, 1, n)); fr = np.fft.rfftfreq(n, 1 / SR)
+    x = np.fft.irfft(X * np.exp(-((np.log2(np.maximum(fr, 1) / 1150)) ** 2) / .8), n)
+    t = np.arange(n) / SR
+    return (x / np.abs(x).max() * np.sin(np.pi * t / d) ** 1.8 * .055).astype(np.float32)
+
+
+def silence(g, breathe, seed):
+    z = np.zeros(int(g * SR), np.float32)
+    if breathe and g >= .2 and seed % 5 != 3:
+        b = breath(seed)[: max(0, len(z) - int(.04 * SR))]
+        z[len(z) - int(.04 * SR) - len(b): len(z) - int(.04 * SR)] += b
+    return z
 
 
 def main():
@@ -143,7 +165,7 @@ def main():
         for gi, seg in enumerate(sc["segments"]):
             if gi > 0:
                 g = seg.get("gap", script.get("gap_in_scene", .12))
-                chunks.append(np.zeros(int(g * SR), np.float32))
+                chunks.append(silence(g, dflt.get("humanize"), si * 10 + gi))
                 t += g
             a = synth(seg, dflt, cache, fresh) * seg.get("gain", 1.0)
             segs.append({"caption": seg["caption"], "voice": seg["voice"], "start": round(t, 3), "end": round(t + len(a) / SR, 3)})
@@ -155,7 +177,7 @@ def main():
             t += .12
             tl["banner"] = {"start": round(t, 3), "dur": banner["dur"]}
             g = banner["dur"] - .1
-        chunks.append(np.zeros(int(g * SR), np.float32))
+        chunks.append(silence(g, dflt.get("humanize") and not (banner and banner["after_scene"] == sc["id"]), si * 10 + 7))
         t += g
         tl["scenes"].append({k: v for k, v in sc.items() if k != "segments"} | {"start": round(start, 3), "end": round(t, 3), "segments": segs})
         print(f"  {sc['id']:<10} {start:6.2f} → {t:6.2f}")

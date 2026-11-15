@@ -34,6 +34,6 @@ if cfg and tl.get("banner"):
             f"[0:v][b]overlay=x={(1080 - cw) // 2}:y={y}:eof_action=pass:enable='between(t,{bs},{bs + dur})'[v]",
             "-map", "[v]", "-map", "1:a"]
 cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-profile:v", "high",
-        "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(out)]
+        "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", "44100", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(out)]
 subprocess.run(cmd, check=True)
 print(f"  ✔ {out}")

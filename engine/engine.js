@@ -293,11 +293,13 @@ const TONES = { green: '#38e07b', yellow: '#ffc21a', red: '#ff3b3b' };
 function hud(t, sc, prev) {
   const HC = TL.hud || { label: 'УСТАЛОСТЬ', invert: false };
   const ls = t - sc.start, tone = TONES[sc.hudTone];
-  const changed = !prev || prev.day !== sc.day;
+  const dayText = sc.dayText ?? ((HC.prefix || 'ДЕНЬ') + ' ' + sc.day);
+  const changed = !prev || (prev.dayText ?? prev.day) !== (sc.dayText ?? sc.day);
+  const pw = Math.max(300, Math.round(dayText.length * 56 * .64 + 76));
   const k = changed ? lerp(1.45, 1, eBack(ls / .32)) : 1;
   const mv = prev ? lerp(prev.meter, sc.meter, eOut(ls / .6)) : sc.meter;
   const bad = HC.invert ? 100 - mv : mv;
-  let s = `<g transform="translate(540,150) scale(${sc100(k)})"><rect x="-150" y="-44" width="300" height="88" rx="44" fill="#111427" stroke="${tone}" stroke-width="7"/>${txt(0, 3, (HC.prefix || 'ДЕНЬ') + ' ' + sc.day, 56, tone)}</g>`;
+  let s = `<g transform="translate(540,150) scale(${sc100(k)})"><rect x="${-pw / 2}" y="-44" width="${pw}" height="88" rx="44" fill="#111427" stroke="${tone}" stroke-width="7"/>${txt(0, 3, dayText, 56, tone)}</g>`;
   const bw = 500, fillC = bad < 50 ? mix('#38e07b', '#ffc21a', bad / 50) : mix('#ffc21a', '#ff3b3b', (bad - 50) / 50);
   const blink = bad >= 99 ? f(.7 + .3 * Math.sin(t * 18)) : 1;
   s += `<rect x="${540 - bw / 2}" y="212" width="${bw}" height="50" rx="25" fill="#111427" stroke="#000" stroke-width="4"/>`;
