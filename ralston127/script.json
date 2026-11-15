@@ -1,0 +1,475 @@
+{
+  "title": "127 часов",
+  "output": "ralston127.mp4",
+  "handle": "@истории.выживания",
+  "hud": {
+    "label": "ВОДА",
+    "invert": true
+  },
+  "narrator": {
+    "speaker": "dmitri",
+    "ls": 0.88,
+    "pitch": 1.03,
+    "range": 1.75
+  },
+  "music": {
+    "bpm": 92,
+    "level": 0.2
+  },
+  "wipe": "#ff7a1a",
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.9,
+  "banner": {
+    "file": "../assets/banner.mp4",
+    "after_scene": "carve",
+    "dur": 6.0,
+    "key_color": "0x00FE00",
+    "src_card_y": [
+      80,
+      919
+    ],
+    "card_h": 519,
+    "card_top": 1010,
+    "cam_shift": 40
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 6,
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Чтобы выжить, он отрезал себе руку.",
+          "caption": "ЧТОБЫ ВЫЖИТЬ, ОН ОТРЕЗАЛ СЕБЕ [РУКУ]",
+          "range": 2.0
+        },
+        {
+          "voice": "Тупым ножом.",
+          "caption": "{ТУПЫМ НОЖОМ}",
+          "ls": 1.05,
+          "pitch": 0.88,
+          "range": 2.2,
+          "fx": "air",
+          "gap": 0.3
+        }
+      ],
+      "views": [
+        {
+          "name": "hook",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0,
+              0.5
+            ],
+            [
+              "heartbeat",
+              0,
+              0.35,
+              "end"
+            ],
+            [
+              "stinger",
+              "s1",
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "walk",
+      "day": 1,
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "Юта. Две тысячи третий год.",
+          "caption": "ЮТА, [2003]"
+        },
+        {
+          "voice": "Арон уходит в каньон один... и никому не говорит, куда.",
+          "caption": "НИКОМУ НЕ СКАЗАЛ, [КУДА] ИДЁТ",
+          "range": 1.9
+        }
+      ],
+      "views": [
+        {
+          "name": "walk",
+          "seg": 0,
+          "sfx": [
+            [
+              "wind",
+              0,
+              0.22,
+              "end"
+            ],
+            [
+              "birds",
+              0.3,
+              0.12,
+              1.5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boulder",
+      "day": 1,
+      "meter": 90,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Вдруг срывается валун в триста шестьдесят килограммов.",
+          "caption": "ВАЛУН — [360 КГ]",
+          "range": 1.9
+        },
+        {
+          "voice": "И намертво зажимает его руку!",
+          "caption": "РУКА {ЗАЖАТА}",
+          "range": 2.1,
+          "pitch": 1.06
+        }
+      ],
+      "views": [
+        {
+          "name": "fall",
+          "seg": 0,
+          "sfx": [
+            [
+              "rumble",
+              0,
+              0.35,
+              "end"
+            ],
+            [
+              "rise_whoosh",
+              "end-0.6",
+              0.35,
+              0.6
+            ]
+          ]
+        },
+        {
+          "name": "pinned",
+          "seg": 1,
+          "sfx": [
+            [
+              "rockhit",
+              0,
+              0.7
+            ],
+            [
+              "crack",
+              0.02,
+              0.4
+            ],
+            [
+              "heartbeat",
+              0.3,
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stuck",
+      "day": 2,
+      "meter": 40,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "С собой — глоток воды и два буррито.",
+          "caption": "ГЛОТОК ВОДЫ И [2 БУРРИТО]"
+        },
+        {
+          "voice": "Он долбит камень ножом. Бесполезно.",
+          "caption": "КАМЕНЬ НЕ {ПОДДАЁТСЯ}",
+          "range": 1.9
+        }
+      ],
+      "views": [
+        {
+          "name": "inventory",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.05,
+              0.3
+            ],
+            [
+              "pop",
+              0.25,
+              0.3
+            ],
+            [
+              "pop",
+              0.45,
+              0.3
+            ]
+          ]
+        },
+        {
+          "name": "chip",
+          "seg": 1,
+          "sfx": [
+            [
+              "clink",
+              0.12,
+              0.45,
+              null,
+              0.38,
+              "end-0.2"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "carve",
+      "day": 5,
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "День пятый. Вода кончилась.",
+          "caption": "ДЕНЬ 5. ВОДА {КОНЧИЛАСЬ}",
+          "ls": 0.95
+        },
+        {
+          "voice": "Он вырезает на скале своё имя...",
+          "caption": "ВЫРЕЗАЕТ НА СКАЛЕ [ИМЯ]…",
+          "gap": 0.2
+        },
+        {
+          "voice": "и дату своей смерти.",
+          "caption": "…И {ДАТУ СМЕРТИ}",
+          "ls": 1.08,
+          "pitch": 0.86,
+          "range": 2.2,
+          "fx": "air",
+          "gap": 0.35
+        }
+      ],
+      "views": [
+        {
+          "name": "empty",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.25,
+              "end"
+            ]
+          ]
+        },
+        {
+          "name": "carve",
+          "seg": 1,
+          "sfx": [
+            [
+              "scratch",
+              0,
+              0.3,
+              "e1"
+            ],
+            [
+              "scratch",
+              "s2",
+              0.3,
+              "e2"
+            ],
+            [
+              "stinger",
+              "s2+0.1",
+              0.45
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vision",
+      "day": 5,
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Ночью ему является мальчик.",
+          "caption": "НОЧЬЮ ЕМУ ЯВЛЯЕТСЯ [МАЛЬЧИК]",
+          "range": 1.9
+        },
+        {
+          "voice": "Его будущий сын.",
+          "caption": "ЕГО [БУДУЩИЙ СЫН]",
+          "ls": 1.05,
+          "pitch": 0.95,
+          "gap": 0.25
+        }
+      ],
+      "views": [
+        {
+          "name": "vision",
+          "seg": 0,
+          "sfx": [
+            [
+              "shimmer",
+              0,
+              0.18,
+              "end"
+            ],
+            [
+              "drone",
+              0,
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cut",
+      "day": 6,
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Утром он понимает: кости можно сломать.",
+          "caption": "КОСТИ МОЖНО {СЛОМАТЬ}",
+          "range": 2.0,
+          "pitch": 0.96
+        },
+        {
+          "voice": "Он режет. Целый час.",
+          "caption": "ОН РЕЖЕТ [ЦЕЛЫЙ ЧАС]",
+          "ls": 1.02,
+          "pitch": 0.9,
+          "range": 2.1,
+          "fx": "air",
+          "gap": 0.6
+        }
+      ],
+      "views": [
+        {
+          "name": "cut",
+          "seg": 0,
+          "sfx": [
+            [
+              "heartbeat",
+              0,
+              0.45,
+              "end"
+            ],
+            [
+              "crack",
+              "e0+0.05",
+              0.75
+            ],
+            [
+              "crack",
+              "e0+0.3",
+              0.6
+            ],
+            [
+              "thump",
+              "e0+0.05",
+              0.6
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "escape",
+      "day": 6,
+      "meter": 0,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "Потом — спуск с двадцатиметровой скалы...",
+          "caption": "СПУСК С [20 МЕТРОВ]"
+        },
+        {
+          "voice": "и долгий путь, пока его не находят спасатели!",
+          "caption": "ЕГО {НАШЛИ}!",
+          "range": 2.0,
+          "pitch": 1.06
+        }
+      ],
+      "views": [
+        {
+          "name": "rappel",
+          "seg": 0,
+          "sfx": [
+            [
+              "wind",
+              0,
+              0.25,
+              "end"
+            ]
+          ]
+        },
+        {
+          "name": "heli",
+          "seg": 1,
+          "sfx": [
+            [
+              "heli",
+              0,
+              0.4,
+              "end"
+            ],
+            [
+              "bell",
+              "e1-0.2",
+              0.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "day": 6,
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Сто двадцать семь часов в ловушке.",
+          "caption": "[127 ЧАСОВ] В ЛОВУШКЕ",
+          "range": 1.9
+        },
+        {
+          "voice": "А ты бы смог на его месте?",
+          "caption": "А ТЫ БЫ {СМОГ}?",
+          "pitch": 1.04,
+          "range": 1.6,
+          "gap": 0.2
+        }
+      ],
+      "views": [
+        {
+          "name": "cta",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0,
+              0.3
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

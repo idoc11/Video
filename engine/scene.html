@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Рендер ролика</title>
+<style>
+@font-face{font-family:Mont;font-weight:900;src:url(fonts/montserrat-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Mont;font-weight:900;src:url(fonts/montserrat-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:Rub;font-weight:900;src:url(fonts/rubik-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Rub;font-weight:900;src:url(fonts/rubik-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+@font-face{font-family:Rub;font-weight:700;src:url(fonts/rubik-cyrillic-700-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:Rub;font-weight:700;src:url(fonts/rubik-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
+html,body{margin:0;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage svg{position:absolute;left:0;top:0}
+#cap{position:absolute;left:40px;top:1385px;width:1000px;height:0;transform-origin:50% 0}
+.cw{position:absolute;left:0;top:0;width:100%;transform:translateY(-50%);text-align:center;
+  font-family:Mont;font-weight:900;font-size:92px;line-height:1.03;letter-spacing:-1px;text-wrap:balance}
+.cw.back{color:#000;-webkit-text-stroke:24px #000;filter:drop-shadow(0 9px 0 rgba(0,0,0,.45))}
+.cw.front{color:#fff}
+.y{color:#ffe100}.r{color:#ff2a2a}
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="art" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+  <div id="cap"><div class="cw back"></div><div class="cw front"></div></div>
+  <svg id="fx" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+</div>
+<script src="engine.js"></script>
+</body>
+</html>

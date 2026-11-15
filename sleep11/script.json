@@ -10,7 +10,7 @@
   "_caption_markup": "[слово] = жёлтая подсветка, {слово} = красная",
   "banner": {
     "_": "рекламный баннер на хромакее; диктор молчит, пока идёт баннер",
-    "file": "assets/banner.mp4",
+    "file": "../assets/banner.mp4",
     "after_scene": "day1",
     "dur": 6.0,
     "key_color": "0x00FE00",
