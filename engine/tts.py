@@ -83,15 +83,16 @@ def trim(a, thr=0.012, tail_thr=None):
 
 
 def synth(seg, dflt, cache, fresh):
-    o = {k: seg.get(k, dflt.get(k)) for k in ("speaker", "ls", "pitch", "range", "fx", "ns", "nw", "humanize")}
+    o = {k: seg.get(k, dflt.get(k)) for k in ("speaker", "ls", "pitch", "range", "fx", "ns", "nw", "humanize", "provider", "voice_id", "model", "stability")}
     if o["humanize"]:  # живой чтец не говорит с одинаковой скоростью
         o["ls"] = round(o["ls"] * (1 + ((int(hashlib.md5(seg["voice"].encode()).hexdigest(), 16) % 9) - 4) / 100), 3)
     key = hashlib.md5(json.dumps([seg["voice"], o], sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
     out = cache / f"{key}.wav"
     if fresh or not out.exists():
         best, score = None, -1
-        for take in range(5 if asr() else 1):
-            a = render_take(seg, o, cache, key)
+        takes = 2 if o["provider"] == "elevenlabs" else 5   # ElevenLabs платный по символам — максимум 2 дубля
+        for take in range(takes if asr() else 1):
+            a = render_take_el(seg, o, cache, key) if o["provider"] == "elevenlabs" else render_take(seg, o, cache, key)
             sc_ = clarity(a, seg["voice"]) if asr() else 1
             if sc_ > score:
                 best, score = a, sc_
@@ -101,7 +102,32 @@ def synth(seg, dflt, cache, fresh):
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
             w.writeframes((best * 32767).astype(np.int16).tobytes())
         print(f"    дубль {take + 1}, разборчивость {score:.0%}: {seg['voice'][:50]}")
+    tempo = seg.get("tempo", dflt.get("tempo"))
+    if tempo and tempo != 1:  # ускорение без смены высоты голоса (кэшируется отдельно)
+        tout = cache / f"{key}.t{tempo}.wav"
+        if fresh or not tout.exists():
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(out), "-af", f"atempo={tempo}", str(tout)], check=True)
+        out = tout
     return trim(load(out), tail_thr=0.003 if o["fx"] else None)
+
+
+def render_take_el(seg, o, cache, key):
+    """Озвучка ElevenLabs. Ключ подставляет сетевой прокси окружения (в коде его нет)."""
+    mp3, out = cache / f"{key}.el.mp3", cache / f"{key}.take.wav"
+    body = {"text": seg["voice"], "model_id": o["model"] or "eleven_v3",
+            "voice_settings": {"stability": o["stability"] if o["stability"] is not None else 0.5}}
+    r = subprocess.run(["curl", "-sS", "-m", "120", "-X", "POST",
+                        f"https://api.elevenlabs.io/v1/text-to-speech/{o['voice_id']}?output_format=mp3_44100_128",
+                        "-H", "xi-api-key: proxy-injected", "-H", "Content-Type: application/json",
+                        "--data-binary", json.dumps(body, ensure_ascii=False), "-o", str(mp3), "-w", "%{http_code}"],
+                       capture_output=True, text=True)
+    if r.stdout.strip() != "200":
+        raise RuntimeError(f"ElevenLabs HTTP {r.stdout.strip()}: {mp3.read_text(errors='ignore')[:300] if mp3.exists() else r.stderr}")
+    chain = "highpass=f=60,acompressor=threshold=-20dB:ratio=2:attack=10:release=150:makeup=2"
+    if o["fx"]:
+        chain += "," + FX[o["fx"]]
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(mp3), "-af", chain, "-ar", str(SR), "-ac", "1", str(out)], check=True)
+    return trim(load(out), thr=0.008, tail_thr=0.003 if o["fx"] else None)
 
 
 def render_take(seg, o, cache, key):
