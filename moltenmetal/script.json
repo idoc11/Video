@@ -1,0 +1,103 @@
+{
+  "title": "Что, если выпить жидкий металл",
+  "output": "moltenmetal.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "ЖИЗНЬ", "invert": true },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.06 },
+  "music": {
+    "bpm": 92, "level": 0.12,
+    "roots": [146.83, 116.54, 98.0, 110.0],
+    "arps": [[293.66, 349.23, 440, 587.33], [233.08, 293.66, 349.23, 466.16], [196.0, 233.08, 293.66, 392.0], [220.0, 277.18, 329.63, 440.0]]
+  },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#ff7a1a",
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "throat",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 0, "dayText": "ОПЫТ", "meter": 100, "hudTone": "yellow",
+      "segments": [
+        { "voice": "[curious] Что, если расплавить металл... и выпить его?", "caption": "ЧТО, ЕСЛИ ВЫПИТЬ [ЖИДКИЙ МЕТАЛЛ]?" }
+      ],
+      "views": [{ "name": "hook", "seg": 0, "sfx": [["pour", 0.3, 0.35, 2.0], ["sizzle", 0.6, 0.2, 1.6]] }]
+    },
+    {
+      "id": "lead", "day": 0, "dayText": "0 СЕК", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "Возьмём свинец. Он плавится при трёхстах двадцати семи градусах.", "caption": "СВИНЕЦ ПЛАВИТСЯ ПРИ [327 °C]" }
+      ],
+      "views": [{ "name": "lead", "seg": 0, "sfx": [["riser", 0, 0.2, "end-0.3"], ["sizzle", "end-1.2", 0.25, 1.0]] }]
+    },
+    {
+      "id": "mouth", "day": 0, "dayText": "0,1 СЕК", "meter": 70, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Первая десятая секунды. Во рту мгновенно вскипает слюна.", "caption": "СЛЮНА {ВСКИПАЕТ}" },
+        { "voice": "А вода, превращаясь в пар, расширяется почти в тысячу семьсот раз!", "caption": "ПАР: [×1700] ОБЪЁМА" }
+      ],
+      "views": [
+        { "name": "mouth", "seg": 0, "sfx": [["sizzle", 0.2, 0.35, "end"], ["boom", 0.2, 0.3]] },
+        { "name": "steam", "seg": 1, "sfx": [["rise_whoosh", 0.1, 0.35, 0.8], ["pop", 0.9, 0.4]] }
+      ]
+    },
+    {
+      "id": "leiden", "day": 0, "dayText": "0,2 СЕК", "meter": 60, "hudTone": "yellow",
+      "segments": [
+        { "voice": "На миг пар даже защищает — как капля воды на раскалённой сковородке.", "caption": "ЭФФЕКТ [ЛЕЙДЕНФРОСТА]" },
+        { "voice": "[serious] Но металла слишком много.", "caption": "НО МЕТАЛЛА {СЛИШКОМ МНОГО}" }
+      ],
+      "views": [{ "name": "leiden", "seg": 0, "sfx": [["sizzle", 0, 0.25, "end"], ["stinger", "s1", 0.35]] }]
+    },
+    {
+      "id": "throat", "day": 1, "dayText": "1 СЕК", "meter": 35, "hudTone": "red",
+      "segments": [
+        { "voice": "Он стекает по пищеводу и обжигает всё на своём пути.", "caption": "ПИЩЕВОД — {ОЖОГ}" }
+      ],
+      "views": [{ "name": "throat", "seg": 0, "sfx": [["pour", 0, 0.3, "end"], ["heartbeat", 0, 0.35, "end"]] }]
+    },
+    {
+      "id": "stomach", "day": 3, "dayText": "3 СЕК", "meter": 15, "hudTone": "red",
+      "segments": [
+        { "voice": "В желудке металл встречает кислоту и воду.", "caption": "ЖЕЛУДОК: КИСЛОТА И [ВОДА]" },
+        { "voice": "И пар с силой рвётся наружу.", "caption": "ПАР {РВЁТСЯ НАРУЖУ}" }
+      ],
+      "views": [{ "name": "stomach", "seg": 0, "sfx": [["sizzle", 0, 0.3, "end"], ["boom", "s1+0.1", 0.35], ["rumble", "s1", 0.3, "end"]] }]
+    },
+    {
+      "id": "cast", "day": 10, "dayText": "10 СЕК", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "А потом металл остывает... и застывает внутри, как слепок.", "caption": "МЕТАЛЛ [ЗАСТЫВАЕТ] ВНУТРИ" },
+        { "voice": "[serious] Шансов выжить — ноль.", "caption": "ШАНСОВ — {НОЛЬ}" }
+      ],
+      "views": [{ "name": "cast", "seg": 0, "sfx": [["drone", 0, 0.25, "end"], ["clink", 1.0, 0.35], ["stinger", "s1", 0.4]] }]
+    },
+    {
+      "id": "history", "day": 0, "dayText": "ИСТОРИЯ", "meter": 0, "hudTone": "yellow",
+      "segments": [
+        { "voice": "По легенде, парфяне залили расплавленное золото в рот убитому полководцу Крассу.", "caption": "ЛЕГЕНДА О [КРАССЕ]" },
+        { "voice": "В насмешку над его жадностью.", "caption": "НАСМЕШКА НАД {ЖАДНОСТЬЮ}" }
+      ],
+      "views": [{ "name": "history", "seg": 0, "sfx": [["drone", 0, 0.2, "end"], ["bell", "s1", 0.2]] }]
+    },
+    {
+      "id": "cta", "day": 0, "dayText": "ОПАСНО", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "Никогда. Не повторяй.", "caption": "{НИКОГДА} НЕ ПОВТОРЯЙ" },
+        { "voice": "[curious] А какой опасный эксперимент разобрать следующим?", "caption": "ЧТО РАЗОБРАТЬ [СЛЕДУЮЩИМ]?" }
+      ],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["boom", 0, 0.3]] }]
+    }
+  ]
+}
