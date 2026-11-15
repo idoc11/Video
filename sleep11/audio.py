@@ -4,6 +4,7 @@
 Все тайминги эффектов совпадают с анимацией в scene.html.
 """
 import json
+import subprocess
 import wave
 from pathlib import Path
 
@@ -259,6 +260,23 @@ def main():
     duck = 1 - .5 * np.clip(venv / .08, 0, 1)
     fade = np.clip((dur - np.arange(n) / SR) / 1.0, 0, 1)
     mus = norm(mus, .2) * duck * duck_extra * fade
+
+    # рекламный баннер: его звук (с озвучкой) по громкости как наш диктор, музыка почти уходит
+    bn = tl.get("banner")
+    if bn:
+        cfg = json.loads((ROOT / "script.json").read_text())["banner"]
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(ROOT / cfg["file"]), "-vn", "-ac", "1", "-ar", str(SR),
+                              "-f", "f32le", "-"], capture_output=True, check=True).stdout
+        ba = np.frombuffer(raw, dtype=np.float32).astype(np.float64)[: int(bn["dur"] * SR)]
+        def active_rms(x):
+            e = np.sqrt(np.convolve(x ** 2, np.ones(2205) / 2205, mode="same"))
+            return np.sqrt(np.mean(x[e > .3 * e.max()] ** 2))
+        gain = active_rms(voice) / active_rms(ba)
+        place(sfx, ba * gain / .9, bn["start"], 1.0)
+        a, e = int(bn["start"] * SR), int((bn["start"] + bn["dur"]) * SR)
+        ramp = np.clip(np.minimum(np.arange(e - a) / (.25 * SR), (e - a - np.arange(e - a)) / (.25 * SR)), 0, 1)
+        mus[a:e] *= 1 - .8 * ramp
+        print(f"баннер: {bn['start']:.2f}–{bn['start'] + bn['dur']:.2f} c, усиление звука x{gain:.2f}")
 
     mix = voice + mus + sfx * .9
     mix = norm(mix, .95)

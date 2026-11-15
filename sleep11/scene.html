@@ -145,7 +145,7 @@ function guy(o) {
   // глаза
   const scl = mix('#ffffff', '#ffc4c4', p.red);
   const eye = (cx, cy, side, lid) => {
-    if (p.eyes === 'closed') return `<path d="M${cx - 46},${cy + 6} Q${cx},${cy + 40} ${cx + 46},${cy + 6}" fill="none" stroke="${OL}" stroke-width="8" stroke-linecap="round"/>`;
+    if (p.eyes === 'closed' || lid >= .95) return `<path d="M${cx - 46},${cy + 6} Q${cx},${cy + 40} ${cx + 46},${cy + 6}" fill="none" stroke="${OL}" stroke-width="8" stroke-linecap="round"/>`;
     if (p.eyes === 'squeeze') return `<path d="M${cx - 38 * side},${cy - 24} L${cx + 30 * side},${cy + 6} L${cx - 38 * side},${cy + 32}" fill="none" stroke="${OL}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>`;
     const cid = `ec${id}${side}`;
     let e = `<clipPath id="${cid}"><ellipse cx="${cx}" cy="${cy}" rx="52" ry="58"/></clipPath>`;
@@ -330,7 +330,8 @@ const VIEWS = {
       s += `<path d="M0,0 L56,0" stroke="${OL}" stroke-width="13" stroke-linecap="round"/><path d="M0,0 L0,-80" stroke="${OL}" stroke-width="9" stroke-linecap="round"/><path d="M0,14 L0,-86" transform="rotate(${Math.floor(t * 2) * 6})" stroke="#ff2b2b" stroke-width="4" stroke-linecap="round"/><circle r="10" fill="#ff2b2b" stroke="${OL}" stroke-width="4"/></g>`;
       s += txt(870, 642, '03:00', 46, '#ff6b6b', { stroke: OL, sw: 10 });
       const fl = .05 + .025 * Math.sin(t * 23) * Math.sin(t * 7.3);
-      s += guy({ x: 540, y: 740, s: 1.2, tired: .15, lid: .2, brow: 'neutral', mouth: 'smile', pose: 'down', legs: false, look: [0, 12], light: fl, t });
+      const bl = (t % 2.7) < .12 ? 1 : .2;
+      s += guy({ x: 540, y: 740, s: 1.2, tired: .15, lid: bl, brow: 'neutral', mouth: 'smile', pose: 'down', legs: false, look: [0, 12], light: fl, headRot: 1.6 * Math.sin(t * 1.3), t });
       s += `<ellipse cx="540" cy="985" rx="270" ry="70" fill="url(#cyanGlow)" opacity="${f(.55 + 3 * fl)}"/>`;
       s += `<path d="M330,1222 L362,966 Q364,950 380,950 L700,950 Q716,950 718,966 L750,1222 Z" fill="#c9d0dc" stroke="${OL}" stroke-width="8" stroke-linejoin="round"/><circle cx="540" cy="1080" r="26" fill="#eef2f8" stroke="#a7b0c0" stroke-width="5"/>`;
       s += `<rect x="-200" y="1210" width="1480" height="80" fill="#b57a52"/><rect x="-200" y="1290" width="1480" height="900" fill="#8a5536"/><path d="M-200,1210 L1280,1210 M-200,1290 L1280,1290" stroke="${OL}" stroke-width="7"/>`;
@@ -586,7 +587,9 @@ window.renderFrame = function (t) {
     const q = (lv - t0) / d;
     if (q >= 0 && q < 1) { const r = rng(Math.floor(t * FPS) * 13 + 7); sx += (r() - .5) * 2 * a * (1 - q); sy += (r() - .5) * 2 * a * (1 - q); }
   }
-  const cam = `translate(${f(540 + sx)},${f(820 + sy)}) scale(${(z).toFixed(4)}) translate(-540,-820)`;
+  const B = TL.banner, bIn = B && t >= B.start - .2 && t < sc.end && sc.id === TL.bannerCfg.after_scene;
+  const bshift = bIn ? TL.bannerCfg.cam_shift * eInOut((t - B.start + .2) / .5) : 0;
+  const cam = `translate(${f(540 + sx)},${f(820 + sy - bshift)}) scale(${(z).toFixed(4)}) translate(-540,-820)`;
   $art.innerHTML = DEFS + `<g transform="${cam}">${art}</g>` + hud(t, sc, prev) +
     txt(48, 1580, TL.handle, 28, '#fff', { anchor: 'start', w: 700, op: .6, stroke: '#000', sw: 5 });
 
@@ -598,7 +601,8 @@ window.renderFrame = function (t) {
   const dt = t - cStart;
   const cs = lerp(.55, 1, eBack(dt / .22)), cr = lerp(-5, 0, eOut(dt / .2));
   $cap.style.transform = `scale(${cs.toFixed(3)}) rotate(${cr.toFixed(2)}deg)`;
-  $cap.style.opacity = clamp(dt / .05).toFixed(2);
+  const capHide = B ? clamp((t - B.start + .05) / .15) * (t < B.start + B.dur ? 1 : 0) : 0;
+  $cap.style.opacity = (clamp(dt / .05) * (1 - capHide)).toFixed(2);
 
   // переходы: голубая диагональная шторка на смене сцен, вспышка на смене кадра
   let fx = '';

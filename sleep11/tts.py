@@ -24,7 +24,10 @@ def load_voice(name: str) -> PiperVoice:
                            config_path=str(d / f"ru_RU-{name}-medium.onnx.json"))
 
 
-def synth(voice: PiperVoice, text: str, length_scale: float, tmp: Path) -> np.ndarray:
+def synth(voice, text: str, length_scale: float, tmp: Path, fresh: bool) -> np.ndarray:
+    if not fresh and tmp.exists():  # уже озвучено — берём готовый файл, голос не меняется
+        with wave.open(str(tmp)) as w:
+            return trim(np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32) / 32768)
     raw = tmp.with_suffix(".raw.wav")
     with wave.open(str(raw), "wb") as w:
         voice.synthesize_wav(text, w, syn_config=SynthesisConfig(length_scale=length_scale))
@@ -55,7 +58,9 @@ def main():
     BUILD.mkdir(exist_ok=True)
     tmpdir = BUILD / "tts"
     tmpdir.mkdir(exist_ok=True)
+    fresh = "--fresh" in sys.argv
     voice = load_voice(script["voice"])
+    banner = script.get("banner")
 
     chunks, t = [], 0.0
     timeline = {"scenes": []}
@@ -70,11 +75,18 @@ def main():
                 g = script["gap_in_scene"]
                 chunks.append(np.zeros(int(g * SR), np.float32))
                 t += g
-            a = synth(voice, seg["voice"], seg.get("ls", script["length_scale"]), tmpdir / f"{si:02d}_{gi}.wav")
+            a = synth(voice, seg["voice"], seg.get("ls", script["length_scale"]), tmpdir / f"{si:02d}_{gi}.wav", fresh)
             segs.append({**seg, "start": round(t, 3), "end": round(t + len(a) / SR, 3)})
             chunks.append(a)
             t += len(a) / SR
         g = script["tail"] if si == len(script["scenes"]) - 1 else script["gap_between_scenes"]
+        if banner and banner["after_scene"] == sc["id"]:
+            # пауза диктора под баннер: баннер стартует чуть после реплики,
+            # следующая сцена — за 0.1 c до его конца (шторка перехода закрывает хвост)
+            chunks.append(np.zeros(int(.12 * SR), np.float32))
+            t += .12
+            timeline["banner"] = {"start": round(t, 3), "dur": banner["dur"]}
+            g = banner["dur"] - .1
         chunks.append(np.zeros(int(g * SR), np.float32))
         t += g
         timeline["scenes"].append({k: v for k, v in sc.items() if k != "segments"}

@@ -8,6 +8,20 @@
   "lead_in": 0.1,
   "tail": 0.9,
   "_caption_markup": "[слово] = жёлтая подсветка, {слово} = красная",
+  "banner": {
+    "_": "рекламный баннер на хромакее; диктор молчит, пока идёт баннер",
+    "file": "assets/banner.mp4",
+    "after_scene": "day1",
+    "dur": 6.0,
+    "key_color": "0x00FE00",
+    "src_card_y": [
+      80,
+      919
+    ],
+    "card_h": 594,
+    "card_top": 930,
+    "cam_shift": 70
+  },
   "scenes": [
     {
       "id": "hook",

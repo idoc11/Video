@@ -8,6 +8,7 @@ const path = require('path');
 (async () => {
   const root = __dirname;
   const tl = JSON.parse(fs.readFileSync(path.join(root, 'build/timeline.json'), 'utf8'));
+  tl.bannerCfg = JSON.parse(fs.readFileSync(path.join(root, 'script.json'), 'utf8')).banner || null;
   const fps = 30, total = Math.ceil(tl.duration * fps);
   const only = process.env.ONLY ? process.env.ONLY.split(',').map(Number) : null;
   const outDir = path.join(root, only ? 'build/stills' : 'build/frames');
