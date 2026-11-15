@@ -1,0 +1,194 @@
+{
+  "title": "Он не спал 11 дней",
+  "handle": "@мозг.изнутри",
+  "voice": "dmitri",
+  "length_scale": 0.86,
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.9,
+  "_caption_markup": "[слово] = жёлтая подсветка, {слово} = красная",
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 11,
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Этот парень не спал одиннадцать дней.",
+          "caption": "ОН НЕ СПАЛ [11 ДНЕЙ]"
+        }
+      ],
+      "views": [
+        [
+          "hook",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "brain",
+      "day": 11,
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "И вот что творилось с его мозгом.",
+          "caption": "ЧТО БЫЛО С ЕГО [МОЗГОМ]?"
+        }
+      ],
+      "views": [
+        [
+          "brain",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "day1",
+      "day": 1,
+      "meter": 10,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "День первый.",
+          "caption": "ДЕНЬ 1."
+        },
+        {
+          "voice": "Кажется, всё нормально.",
+          "caption": "КАЖЕТСЯ, ВСЁ [НОРМАЛЬНО]"
+        }
+      ],
+      "views": [
+        [
+          "room",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "drunk",
+      "day": 2,
+      "meter": 30,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "Двадцать четыре часа без сна.",
+          "caption": "24 ЧАСА [БЕЗ СНА]"
+        },
+        {
+          "voice": "И реакция уже как у пьяного.",
+          "caption": "РЕАКЦИЯ КАК У {ПЬЯНОГО}"
+        }
+      ],
+      "views": [
+        [
+          "clock",
+          0
+        ],
+        [
+          "drunk",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "microsleep",
+      "day": 3,
+      "meter": 55,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "День третий.",
+          "caption": "ДЕНЬ 3."
+        },
+        {
+          "voice": "Мозг выключается на пару секунд.",
+          "caption": "МОЗГ {ВЫКЛЮЧАЕТСЯ}"
+        },
+        {
+          "voice": "Прямо на ходу.",
+          "caption": "ПРЯМО [НА ХОДУ]"
+        }
+      ],
+      "views": [
+        [
+          "brainOff",
+          0
+        ],
+        [
+          "sleepwalk",
+          2
+        ]
+      ]
+    },
+    {
+      "id": "halluc",
+      "day": 4,
+      "meter": 75,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "День четвёртый.",
+          "caption": "ДЕНЬ 4."
+        },
+        {
+          "voice": "Он принимает дорожный знак за человека.",
+          "caption": "ЗНАК — ЭТО {ЧЕЛОВЕК}?!"
+        }
+      ],
+      "views": [
+        [
+          "street",
+          0
+        ]
+      ]
+    },
+    {
+      "id": "record",
+      "day": 11,
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "День одиннадцатый.",
+          "caption": "ДЕНЬ 11."
+        },
+        {
+          "voice": "Рекорд: двести шестьдесят четыре часа без сна.",
+          "caption": "РЕКОРД: [264 ЧАСА]"
+        }
+      ],
+      "views": [
+        [
+          "calendar",
+          0
+        ],
+        [
+          "trophy",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "cta",
+      "day": 11,
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "А ты? Сколько спал сегодня?",
+          "caption": "А ТЫ СКОЛЬКО [СПАЛ]?",
+          "ls": 0.9
+        }
+      ],
+      "views": [
+        [
+          "yawn",
+          0
+        ]
+      ]
+    }
+  ]
+}
