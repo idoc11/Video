@@ -292,10 +292,18 @@ const VIEWS = {};
 const TONES = { green: '#38e07b', yellow: '#ffc21a', red: '#ff3b3b' };
 function hud(t, sc, prev) {
   const HC = TL.hud || { label: 'УСТАЛОСТЬ', invert: false };
-  const ls = t - sc.start, tone = TONES[sc.hudTone];
-  const dayText = sc.dayText ?? ((HC.prefix || 'ДЕНЬ') + ' ' + sc.day);
-  const changed = !prev || (prev.dayText ?? prev.day) !== (sc.dayText ?? sc.day);
+  const ls = t - sc.start;
+  let dayText = sc.dayText ?? ((HC.prefix || 'ДЕНЬ') + ' ' + sc.day);
+  if (HC.timer) { // живой обратный отсчёт: стоит на месте во время баннера, доходит до 0 к концу речи
+    const B = TL.banner, last = TL.scenes[TL.scenes.length - 1], endT = last.segments[last.segments.length - 1].end;
+    const pause = B ? clamp(t - B.start, 0, B.dur) : 0, total = endT - (B ? B.dur : 0);
+    const left = Math.max(0, Math.ceil(HC.timer * (1 - clamp((t - pause) / total)) - 1e-6));
+    dayText = '0:' + String(left).padStart(2, '0');
+    sc = { ...sc, hudTone: left <= 10 ? 'red' : sc.hudTone };
+  }
+  const changed = HC.timer ? false : (!prev || (prev.dayText ?? prev.day) !== (sc.dayText ?? sc.day));
   const pw = Math.max(300, Math.round(dayText.length * 56 * .64 + 76));
+  const tone = TONES[sc.hudTone];
   const k = changed ? lerp(1.45, 1, eBack(ls / .32)) : 1;
   const mv = prev ? lerp(prev.meter, sc.meter, eOut(ls / .6)) : sc.meter;
   const bad = HC.invert ? 100 - mv : mv;

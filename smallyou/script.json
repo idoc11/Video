@@ -1,0 +1,73 @@
+{
+  "title": "За 30 секунд я покажу, насколько ты маленький",
+  "output": "smallyou.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "ТВОЙ РАЗМЕР", "invert": true, "timer": 30 },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.06 },
+  "music": {
+    "bpm": 104, "level": 0.12, "pulse": true,
+    "roots": [130.81, 98.0, 110.0, 87.31],
+    "arps": [[261.63, 329.63, 392.0, 523.25], [196.0, 246.94, 293.66, 392.0], [220.0, 261.63, 329.63, 440.0], [174.61, 220.0, 261.63, 349.23]]
+  },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#8b5cff",
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.12,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "sun",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 0, "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "[curious] За тридцать секунд я покажу, насколько ты маленький.", "caption": "ЗА 30 СЕКУНД ПОКАЖУ, НАСКОЛЬКО ТЫ [МАЛЕНЬКИЙ]" }
+      ],
+      "views": [{ "name": "hook", "seg": 0, "sfx": [["tick", 0.2, 0.3, null, 0.5, "end"]] }]
+    },
+    {
+      "id": "you", "day": 0, "meter": 100, "hudTone": "green",
+      "segments": [{ "voice": "Это ты. Метр семьдесят.", "caption": "ЭТО ТЫ: [1,7 М]" }],
+      "views": [{ "name": "you", "seg": 0, "sfx": [["pop", 0.3, 0.4]] }]
+    },
+    {
+      "id": "tower", "day": 0, "meter": 60, "hudTone": "green",
+      "segments": [{ "voice": "Бурдж-Халифа — почти пятьсот таких, как ты.", "caption": "БУРДЖ-ХАЛИФА: [828 М]" }],
+      "views": [{ "name": "tower", "seg": 0, "sfx": [["rise_whoosh", 0, 0.35, 0.8]] }]
+    },
+    {
+      "id": "earth", "day": 0, "meter": 25, "hudTone": "yellow",
+      "segments": [{ "voice": "Земля — двенадцать тысяч километров в поперечнике.", "caption": "ЗЕМЛЯ: [12 742 КМ]" }],
+      "views": [{ "name": "earth", "seg": 0, "sfx": [["whoosh", 0, 0.3], ["shimmer", 0.3, 0.12, "end"]] }]
+    },
+    {
+      "id": "sun", "day": 0, "meter": 8, "hudTone": "yellow",
+      "segments": [{ "voice": "А в Солнце поместится больше миллиона Земель.", "caption": "В СОЛНЦЕ — [1 300 000] ЗЕМЕЛЬ" }],
+      "views": [{ "name": "sun", "seg": 0, "sfx": [["rumble", 0, 0.25, "end"], ["boom", 0.1, 0.3]] }]
+    },
+    {
+      "id": "galaxy", "day": 0, "meter": 2, "hudTone": "red",
+      "segments": [{ "voice": "Наша галактика — сто тысяч световых лет. И сотни миллиардов звёзд.", "caption": "МЛЕЧНЫЙ ПУТЬ: [100 000] СВ. ЛЕТ" }],
+      "views": [{ "name": "galaxy", "seg": 0, "sfx": [["shimmer", 0, 0.2, "end"], ["whoosh", 0, 0.3]] }]
+    },
+    {
+      "id": "universe", "day": 0, "meter": 0, "hudTone": "red",
+      "segments": [{ "voice": "А во Вселенной — сотни миллиардов таких галактик.", "caption": "СОТНИ МИЛЛИАРДОВ [ГАЛАКТИК]" }],
+      "views": [{ "name": "universe", "seg": 0, "sfx": [["drone", 0, 0.25, "end"], ["whoosh", 0, 0.3]] }]
+    },
+    {
+      "id": "cta", "day": 0, "meter": 0, "hudTone": "red",
+      "segments": [{ "voice": "[whispers] И где-то там — ты. Читаешь это с телефона.", "caption": "И ГДЕ-ТО ТАМ — [ТЫ]" }],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["shimmer", 0, 0.15, "end"], ["bell", "end-0.6", 0.2]] }]
+    }
+  ]
+}
