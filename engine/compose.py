@@ -18,12 +18,19 @@ if cfg and tl.get("banner"):
     y0, y1 = cfg["src_card_y"]
     k = cfg["card_h"] / (y1 - y0 + 1)
     bw, bh = round(sw * k / 2) * 2, round(sh * k / 2) * 2
-    cw = min(bw, 1080)
+    cw = min(bw, 1080) // 2 * 2
     y = cfg["card_top"] - round(y0 * k)
-    print(f"  баннер: карточка {cw}x{cfg['card_h']} = {cfg['card_h'] * cw / (1080 * 1920):.1%} экрана, {bs:.2f}–{bs + dur:.2f} c")
-    cmd += ["-i", str(src), "-filter_complex",
-            f"[2:v]fps=30,chromakey={cfg['key_color']}:0.16:0.06,despill=type=green:mix=0.6:expand=0.1,"
-            f"scale={bw}:{bh}:flags=lanczos,crop={cw}:{bh}:(iw-{cw})/2:0,setpts=PTS-STARTPTS+{bs}/TB[b];"
+    print(f"  баннер: {cw}x{cfg['card_h']} = {cfg['card_h'] * cw / (1080 * 1920):.1%} экрана, {bs:.2f}–{bs + dur:.2f} c")
+    from PIL import Image, ImageDraw
+    mask = vdir / "build" / "banner_mask.png"
+    m = Image.new("L", (cw, bh), 0 if cfg.get("radius") else 255)
+    if cfg.get("radius"):
+        ImageDraw.Draw(m).rounded_rectangle([0, 0, cw - 1, bh - 1], radius=cfg["radius"], fill=255)
+    m.save(mask)
+    key = f"chromakey={cfg['key_color']}:0.16:0.06,despill=type=green:mix=0.6:expand=0.1," if cfg.get("key_color") else ""
+    cmd += ["-i", str(src), "-loop", "1", "-framerate", "30", "-t", str(dur), "-i", str(mask), "-filter_complex",
+            f"[2:v]fps=30,{key}scale={bw}:{bh}:flags=lanczos,crop={cw}:{bh}:(iw-{cw})/2:0,format=yuva420p[bs];"
+            f"[3:v]format=gray[m];[bs][m]alphamerge,setpts=PTS-STARTPTS+{bs}/TB[b];"
             f"[0:v][b]overlay=x={(1080 - cw) // 2}:y={y}:eof_action=pass:enable='between(t,{bs},{bs + dur})'[v]",
             "-map", "[v]", "-map", "1:a"]
 cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-profile:v", "high",

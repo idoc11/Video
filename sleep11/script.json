@@ -1,6 +1,6 @@
 {
   "title": "Он не спал 11 дней",
-  "handle": "@мозг.изнутри",
+  "handle": "@id0cs",
   "voice": "dmitri",
   "length_scale": 0.86,
   "gap_in_scene": 0.1,
@@ -9,18 +9,19 @@
   "tail": 0.9,
   "_caption_markup": "[слово] = жёлтая подсветка, {слово} = красная",
   "banner": {
-    "_": "рекламный баннер на хромакее; диктор молчит, пока идёт баннер",
-    "file": "../assets/banner.mp4",
+    "file": "../assets/banner_rubup.mp4",
     "after_scene": "day1",
-    "dur": 6.0,
-    "key_color": "0x00FE00",
+    "dur": 5.05,
+    "key_color": null,
     "src_card_y": [
-      80,
-      919
+      0,
+      1007
     ],
-    "card_h": 594,
+    "card_h": 580,
     "card_top": 930,
-    "cam_shift": 70
+    "cam_shift": 70,
+    "radius": 26,
+    "_": "рекламный баннер RubUP; диктор молчит, пока идёт баннер"
   },
   "scenes": [
     {
@@ -204,5 +205,6 @@
         ]
       ]
     }
-  ]
+  ],
+  "output": "sleep11_demo.mp4"
 }

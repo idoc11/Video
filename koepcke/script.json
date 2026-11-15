@@ -1,7 +1,7 @@
 {
   "title": "Она упала с неба",
   "output": "koepcke.mp4",
-  "handle": "@истории.выживания",
+  "handle": "@id0cs",
   "hud": {
     "label": "СИЛЫ",
     "invert": true
@@ -54,17 +54,18 @@
   "lead_in": 0.1,
   "tail": 0.9,
   "banner": {
-    "file": "../assets/banner.mp4",
+    "file": "../assets/banner_rubup.mp4",
     "after_scene": "river",
-    "dur": 6.0,
-    "key_color": "0x00FE00",
+    "dur": 5.05,
+    "key_color": null,
     "src_card_y": [
-      80,
-      919
+      0,
+      1007
     ],
-    "card_h": 519,
-    "card_top": 1010,
-    "cam_shift": 50
+    "card_h": 542,
+    "card_top": 1000,
+    "cam_shift": 50,
+    "radius": 26
   },
   "scenes": [
     {
