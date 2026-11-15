@@ -101,6 +101,7 @@ SFX = {
     "sizzle": lambda d: fade(norm(band(noise(d), 3000) * (.5 + .5 * np.sin(2 * np.pi * 17 * T(d)))), .05, .3),
     "shimmer": lambda d: fade(norm(sum(np.sin(2 * np.pi * fq * T(d)) * (.5 + .5 * np.sin(2 * np.pi * (.7 + i * .3) * T(d) + i)) for i, fq in enumerate((1318.5, 1567.98, 1975.5, 2637)))), .4, .5),
     "birds": lambda d: _chirps(d, 3),
+    "power_down": lambda d: sweep(950, 70, .5) * env(.5, .003, 4) * .9,
 }
 
 
@@ -203,30 +204,48 @@ def main():
     win = int(.06 * SR)
     venv = np.sqrt(np.convolve(voice ** 2, np.ones(win) / win, mode="same"))
     venv = np.convolve(venv, np.ones(win * 3) / (win * 3), mode="same")
-    duck = 1 - .5 * np.clip(venv / .08, 0, 1)
+    mc = script.get("mix", {})  # {"duck": доля приглушения под голосом, "sfx": громкость эффектов, "bg_cap_db": потолок фона}
+    duck = 1 - mc.get("duck", .5) * np.clip(venv / .08, 0, 1)
     tail = np.clip((dur - np.arange(n) / SR) / 1.0, 0, 1)
     mus = norm(mus, script.get("music", {}).get("level", .2)) * duck * tail
+    sfx = sfx * mc.get("sfx", .9) * (duck if mc.get("duck_sfx") else 1)
 
+    ad = np.zeros(n)  # звук рекламного баннера — отдельной дорожкой, потолок фона его не трогает
     bn, cfg = tl.get("banner"), script.get("banner")
     if bn and cfg:
         raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str((vdir / cfg["file"]).resolve()), "-vn", "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
                              capture_output=True, check=True).stdout
         ba = np.frombuffer(raw, dtype=np.float32).astype(np.float64)[: int(bn["dur"] * SR)]
-        def active_rms(x):
-            e = np.sqrt(np.convolve(x ** 2, np.ones(2205) / 2205, mode="same")); return np.sqrt(np.mean(x[e > .3 * e.max()] ** 2))
         gain = active_rms(voice) / active_rms(ba)
         a, e = int(bn["start"] * SR), int((bn["start"] + bn["dur"]) * SR)
         sfx[a:e] *= 0  # свои эффекты под баннером не звучат
-        place(sfx, ba * gain / .9, bn["start"], 1.0)
+        place(ad, ba * gain, bn["start"], 1.0)
         ramp = np.clip(np.minimum(np.arange(e - a) / (.25 * SR), (e - a - np.arange(e - a)) / (.25 * SR)), 0, 1)
         mus[a:e] *= 1 - .8 * ramp
         print(f"  баннер {bn['start']:.2f}–{bn['start'] + bn['dur']:.2f} c, звук x{gain:.2f}")
 
-    mix = norm(voice + mus + sfx * .9, .95)
+    bg = mus + sfx
+    if mc.get("bg_cap_db") is not None:
+        # фон нигде не громче голоса: кратковременная громкость фона ≤ средней громкости речи + bg_cap_db
+        cap = active_rms(voice) * 10 ** (mc["bg_cap_db"] / 20)
+        w = int(.3 * SR)
+        benv = np.sqrt(np.convolve(bg ** 2, np.ones(w) / w, mode="same"))
+        g = np.minimum(1, cap / np.maximum(benv, 1e-9))
+        g = -np.convolve(-g, np.ones(int(.05 * SR)) / int(.05 * SR), mode="same")
+        bg = bg * np.minimum(g, 1)
+        benv = np.sqrt(np.convolve(bg ** 2, np.ones(w) / w, mode="same"))
+        print(f"  фон: пик {20 * np.log10(benv.max() / active_rms(voice)):+.1f} дБ относительно голоса")
+    mix = norm(voice + bg + ad, .95)
     with wave.open(str(build / "mix.wav"), "wb") as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((np.stack([mix, mix], 1) * 32767).astype(np.int16).tobytes())
     print(f"  mix.wav {dur:.2f} c")
+
+
+def active_rms(x):
+    """Громкость речи: среднеквадратичное только по звучащим участкам."""
+    e = np.sqrt(np.convolve(x ** 2, np.ones(2205) / 2205, mode="same"))
+    return np.sqrt(np.mean(x[e > .3 * e.max()] ** 2))
 
 
 def load_wav(p):

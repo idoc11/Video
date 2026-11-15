@@ -1,0 +1,100 @@
+{
+  "title": "Что, если все люди исчезнут",
+  "output": "nopeople.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "ПРИРОДА", "invert": true },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.06 },
+  "music": {
+    "bpm": 84, "level": 0.12,
+    "roots": [110.0, 87.31, 130.81, 98.0],
+    "arps": [[220.0, 261.63, 329.63, 440.0], [174.61, 220.0, 261.63, 349.23], [261.63, 329.63, 392.0, 523.25], [196.0, 246.94, 293.66, 392.0]]
+  },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#3fd17a",
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "nuclear",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 0, "dayText": "СЕЙЧАС", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "[curious] Что, если все люди на Земле исчезнут — прямо сейчас?", "caption": "ЧТО, ЕСЛИ ВСЕ ЛЮДИ [ИСЧЕЗНУТ]?" }
+      ],
+      "views": [{ "name": "vanish", "seg": 0, "sfx": [["pop", 0.9, 0.5], ["pop", 1.25, 0.5], ["pop", 1.6, 0.5], ["pop", 1.95, 0.5], ["shimmer", 0.9, 0.2, 1.6]] }]
+    },
+    {
+      "id": "lights", "day": 1, "dayText": "ДЕНЬ 1", "meter": 2, "hudTone": "red",
+      "segments": [
+        { "voice": "В первые же сутки по всей планете гаснет свет.", "caption": "ПЛАНЕТА {ГАСНЕТ}" },
+        { "voice": "Электростанции без людей просто отключаются.", "caption": "СТАНЦИИ [ОТКЛЮЧАЮТСЯ]" }
+      ],
+      "views": [{ "name": "lights", "seg": 0, "sfx": [["power_down", "s1+0.3", 0.5], ["drone", 0, 0.2, "end"]] }]
+    },
+    {
+      "id": "subway", "day": 2, "dayText": "ДЕНЬ 2", "meter": 3, "hudTone": "red",
+      "segments": [
+        { "voice": "Через пару дней вода затапливает метро.", "caption": "МЕТРО {ПОД ВОДОЙ}" },
+        { "voice": "Насосы, которые откачивали её каждый день, остановились.", "caption": "НАСОСЫ [ОСТАНОВИЛИСЬ]" }
+      ],
+      "views": [{ "name": "subway", "seg": 0, "sfx": [["water", 0, 0.35, "end"], ["splash", 0.4, 0.3]] }]
+    },
+    {
+      "id": "nuclear", "day": 30, "dayText": "МЕСЯЦ 1", "meter": 5, "hudTone": "red",
+      "segments": [
+        { "voice": "[serious] Атомные станции остаются без присмотра.", "caption": "АЭС [БЕЗ ПРИСМОТРА]" },
+        { "voice": "Когда кончится резервное топливо, без охлаждения начнутся аварии.", "caption": "{АВАРИИ} ПО ВСЕМУ МИРУ" }
+      ],
+      "views": [{ "name": "nuclear", "seg": 0, "sfx": [["drone", 0, 0.25, "end"], ["tick", "s1", 0.25, null, 0.5, "end"], ["stinger", "e1-0.4", 0.35]] }]
+    },
+    {
+      "id": "year1", "day": 1, "dayText": "ГОД 1", "meter": 25, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Но природа не ждёт. Через год асфальт трескается, и улицы зарастают травой.", "caption": "УЛИЦЫ [ЗАРАСТАЮТ]" },
+        { "voice": "А в города заходят дикие звери.", "caption": "В ГОРОДАХ — [ДИКИЕ ЗВЕРИ]" }
+      ],
+      "views": [{ "name": "year1", "seg": 0, "sfx": [["birds", 0.2, 0.25, 3], ["wind", 0, 0.15, "end"]] }]
+    },
+    {
+      "id": "year20", "day": 20, "dayText": "ГОД 20", "meter": 55, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Через двадцать лет посреди улиц шумят леса.", "caption": "ЛЕС [ПОСРЕДИ УЛИЦ]" },
+        { "voice": "Деревянные дома гниют и рушатся.", "caption": "ДОМА {РУШАТСЯ}" }
+      ],
+      "views": [{ "name": "year20", "seg": 0, "sfx": [["wind", 0, 0.2, "end"], ["birds", 0.3, 0.2, 2], ["crash", "s1+0.5", 0.45]] }]
+    },
+    {
+      "id": "year300", "day": 300, "dayText": "ГОД 300", "meter": 80, "hudTone": "green",
+      "segments": [
+        { "voice": "Через несколько сотен лет падают стальные мосты. Их больше никто не красит, и ржавчина делает своё дело.", "caption": "МОСТЫ {ПАДАЮТ}" }
+      ],
+      "views": [{ "name": "year300", "seg": 0, "sfx": [["water", 0, 0.2, "end"], ["rumble", "end-2.2", 0.35, 1.2], ["crash", "end-1.1", 0.5]] }]
+    },
+    {
+      "id": "year10k", "day": 10000, "dayText": "ГОД 10 000", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "Через десять тысяч лет от нас почти ничего не останется.", "caption": "ОТ НАС — {ПОЧТИ НИЧЕГО}" },
+        { "voice": "Только пирамиды, бронзовые статуи... и пластик.", "caption": "ПИРАМИДЫ, БРОНЗА И [ПЛАСТИК]" }
+      ],
+      "views": [{ "name": "year10k", "seg": 0, "sfx": [["wind", 0, 0.2, "end"], ["pop", "s1+0.1", 0.4], ["pop", "s1+0.9", 0.4], ["bell", "s1+1.9", 0.25]] }]
+    },
+    {
+      "id": "cta", "day": 10000, "dayText": "ГОД 10 000", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "[curious] А как думаешь, что из нашего продержится дольше всего?", "caption": "ЧТО ПРОДЕРЖИТСЯ [ДОЛЬШЕ ВСЕГО]?" }
+      ],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["shimmer", 0, 0.15, "end"]] }]
+    }
+  ]
+}
