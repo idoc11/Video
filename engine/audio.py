@@ -179,6 +179,23 @@ def main():
     tl = json.loads((build / "timeline.json").read_text())
     dur = tl["duration"]; n = int(dur * SR)
     voice = load_wav(build / "voice.wav"); voice = np.pad(voice, (0, max(0, n - len(voice))))[:n]
+    # цензура: заменяем отмеченные слова на «пииип»
+    nb = 0
+    for sc in tl["scenes"]:
+        for g in sc["segments"]:
+            for bw in g.get("bleep", []):
+                for wi, (w, a0, a1) in enumerate(g.get("words", [])):
+                    if wi == len(g["words"]) - 1: a1 = max(a1, g["end"])
+                    if re.sub(r"[^а-яё]", "", w.lower()).startswith(bw.lower()):
+                        # начало — в самой тихой точке перед словом (пауза между словами)
+                        lo, hi = int((a0 - .2) * SR), int((a0 + .05) * SR)
+                        e_ = np.sqrt(np.convolve(voice[lo:hi] ** 2, np.ones(441) / 441, mode="same"))
+                        i0, i1 = lo + int(np.argmin(e_[220:-220])) + 220, int((a1 + .05) * SR)
+                        tt = np.arange(i1 - i0) / SR
+                        env_ = np.clip(np.minimum(tt / .01, (tt[-1] - tt) / .01), 0, 1)
+                        voice[i0:i1] = np.sin(2 * np.pi * 1000 * tt) * env_ * active_rms(voice) * 1.2
+                        nb += 1; break
+    if nb: print(f"  запикано слов: {nb}")
     sfx = np.zeros(n); duck_extra = np.ones(n)
     W = SFX["whoosh"](0)
     for k, sc in enumerate(tl["scenes"]):

@@ -241,8 +241,10 @@ def main():
                 t += g
             a = synth(seg, dflt, cache, fresh) * seg.get("gain", 1.0)
             seg_out = {"caption": seg["caption"], "voice": seg["voice"], "start": round(t, 3), "end": round(t + len(a) / SR, 3)}
-            if script.get("style") == "cinema":
+            if script.get("style") == "cinema" or seg.get("bleep"):
                 seg_out["words"] = word_times(seg["voice"], a, t)
+            if seg.get("bleep"):
+                seg_out["bleep"] = seg["bleep"]
             segs.append(seg_out)
             chunks.append(a)
             t += len(a) / SR
