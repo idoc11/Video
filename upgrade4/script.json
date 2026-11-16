@@ -1,0 +1,412 @@
+{
+  "title": "Апгрейд. Финал",
+  "output": "upgrade_s04_final.mp4",
+  "handle": "@id0cs",
+  "hud": {
+    "label": "ЖИЗНЬ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.5,
+    "tempo": 1.05
+  },
+  "music": {
+    "bpm": 84,
+    "level": 0.11
+  },
+  "mix": {
+    "duck": 0.75,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "wipe": "#8b5cff",
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.22,
+  "lead_in": 0.1,
+  "tail": 1.2,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "notice",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "count",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[menacing] Десять секунд. Время пошло.",
+          "caption": "{10 СЕКУНД}",
+          "voice_id": "pNInz6obpgDQGcFmaJgB"
+        }
+      ],
+      "views": [
+        {
+          "name": "count",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.3,
+              0.3,
+              null,
+              1.0,
+              "end"
+            ],
+            [
+              "stinger",
+              0.1,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plea",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[tired] Нажимай. Мне уже нечего терять.",
+          "caption": "«МНЕ УЖЕ [НЕЧЕГО] ТЕРЯТЬ»",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+        }
+      ],
+      "views": [
+        {
+          "name": "plea",
+          "seg": 0,
+          "sfx": [
+            [
+              "heartbeat",
+              0,
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "refuse",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[determined] Нет.",
+          "caption": "{НЕТ}",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ"
+        }
+      ],
+      "views": [
+        {
+          "name": "refuse",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0.05,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notice",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[whispers] И тут Ваня замечает: у Создателя тоже есть телефон. С той же кнопкой.",
+          "caption": "У СОЗДАТЕЛЯ — [ТА ЖЕ КНОПКА]"
+        }
+      ],
+      "views": [
+        {
+          "name": "notice",
+          "seg": 0,
+          "sfx": [
+            [
+              "shimmer",
+              "e0-1.5",
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grab",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[excited] Он выхватывает телефон — и жмёт «Улучшить».",
+          "caption": "ЖМЁТ [«УЛУЧШИТЬ»]"
+        }
+      ],
+      "views": [
+        {
+          "name": "grab",
+          "seg": 0,
+          "sfx": [
+            [
+              "swish",
+              0.3,
+              0.4
+            ],
+            [
+              "pop",
+              "e0-0.3",
+              0.5
+            ],
+            [
+              "rise_whoosh",
+              "e0-0.3",
+              0.4,
+              0.8
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "release",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 80,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Украденные годы возвращаются к хозяевам. Все до одного.",
+          "caption": "ГОДЫ [ВОЗВРАЩАЮТСЯ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "release",
+          "seg": 0,
+          "sfx": [
+            [
+              "riser",
+              0,
+              0.25,
+              "end"
+            ],
+            [
+              "shimmer",
+              0,
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decay",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 80,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[screaming] Нет!..",
+          "caption": "«{НЕТ}!..»",
+          "voice_id": "pNInz6obpgDQGcFmaJgB"
+        },
+        {
+          "voice": "Создатель стареет за секунды — и рассыпается в пыль.",
+          "caption": "СОЗДАТЕЛЬ — {В ПЫЛЬ}"
+        }
+      ],
+      "views": [
+        {
+          "name": "decay",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              0,
+              0.3
+            ],
+            [
+              "wind",
+              "s1",
+              0.3,
+              "end"
+            ],
+            [
+              "crash",
+              "e1-0.4",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "young",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[excited] Мне снова двадцать три!",
+          "caption": "«МНЕ СНОВА [23]!»",
+          "voice_id": "N2lVS1w4EtoT3dr4eOWO"
+        }
+      ],
+      "views": [
+        {
+          "name": "young",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              0.2,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "morning",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Утром приложение исчезло. Ваня снова самый невезучий парень в городе.",
+          "caption": "ПРИЛОЖЕНИЕ [ИСЧЕЗЛО]"
+        },
+        {
+          "voice": "[happy] И самый счастливый.",
+          "caption": "И САМЫЙ [СЧАСТЛИВЫЙ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "morning",
+          "seg": 0,
+          "sfx": [
+            [
+              "birds",
+              0.2,
+              0.2,
+              2.5
+            ],
+            [
+              "shimmer",
+              "s1",
+              0.12,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "twist",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[mysterious] А где-то в другом конце города загорается чей-то телефон.",
+          "caption": "ГДЕ-ТО [В ГОРОДЕ]…"
+        },
+        {
+          "voice": "Хочешь улучшить свою жизнь?",
+          "caption": "«ХОЧЕШЬ [УЛУЧШИТЬ] ЖИЗНЬ?»",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        }
+      ],
+      "views": [
+        {
+          "name": "twist",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.2,
+              "end"
+            ],
+            [
+              "glitch",
+              "s1",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "day": 0,
+      "dayText": "ФИНАЛ",
+      "meter": 100,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[curious] Апгрейд. Конец. Какой сериал снять следующим? Пиши в комментариях.",
+          "caption": "КАКОЙ СЕРИАЛ [СЛЕДУЮЩИМ]?"
+        }
+      ],
+      "views": [
+        {
+          "name": "endcard",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0.1,
+              0.25
+            ],
+            [
+              "shimmer",
+              0.2,
+              0.12,
+              "end"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "style": "cinema",
+  "tag": "АПГРЕЙД · ФИНАЛ"
+}

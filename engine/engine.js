@@ -51,7 +51,7 @@ const DEFS = `<defs>
 <filter id="blur6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
 <filter id="blur10" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10"/></filter>
 <filter id="blur30" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="30"/></filter>
-<filter id="sepia"><feColorMatrix type="matrix" values=".39 .77 .19 0 0  .35 .69 .17 0 0  .27 .53 .13 0 0  0 0 0 1 0"/></filter>
+<linearGradient id="cineTone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1fa7c9" stop-opacity=".55"/><stop offset="1" stop-color="#ff9a3c" stop-opacity=".45"/></linearGradient><radialGradient id="cineVig" cx="50%" cy="46%" r="68%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient><filter id="sepia"><feColorMatrix type="matrix" values=".39 .77 .19 0 0  .35 .69 .17 0 0  .27 .53 .13 0 0  0 0 0 1 0"/></filter>
 </defs>`;
 
 function sunburst(c1, c2, rot, cx = 540, cy = 820, n = 22) {
@@ -315,6 +315,35 @@ function hud(t, sc, prev) {
   s += txt(540, 238, `${HC.label}: ${Math.round(mv)}%`, 28, bad >= 99 && Math.sin(t * 18) > 0 ? '#ff6b6b' : '#fff', { w: 700, stroke: '#111427', sw: 7 });
   return s;
 }
+function cinemaCaption(seg, t) {
+  // куски по 2–4 слова: разрыв на знаке препинания или после 4 слов
+  const W = seg.words, chunks = []; let cur = [];
+  W.forEach((w, i) => { cur.push(i); if (cur.length >= 4 || (/[.,!?…—:]$/.test(w[0]) && cur.length >= 2) || i === W.length - 1) { chunks.push(cur); cur = []; } });
+  let ci = 0; chunks.forEach((c, k) => { if (t >= W[c[0]][1] - .05) ci = k; });
+  const acc = new Set((seg.caption.match(/[\[{](.+?)[\]}]/g) || []).flatMap(m => m.slice(1, -1).toUpperCase().split(/\s+/)).map(x => x.replace(/[^А-ЯЁA-Z0-9]/g, '')));
+  let wi = -1; W.forEach((w, i) => { if (t >= w[1] - .03) wi = i; });
+  const clean = x => x.replace(/[«»"]/g, '').toUpperCase();
+  const span = (i, back) => {
+    const w = clean(W[i][0]), key = w.replace(/[^А-ЯЁA-Z0-9]/g, ''), done = i <= wi, now = i === wi;
+    const col = now ? '#ffe14a' : acc.has(key) && done ? '#ff5a5a' : '#fff';
+    const st = back ? `opacity:${done ? 1 : .35};` : `color:${col};opacity:${done ? 1 : .42};`;
+    return `<span style="display:inline-block;${st}transform:scale(${now ? 1.1 : 1});margin:0 .12em">${w}</span>`;
+  };
+  const c = chunks[ci];
+  return { key: ci + ':' + wi + ':' + seg.start, back: c.map(i => span(i, true)).join(' '), front: c.map(i => span(i, false)).join(' ') };
+}
+function cinemaGrade(t) {
+  const r = rng(Math.floor(t * FPS) * 7 + 1); let g = '';
+  for (let i = 0; i < 260; i++) g += `<rect x="${f(r() * 1080)}" y="${f(r() * 1920)}" width="2" height="2" fill="${r() < .5 ? '#fff' : '#000'}" opacity=".18"/>`;
+  return `<rect width="1080" height="1920" fill="url(#cineTone)" style="mix-blend-mode:soft-light"/><rect width="1080" height="1920" fill="url(#cineVig)"/>` + g;
+}
+function cinemaHud(t, sc, prev) {
+  const HC = TL.hud || {}, ls = t - sc.start, mv = prev ? lerp(prev.meter, sc.meter, eOut(ls / .6)) : sc.meter;
+  const col = mv > 60 ? '#38e07b' : mv > 30 ? '#ffc21a' : '#ff3b3b';
+  let s = `<rect x="48" y="112" width="${f((TL.tag || '').length * 17 + 44)}" height="52" rx="10" fill="#000" opacity=".45"/><rect x="48" y="112" width="6" height="52" fill="#ff3b3b"/>` + txt(70, 139, TL.tag || '', 26, '#fff', { anchor: 'start', w: 700, ls: 3 });
+  if (HC.label) s += txt(1032, 128, HC.label + ' ' + Math.round(mv) + '%', 22, '#fff', { anchor: 'end', w: 700, op: .9, ls: 2 }) + `<rect x="792" y="146" width="240" height="8" rx="4" fill="#fff" opacity=".2"/><rect x="792" y="146" width="${f(240 * mv / 100)}" height="8" rx="4" fill="${col}"/>`;
+  return s;
+}
 function capHTML(c) { return c.replace(/\[(.+?)\]/g, '<span class="y">$1</span>').replace(/\{(.+?)\}/g, '<span class="r">$1</span>'); }
 
 const $art = document.getElementById('art'), $fx = document.getElementById('fx'), $cap = document.getElementById('cap');
@@ -333,6 +362,7 @@ function viewsOf(sc) {
 
 window.init = async function (tl) {
   TL = tl;
+  if (TL.style === 'cinema') { document.getElementById('cap').style.top = '1450px'; document.querySelectorAll('.cw').forEach(e => { e.style.fontSize = '74px'; e.style.lineHeight = '1.12'; }); document.querySelector('.cw.back').style.webkitTextStroke = '16px #000'; }
   TL.scenes.forEach(sc => { sc._views = viewsOf(sc); });
   await Promise.all(['900 92px Mont', '900 40px Rub', '700 22px Rub'].map(x => document.fonts.load(x, 'АБВ abc 0123')));
   await document.fonts.ready;
@@ -363,13 +393,18 @@ window.renderFrame = function (t) {
   const bIn = B && bc && sc.id === bc.after_scene && t >= B.start - .2;
   const bshift = bIn ? (bc.cam_shift || 0) * eInOut((t - B.start + .2) / .5) : 0;
   const cam = `translate(${f(540 + sx)},${f(820 + sy - bshift)}) scale(${z.toFixed(4)}) translate(-540,-820)`;
-  $art.innerHTML = DEFS + `<g transform="${cam}">${art}</g>` + (TL.hud?.hidden ? '' : hud(t, sc, prev)) +
+  const grade = TL.style === 'cinema' ? cinemaGrade(t) : '';
+  const hudS = TL.style === 'cinema' ? cinemaHud(t, sc, prev) : (TL.hud?.hidden ? '' : hud(t, sc, prev));
+  $art.innerHTML = DEFS + `<g transform="${cam}">${art}</g>` + grade + hudS +
     txt(48, 1580, TL.handle, 28, '#fff', { anchor: 'start', w: 700, op: .6, stroke: '#000', sw: 5 });
 
   let gi = 0; sc.segments.forEach((g, k) => { if (k === 0 || t >= g.start - .06) gi = k; });
   const seg = sc.segments[gi], cStart = gi === 0 ? sc.start : seg.start - .06;
   const key = si + ':' + gi;
-  if (key !== capKey) { capKey = key; $back.innerHTML = $front.innerHTML = capHTML(seg.caption); }
+  if (TL.style === 'cinema' && seg.words) {
+    const html = cinemaCaption(seg, t);
+    if (html.key !== capKey) { capKey = html.key; $back.innerHTML = html.back; $front.innerHTML = html.front; }
+  } else if (key !== capKey) { capKey = key; $back.innerHTML = $front.innerHTML = capHTML(seg.caption); }
   const dt = t - cStart;
   const cs = lerp(.55, 1, eBack(dt / .22)), cr = lerp(-5, 0, eOut(dt / .2));
   $cap.style.transform = `scale(${cs.toFixed(3)}) rotate(${cr.toFixed(2)}deg)`;
@@ -379,8 +414,9 @@ window.renderFrame = function (t) {
   let fx = '';
   TL.scenes.forEach((s2, k) => {
     if (k === 0) return;
-    const q = (t - (s2.start - .1)) / .2;
+    const q = TL.style === 'cinema' ? (t - (s2.start - .17)) / .34 : (t - (s2.start - .1)) / .2;
     if (q > 0 && q < 1) {
+      if (TL.style === 'cinema') { fx += `<rect width="1080" height="1920" fill="#000" opacity="${f(.92 * Math.sin(q * Math.PI))}"/>`; return; }
       const x = -2300 + q * 4600, col = TL.wipe || '#19d3f3';
       fx += `<path d="M${f(x)},0 L${f(x + 1900)},0 L${f(x + 1300)},1920 L${f(x - 600)},1920 Z" fill="${col}"/><path d="M${f(x + 1900)},0 L${f(x + 1990)},0 L${f(x + 1390)},1920 L${f(x + 1300)},1920 Z" fill="#fff" opacity=".9"/>`;
     }

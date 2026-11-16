@@ -153,6 +153,52 @@ def render_take(seg, o, cache, key):
     return trim(load(out), tail_thr=0.003 if o["fx"] else None)
 
 
+def word_times(text, a, t0):
+    """Время каждого слова: распределяем по слогам внутри реально звучащего участка реплики."""
+    words = [w for w in re.sub(r"\[[^\]]*\]", " ", text).split() if re.search(r"[\wа-яё0-9]", w, re.I)]
+    if not words:
+        return []
+    win = int(.02 * SR)
+    env = np.sqrt(np.convolve(a.astype(np.float64) ** 2, np.ones(win) / win, mode="same"))
+    on = np.where(env > .12 * env.max())[0]
+    s0, s1 = (on[0] / SR, on[-1] / SR) if len(on) else (0, len(a) / SR)
+    w8 = [max(1, len(re.findall(r"[аеёиоуыэюяaeiou]", w.lower()))) + (.6 if re.search(r"[.,!?…—:]$", w) else 0) for w in words]
+    tot, acc, out = sum(w8), 0.0, []
+    for w, k in zip(words, w8):
+        a_ = s0 + (s1 - s0) * acc / tot; acc += k; b_ = s0 + (s1 - s0) * acc / tot
+        out.append([w, round(t0 + a_, 3), round(t0 + b_, 3)])
+    # уточнение по реальному звуку: отметки времени слов из распознавания речи (выравнивание по тексту)
+    rec = asr()
+    if rec:
+        st = rec.create_stream(); st.accept_waveform(SR, a); rec.decode_stream(st)
+        r = st.result; aw, cur = [], None
+        for tok, ts in zip(r.tokens, r.timestamps):
+            if tok.startswith("▁") or cur is None:
+                cur = [tok.lstrip("▁"), ts]; aw.append(cur)
+            else:
+                cur[0] += tok
+        norm = lambda x: re.sub(r"[^а-я0-9]", "", x.lower().replace("ё", "е"))
+        sm = difflib.SequenceMatcher(None, [norm(w) for w in words], [norm(w[0]) for w in aw])
+        fixed = {}
+        for tag, i1, i2, j1, j2 in sm.get_opcodes():
+            if tag == "equal":
+                for k in range(i2 - i1): fixed[i1 + k] = aw[j1 + k][1]
+            elif tag == "replace" and i2 - i1 == j2 - j1:
+                for k in range(i2 - i1): fixed[i1 + k] = aw[j1 + k][1]
+        if len(fixed) >= max(1, len(words) // 2):
+            starts = [fixed.get(i) for i in range(len(words))]
+            for i in range(len(words)):        # пропуски — интерполяция между соседями
+                if starts[i] is None:
+                    prev = next((j for j in range(i - 1, -1, -1) if starts[j] is not None), None)
+                    nxt = next((j for j in range(i + 1, len(words)) if starts[j] is not None), None)
+                    pa = starts[prev] if prev is not None else s0; na = starts[nxt] if nxt is not None else s1
+                    pi = prev if prev is not None else -1; ni = nxt if nxt is not None else len(words)
+                    starts[i] = pa + (na - pa) * (i - pi) / (ni - pi)
+            starts = [max(0, x - .04) for x in starts]
+            out = [[w, round(t0 + starts[i], 3), round(t0 + (starts[i + 1] if i + 1 < len(words) else s1), 3)] for i, w in enumerate(words)]
+    return out
+
+
 def breath(seed):
     """Тихий вдох: шум с формантой около 1 кГц и плавной огибающей."""
     r = np.random.default_rng(seed); d = .26 + .1 * r.random(); n = int(d * SR)
@@ -194,7 +240,10 @@ def main():
                 chunks.append(silence(g, dflt.get("humanize"), si * 10 + gi))
                 t += g
             a = synth(seg, dflt, cache, fresh) * seg.get("gain", 1.0)
-            segs.append({"caption": seg["caption"], "voice": seg["voice"], "start": round(t, 3), "end": round(t + len(a) / SR, 3)})
+            seg_out = {"caption": seg["caption"], "voice": seg["voice"], "start": round(t, 3), "end": round(t + len(a) / SR, 3)}
+            if script.get("style") == "cinema":
+                seg_out["words"] = word_times(seg["voice"], a, t)
+            segs.append(seg_out)
             chunks.append(a)
             t += len(a) / SR
         g = script.get("tail", .9) if si == len(script["scenes"]) - 1 else sc.get("gap_after", script.get("gap_between_scenes", .16))
@@ -213,7 +262,7 @@ def main():
     with wave.open(str(build / "voice.wav"), "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((track * 32767).astype(np.int16).tobytes())
-    tl |= {"duration": round(t, 3), "handle": script["handle"], "hud": script.get("hud"), "wipe": script.get("wipe")}
+    tl |= {"duration": round(t, 3), "handle": script["handle"], "hud": script.get("hud"), "wipe": script.get("wipe"), "style": script.get("style"), "tag": script.get("tag")}
     (build / "timeline.json").write_text(json.dumps(tl, ensure_ascii=False, indent=1))
     print(f"  итого {t:.2f} c")
 
