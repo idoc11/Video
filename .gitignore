@@ -5,3 +5,4 @@ __pycache__/
 engine/.cache/
 */build/
 cs_top4/build/
+clip_logo/build/
