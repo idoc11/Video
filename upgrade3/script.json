@@ -1,0 +1,339 @@
+{
+  "title": "Апгрейд. Серия 3",
+  "output": "upgrade_s03.mp4",
+  "handle": "@id0cs",
+  "hud": {
+    "label": "ЖИЗНЬ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.5,
+    "tempo": 1.05
+  },
+  "music": {
+    "bpm": 90,
+    "level": 0.12
+  },
+  "mix": {
+    "duck": 0.7,
+    "sfx": 0.55,
+    "duck_sfx": true,
+    "bg_cap_db": -12
+  },
+  "wipe": "#8b5cff",
+  "gap_in_scene": 0.14,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.8,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "tempt",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "recap",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Ранее: Ваня потерял шесть лет жизни. А на пороге — старик, которому двадцать три.",
+          "caption": "РАНЕЕ: {−6 ЛЕТ}"
+        }
+      ],
+      "views": [
+        {
+          "name": "recap3",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              0.2,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "misha",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Меня зовут Миша. Полгода назад я был таким же, как ты.",
+          "caption": "«МЕНЯ ЗОВУТ [МИША]»",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+        },
+        {
+          "voice": "[mysterious] У Миши то же приложение. Сорок семь улучшений.",
+          "caption": "[47] УЛУЧШЕНИЙ"
+        }
+      ],
+      "views": [
+        {
+          "name": "misha",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              "s1+0.3",
+              0.2,
+              null,
+              0.05,
+              "s1+1.6"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "secret",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Годы никуда не исчезают. Их кто-то забирает.",
+          "caption": "ГОДЫ [КТО-ТО ЗАБИРАЕТ]",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+        }
+      ],
+      "views": [
+        {
+          "name": "vortex",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.25,
+              "end"
+            ],
+            [
+              "rise_whoosh",
+              0.6,
+              0.25,
+              1.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trace",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Миша выяснил, куда приложение отправляет данные: старый дата-центр на окраине.",
+          "caption": "ЗАБРОШЕННЫЙ [ДАТА-ЦЕНТР]"
+        }
+      ],
+      "views": [
+        {
+          "name": "trace",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              1.2,
+              0.4
+            ],
+            [
+              "tick",
+              0.2,
+              0.15,
+              null,
+              0.08,
+              1.0
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tempt",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[mysterious] По дороге телефон Вани снова загорается.",
+          "caption": "ТЕЛЕФОН [ЗАГОРАЕТСЯ]"
+        },
+        {
+          "voice": "Улучшить скорость?",
+          "caption": "«[УЛУЧШИТЬ] СКОРОСТЬ?»",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        },
+        {
+          "voice": "Даже не думай.",
+          "caption": "«ДАЖЕ {НЕ ДУМАЙ}»",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ"
+        }
+      ],
+      "views": [
+        {
+          "name": "tempt",
+          "seg": 0,
+          "sfx": [
+            [
+              "rumble",
+              0,
+              0.2,
+              "end"
+            ],
+            [
+              "glitch",
+              "s1",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dc",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[mysterious] Внутри — тысячи серверов. И один человек.",
+          "caption": "ТЫСЯЧИ СЕРВЕРОВ. [И ОДИН ЧЕЛОВЕК]"
+        }
+      ],
+      "views": [
+        {
+          "name": "dc",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.25,
+              "end"
+            ],
+            [
+              "tick",
+              0.2,
+              0.1,
+              null,
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "creator",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Он выглядит на двадцать. Но на его столе — его же фото. Тысяча восемьсот девяностого года.",
+          "caption": "ЕГО ФОТО — [1890 ГОДА]"
+        }
+      ],
+      "views": [
+        {
+          "name": "creator",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              "end-1.8",
+              0.35
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "offer",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Хочешь вернуть свои годы? Забери их у друга. Нажми «Улучшить» на его телефоне.",
+          "caption": "«ЗАБЕРИ ГОДЫ [У ДРУГА]»",
+          "voice_id": "pNInz6obpgDQGcFmaJgB"
+        }
+      ],
+      "views": [
+        {
+          "name": "offer",
+          "seg": 0,
+          "sfx": [
+            [
+              "heartbeat",
+              0,
+              0.3,
+              "end"
+            ],
+            [
+              "stinger",
+              "end-0.8",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cliff",
+      "day": 0,
+      "dayText": "СЕРИЯ 3",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[curious] Что выберет Ваня? А ты бы нажал? Пиши в комментариях.",
+          "caption": "А ТЫ БЫ [НАЖАЛ]?"
+        }
+      ],
+      "views": [
+        {
+          "name": "cliff3",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
