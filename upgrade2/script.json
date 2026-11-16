@@ -1,0 +1,379 @@
+{
+  "title": "Апгрейд. Серия 2",
+  "output": "upgrade_s02.mp4",
+  "handle": "@id0cs",
+  "hud": {
+    "label": "ЖИЗНЬ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.5,
+    "tempo": 1.05
+  },
+  "music": {
+    "bpm": 90,
+    "level": 0.12
+  },
+  "mix": {
+    "duck": 0.7,
+    "sfx": 0.55,
+    "duck_sfx": true,
+    "bg_cap_db": -12
+  },
+  "wipe": "#8b5cff",
+  "gap_in_scene": 0.14,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.8,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "press",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "recap",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 90,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "В прошлой серии Ваня нажал «Улучшить» — и потерял год жизни.",
+          "caption": "РАНЕЕ: {−1 ГОД ЖИЗНИ}"
+        }
+      ],
+      "views": [
+        {
+          "name": "recap",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              0.2,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "buzz",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 90,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[mysterious] Ровно через сутки телефон снова вибрирует.",
+          "caption": "ЧЕРЕЗ [24 ЧАСА]…"
+        },
+        {
+          "voice": "Доступно новое улучшение. Хочешь стать богатым?",
+          "caption": "«ХОЧЕШЬ СТАТЬ [БОГАТЫМ]?»",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        }
+      ],
+      "views": [
+        {
+          "name": "buzz",
+          "seg": 0,
+          "sfx": [
+            [
+              "glitch",
+              0.3,
+              0.3,
+              null,
+              0.35,
+              1.4
+            ],
+            [
+              "shimmer",
+              "s1",
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "press",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 90,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Один раз... и всё.",
+          "caption": "«ОДИН РАЗ… [И ВСЁ]»",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ"
+        },
+        {
+          "voice": "Он снова нажимает.",
+          "caption": "ОН [СНОВА] НАЖИМАЕТ"
+        }
+      ],
+      "views": [
+        {
+          "name": "tap",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              "s1+0.4",
+              0.5
+            ],
+            [
+              "rise_whoosh",
+              "s1+0.4",
+              0.3,
+              0.6
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rich",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 90,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[excited] На счёт падает миллион рублей.",
+          "caption": "НА СЧЁТ: [+1 000 000 ₽]"
+        },
+        {
+          "voice": "[excited] Да ладно!",
+          "caption": "«ДА [ЛАДНО]!»",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ"
+        }
+      ],
+      "views": [
+        {
+          "name": "rich",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.3,
+              0.2,
+              null,
+              0.06,
+              1.6
+            ],
+            [
+              "bell",
+              1.8,
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "greed",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 70,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Ваня жмёт ещё. И ещё. Одежда. Машина. Квартира.",
+          "caption": "ЕЩЁ. И ЕЩЁ. [И ЕЩЁ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "greed",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              1.2,
+              0.4
+            ],
+            [
+              "pop",
+              2.0,
+              0.4
+            ],
+            [
+              "pop",
+              2.7,
+              0.4
+            ],
+            [
+              "pop",
+              3.4,
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cost",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Списано пять лет жизни.",
+          "caption": "СПИСАНО: {5 ЛЕТ ЖИЗНИ}",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        },
+        {
+          "voice": "Ваня смотрит на свои руки... и не узнаёт их.",
+          "caption": "ЭТО [ЕГО РУКИ]?"
+        }
+      ],
+      "views": [
+        {
+          "name": "hands",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              0.1,
+              0.35
+            ],
+            [
+              "heartbeat",
+              "s1",
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delete",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[shouting] Всё, хватит! Удаляю!",
+          "caption": "«ХВАТИТ! {УДАЛЯЮ}!»",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ"
+        },
+        {
+          "voice": "[mysterious] Но кнопка «Удалить» сама превращается в «Улучшить».",
+          "caption": "«УДАЛИТЬ» → [«УЛУЧШИТЬ»]"
+        }
+      ],
+      "views": [
+        {
+          "name": "delete",
+          "seg": 0,
+          "sfx": [
+            [
+              "glitch",
+              "s1+1.0",
+              0.4
+            ],
+            [
+              "glitch",
+              "s1+1.3",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "knock",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "И тут в дверь стучат. На пороге — седой старик.",
+          "caption": "НА ПОРОГЕ — [СТАРИК]"
+        },
+        {
+          "voice": "Мне двадцать три. Я тоже нажимал.",
+          "caption": "«МНЕ {23}. Я ТОЖЕ НАЖИМАЛ»",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+          "pitch": 0.9
+        }
+      ],
+      "views": [
+        {
+          "name": "door",
+          "seg": 0,
+          "sfx": [
+            [
+              "thump",
+              0.2,
+              0.6
+            ],
+            [
+              "thump",
+              0.5,
+              0.6
+            ],
+            [
+              "thump",
+              0.8,
+              0.6
+            ],
+            [
+              "stinger",
+              "s1+1.6",
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cliff",
+      "day": 0,
+      "dayText": "СЕРИЯ 2",
+      "meter": 55,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[curious] Кто он? И что будет с Ваней? Продолжение — в следующей серии.",
+          "caption": "ПРОДОЛЖЕНИЕ [СЛЕДУЕТ]…"
+        }
+      ],
+      "views": [
+        {
+          "name": "cliff2",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
