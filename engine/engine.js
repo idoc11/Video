@@ -302,7 +302,7 @@ function hud(t, sc, prev) {
     sc = { ...sc, hudTone: left <= 10 ? 'red' : sc.hudTone };
   }
   const changed = HC.timer ? false : (!prev || (prev.dayText ?? prev.day) !== (sc.dayText ?? sc.day));
-  const pw = Math.max(300, Math.round(dayText.length * 56 * .64 + 76));
+  const pw = Math.max(300, Math.round(dayText.length * 56 * .7 + 80));
   const tone = TONES[sc.hudTone];
   const k = changed ? lerp(1.45, 1, eBack(ls / .32)) : 1;
   const mv = prev ? lerp(prev.meter, sc.meter, eOut(ls / .6)) : sc.meter;

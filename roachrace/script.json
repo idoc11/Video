@@ -1,0 +1,422 @@
+{
+  "title": "Тараканьи бега",
+  "output": "roachrace.mp4",
+  "handle": "@id0cs",
+  "hud": {
+    "label": "ДИСТАНЦИЯ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.0,
+    "tempo": 1.06
+  },
+  "music": {
+    "bpm": 128,
+    "level": 0.12,
+    "pulse": true
+  },
+  "mix": {
+    "duck": 0.7,
+    "sfx": 0.55,
+    "duck_sfx": true,
+    "bg_cap_db": -12
+  },
+  "wipe": "#ffd23a",
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.12,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "crumb",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 0
+  },
+  "scenes": [
+    {
+      "id": "intro",
+      "day": 0,
+      "dayText": "ЗАБЕГ №1",
+      "meter": 0,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[excited] Дамы и господа, добро пожаловать на тараканьи бега!",
+          "caption": "[ТАРАКАНЬИ БЕГА]!"
+        },
+        {
+          "voice": "Пять участников. Выбери своего — и смотри до конца!",
+          "caption": "ВЫБЕРИ [СВОЕГО]!"
+        }
+      ],
+      "views": [
+        {
+          "name": "lineup",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              0.1,
+              0.2
+            ],
+            [
+              "pop",
+              "s1+0.2",
+              0.3,
+              null,
+              0.25,
+              "s1+1.3"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "start",
+      "day": 0,
+      "dayText": "СТАРТ",
+      "meter": 5,
+      "hudTone": "yellow",
+      "race": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          14,
+          5,
+          10,
+          9
+        ]
+      ],
+      "segments": [
+        {
+          "voice": "[excited] На старт... внимание... марш!",
+          "caption": "НА СТАРТ… {МАРШ!}"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.3,
+              0.3
+            ],
+            [
+              "tick",
+              1.0,
+              0.3
+            ],
+            [
+              "boom",
+              "e0-0.4",
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lead",
+      "day": 0,
+      "dayText": "ЗАБЕГ №1",
+      "meter": 35,
+      "hudTone": "yellow",
+      "race": [
+        [
+          8,
+          14,
+          5,
+          10,
+          9
+        ],
+        [
+          30,
+          42,
+          18,
+          33,
+          28
+        ]
+      ],
+      "fx": "lead",
+      "segments": [
+        {
+          "voice": "[excited] Шустрик сразу вырывается вперёд! Усач не отстаёт!",
+          "caption": "[ШУСТРИК] ВПЕРЕДИ!"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "rise_whoosh",
+              0.2,
+              0.25,
+              0.8
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crumb",
+      "day": 0,
+      "dayText": "ЗАБЕГ №1",
+      "meter": 55,
+      "hudTone": "yellow",
+      "race": [
+        [
+          30,
+          42,
+          18,
+          33,
+          28
+        ],
+        [
+          50,
+          58,
+          32,
+          35,
+          47
+        ]
+      ],
+      "fx": "crumb",
+      "segments": [
+        {
+          "voice": "[laughs] Ой! Генерал нашёл крошку — и забыл про гонку!",
+          "caption": "ГЕНЕРАЛ НАШЁЛ {КРОШКУ}"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.6,
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "comeback",
+      "day": 0,
+      "dayText": "ЗАБЕГ №1",
+      "meter": 70,
+      "hudTone": "green",
+      "race": [
+        [
+          50,
+          58,
+          32,
+          35,
+          47
+        ],
+        [
+          70,
+          74,
+          66,
+          40,
+          62
+        ]
+      ],
+      "fx": "turbo",
+      "segments": [
+        {
+          "voice": "[excited] А Тапок, который плёлся последним, включает турбо!",
+          "caption": "ТАПОК ВКЛЮЧАЕТ [ТУРБО]"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "rise_whoosh",
+              1.2,
+              0.35,
+              1.0
+            ],
+            [
+              "riser",
+              0.8,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "day": 0,
+      "dayText": "ФИНИШ БЛИЗКО",
+      "meter": 95,
+      "hudTone": "green",
+      "race": [
+        [
+          70,
+          74,
+          66,
+          40,
+          62
+        ],
+        [
+          96,
+          97,
+          97.5,
+          48,
+          88
+        ]
+      ],
+      "fx": "turbo",
+      "segments": [
+        {
+          "voice": "[excited] Последние сантиметры! Шустрик, Усач, Тапок — ноздря в ноздрю!",
+          "caption": "{НОЗДРЯ В НОЗДРЮ}!"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "heartbeat",
+              0,
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "photo",
+      "day": 0,
+      "dayText": "ФОТОФИНИШ",
+      "meter": 100,
+      "hudTone": "green",
+      "race": [
+        [
+          96,
+          97,
+          97.5,
+          48,
+          88
+        ],
+        [
+          99.7,
+          99.85,
+          100.4,
+          49,
+          90
+        ]
+      ],
+      "fx": "photo",
+      "segments": [
+        {
+          "voice": "[excited] Фотофиниш! Кто же первый?",
+          "caption": "{ФОТОФИНИШ}"
+        }
+      ],
+      "views": [
+        {
+          "name": "race",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              "e0-0.2",
+              0.3
+            ],
+            [
+              "tick",
+              "e0-0.15",
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "winner",
+      "day": 0,
+      "dayText": "ИТОГИ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[excited] И побеждает... Тапок!",
+          "caption": "ПОБЕДИТЕЛЬ — [ТАПОК]!"
+        },
+        {
+          "voice": "Аутсайдер, которого никто не ждал!",
+          "caption": "{АУТСАЙДЕР} ВЗЯЛ ЗОЛОТО"
+        }
+      ],
+      "views": [
+        {
+          "name": "podium",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              "s0+1.2",
+              0.3
+            ],
+            [
+              "shimmer",
+              "s0+1.2",
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "day": 0,
+      "dayText": "ИТОГИ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[curious] А на кого ставил ты? Пиши в комментариях!",
+          "caption": "НА КОГО [СТАВИЛ] ТЫ?"
+        }
+      ],
+      "views": [
+        {
+          "name": "cta",
+          "seg": 0
+        }
+      ]
+    }
+  ]
+}
