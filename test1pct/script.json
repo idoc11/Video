@@ -1,0 +1,283 @@
+{
+  "title": "Только 1% пройдёт",
+  "output": "test1pct.mp4",
+  "handle": "@id0cs",
+  "style": "cinema",
+  "tag": "ТЕСТ НА ВНИМАНИЕ",
+  "hud": {
+    "label": "ПРОЙДЕНО",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.5,
+    "tempo": 1.06
+  },
+  "music": {
+    "bpm": 120,
+    "level": 0.11,
+    "pulse": true
+  },
+  "mix": {
+    "duck": 0.75,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.2,
+  "lead_in": 0.1,
+  "tail": 1.0,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "tease",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 0
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 0,
+      "dayText": "ТЕСТ",
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[curious] Только один процент людей пройдёт все четыре уровня. Проверим тебя?",
+          "caption": "ТОЛЬКО [1%] ПРОЙДЁТ ВСЁ"
+        }
+      ],
+      "views": [
+        {
+          "name": "hook",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0.1,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l1",
+      "day": 1,
+      "dayText": "УРОВЕНЬ 1/4",
+      "meter": 25,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Уровень один. Найди кружок другого цвета. Три секунды!",
+          "caption": "НАЙДИ [ДРУГОЙ ЦВЕТ]"
+        },
+        {
+          "voice": "[excited] Вот он!",
+          "caption": "[ОТВЕТ]",
+          "gap": 3.3
+        }
+      ],
+      "views": [
+        {
+          "name": "shade1",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              "e0+0.1",
+              0.35,
+              null,
+              1.0,
+              "e0+2.2"
+            ],
+            [
+              "bell",
+              "s1-0.05",
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "day": 2,
+      "dayText": "УРОВЕНЬ 2/4",
+      "meter": 50,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Уровень два. Найди букву Щ.",
+          "caption": "НАЙДИ БУКВУ [Щ]"
+        },
+        {
+          "voice": "[excited] Вот она!",
+          "caption": "[ОТВЕТ]",
+          "gap": 3.3
+        }
+      ],
+      "views": [
+        {
+          "name": "letterShch",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              "e0+0.1",
+              0.35,
+              null,
+              1.0,
+              "e0+2.2"
+            ],
+            [
+              "bell",
+              "s1-0.05",
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tease",
+      "day": 2,
+      "dayText": "УРОВЕНЬ 2/4",
+      "meter": 50,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[mysterious] Дальше будет сложнее. Досмотри до конца.",
+          "caption": "ДАЛЬШЕ — [СЛОЖНЕЕ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "tease",
+          "seg": 0,
+          "sfx": [
+            [
+              "stinger",
+              0.1,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "day": 3,
+      "dayText": "УРОВЕНЬ 3/4",
+      "meter": 75,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Уровень три. Найди букву Ё.",
+          "caption": "НАЙДИ БУКВУ [Ё]"
+        },
+        {
+          "voice": "[excited] Вот она!",
+          "caption": "[ОТВЕТ]",
+          "gap": 3.3
+        }
+      ],
+      "views": [
+        {
+          "name": "letterYo",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              "e0+0.1",
+              0.35,
+              null,
+              1.0,
+              "e0+2.2"
+            ],
+            [
+              "bell",
+              "s1-0.05",
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l4",
+      "day": 4,
+      "dayText": "УРОВЕНЬ 4/4",
+      "meter": 100,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[whispers] Последний уровень. Почти невозможно.",
+          "caption": "{ПОЧТИ НЕВОЗМОЖНО}"
+        },
+        {
+          "voice": "[excited] Вот он!",
+          "caption": "[ОТВЕТ]",
+          "gap": 3.3
+        }
+      ],
+      "views": [
+        {
+          "name": "shade4",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              "e0+0.1",
+              0.35,
+              null,
+              1.0,
+              "e0+2.2"
+            ],
+            [
+              "bell",
+              "s1-0.05",
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "day": 4,
+      "dayText": "ИТОГ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[excited] Сколько уровней прошёл ты? Пиши цифру в комментариях!",
+          "caption": "СКОЛЬКО ПРОШЁЛ? [ПИШИ ЦИФРУ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "cta",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              0.2,
+              0.2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
