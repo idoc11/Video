@@ -1,0 +1,97 @@
+{
+  "title": "Миллион на газяву и кирики",
+  "output": "million.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "БЮДЖЕТ", "invert": true },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.06 },
+  "music": {
+    "bpm": 112, "level": 0.12, "pulse": true,
+    "roots": [130.81, 110.0, 87.31, 98.0],
+    "arps": [[261.63, 329.63, 392.0, 523.25], [220.0, 261.63, 329.63, 440.0], [174.61, 220.0, 261.63, 349.23], [196.0, 246.94, 293.66, 392.0]]
+  },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#2fd27a",
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.14,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "trucks",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 0, "dayText": "$1 000 000", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "[excited] Тебе дали миллион долларов!", "caption": "ТЕБЕ ДАЛИ [$1 000 000]" },
+        { "voice": "Но тратить можно только на газяву и кирики.", "caption": "НО ТОЛЬКО НА {ГАЗЯВУ И КИРИКИ}" }
+      ],
+      "views": [{ "name": "hook", "seg": 0, "sfx": [["bell", 0.1, 0.25], ["pop", "s1+0.3", 0.4], ["pop", "s1+0.7", 0.4]] }]
+    },
+    {
+      "id": "split", "day": 0, "dayText": "$1 000 000", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "Делим пополам. Бутылка газявы — полтора доллара, пачка кириков — пятьдесят центов.", "caption": "ГАЗЯВА [$1,5] • КИРИКИ [$0,5]" }
+      ],
+      "views": [{ "name": "split", "seg": 0, "sfx": [["pop", 0.3, 0.35], ["pop", 1.6, 0.35]] }]
+    },
+    {
+      "id": "soda", "day": 0, "dayText": "$500 000", "meter": 50, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Выходит триста тридцать три тысячи бутылок. Полмиллиона литров!", "caption": "[500 000 ЛИТРОВ] ГАЗЯВЫ" },
+        { "voice": "[excited] Это пятая часть олимпийского бассейна.", "caption": "= [1/5] ОЛИМПИЙСКОГО БАССЕЙНА" }
+      ],
+      "views": [
+        { "name": "bottles", "seg": 0, "sfx": [["tick", 0.2, 0.2, null, 0.06, 1.6]] },
+        { "name": "pool", "seg": 1, "sfx": [["water", 0, 0.3, "end"], ["splash", 0.2, 0.4]] }
+      ]
+    },
+    {
+      "id": "croutons", "day": 0, "dayText": "$0", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "И миллион пачек кириков. Сорок тонн — столько весят семь слонов!", "caption": "40 ТОНН = [7 СЛОНОВ]" }
+      ],
+      "views": [{ "name": "scale", "seg": 0, "sfx": [["thump", 0.5, 0.5], ["crash", 1.6, 0.3]] }]
+    },
+    {
+      "id": "trucks", "day": 0, "dayText": "$0", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "Чтобы всё это привезти, понадобится почти тридцать фур.", "caption": "ПОНАДОБИТСЯ [~30 ФУР]" }
+      ],
+      "views": [{ "name": "trucks", "seg": 0, "sfx": [["rumble", 0, 0.3, "end"]] }]
+    },
+    {
+      "id": "years", "day": 0, "dayText": "$0", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "Если пить по бутылке в день, газявы хватит на девятьсот лет.", "caption": "ГАЗЯВЫ — НА [900 ЛЕТ]" },
+        { "voice": "[laughs] А кириков — почти на три тысячи. Начинать надо было ещё до нашей эры!", "caption": "КИРИКОВ — НА [2 740 ЛЕТ]" }
+      ],
+      "views": [
+        { "name": "years", "seg": 0, "sfx": [["tick", 0.3, 0.2, null, 0.05, 1.5]] },
+        { "name": "ancient", "seg": 1, "sfx": [["bell", 0.4, 0.2]] }
+      ]
+    },
+    {
+      "id": "health", "day": 0, "dayText": "$0", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "Только здоровье не оценит. В одной бутылке — около ста шестидесяти граммов сахара.", "caption": "В БУТЫЛКЕ — [160 Г САХАРА]" },
+        { "voice": "[serious] Это втрое больше дневной нормы.", "caption": "{×3} ДНЕВНОЙ НОРМЫ" }
+      ],
+      "views": [{ "name": "sugar", "seg": 0, "sfx": [["pop", 0.3, 0.3, null, 0.12, 1.6], ["stinger", "s1", 0.3]] }]
+    },
+    {
+      "id": "cta", "day": 0, "dayText": "$0", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "[curious] Ну что, взял бы такой миллион?", "caption": "А ТЫ БЫ [ВЗЯЛ]?" }
+      ],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["bell", 0.2, 0.2]] }]
+    }
+  ]
+}
