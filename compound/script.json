@@ -1,0 +1,92 @@
+{
+  "title": "100 млн сейчас или 0,5 ₽ +1% в день",
+  "output": "compound.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "ДО 100 МЛН", "invert": true },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.07 },
+  "music": {
+    "bpm": 108, "level": 0.12, "pulse": true,
+    "roots": [110.0, 87.31, 130.81, 98.0],
+    "arps": [[220.0, 261.63, 329.63, 440.0], [174.61, 220.0, 261.63, 349.23], [261.63, 329.63, 392.0, 523.25], [196.0, 246.94, 293.66, 392.0]]
+  },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#ffd23a",
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.14,
+  "lead_in": 0.1,
+  "tail": 0.7,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "year4",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [0, 1007],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook", "day": 0, "dayText": "ДЕНЬ 0", "meter": 0, "hudTone": "yellow",
+      "segments": [
+        { "voice": "[curious] Сто миллионов рублей сразу...", "caption": "[100 000 000 ₽] СРАЗУ" },
+        { "voice": "или пятьдесят копеек в день, но каждый день — на один процент больше. Десять лет.", "caption": "ИЛИ [0,5 ₽] +1% КАЖДЫЙ ДЕНЬ" },
+        { "voice": "Что выберешь?", "caption": "ЧТО {ВЫБЕРЕШЬ}?" }
+      ],
+      "views": [{ "name": "hook", "seg": 0, "sfx": [["bell", 0.1, 0.2], ["pop", "s1+0.2", 0.4], ["pop", "s2", 0.4]] }]
+    },
+    {
+      "id": "month", "day": 30, "dayText": "ДЕНЬ 30", "meter": 0, "hudTone": "red",
+      "segments": [
+        { "voice": "Выбор вроде очевиден.", "caption": "ВЫБОР [ОЧЕВИДЕН]?" },
+        { "voice": "[laughs] За первый месяц ты получишь... семнадцать рублей.", "caption": "МЕСЯЦ 1: [17 ₽]" }
+      ],
+      "views": [{ "name": "month", "seg": 0, "sfx": [["pop", "s1+1.4", 0.4], ["tick", "s1+1.5", 0.2, null, 0.08, "end-0.3"]] }]
+    },
+    {
+      "id": "year1", "day": 365, "dayText": "ДЕНЬ 365", "meter": 0, "hudTone": "red",
+      "segments": [{ "voice": "За целый год — тысяча восемьсот рублей.", "caption": "ГОД 1: [1 839 ₽]" }],
+      "views": [{ "name": "chart1", "seg": 0, "sfx": [["tick", 0.2, 0.15, null, 0.1, "end-0.3"]] }]
+    },
+    {
+      "id": "year3", "day": 1095, "dayText": "ДЕНЬ 1095", "meter": 3, "hudTone": "yellow",
+      "segments": [{ "voice": "Но к концу третьего года тебе платят уже двадцать шесть тысяч в день.", "caption": "ГОД 3: [26 700 ₽] В ДЕНЬ" }],
+      "views": [{ "name": "chart3", "seg": 0, "sfx": [["rise_whoosh", 0.3, 0.3, 1.2]] }]
+    },
+    {
+      "id": "year4", "day": 1459, "dayText": "ДЕНЬ 1459", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "[excited] А ровно через четыре года ты обгоняешь сто миллионов!", "caption": "ГОД 4: [ОБГОН 100 МЛН]" },
+        { "voice": "И платят уже миллион в день.", "caption": "[1 000 000 ₽] В ДЕНЬ" }
+      ],
+      "views": [{ "name": "chart4", "seg": 0, "sfx": [["riser", 0, 0.25, "e0-0.6"], ["boom", "e0-0.5", 0.35], ["bell", "e0-0.45", 0.25]] }]
+    },
+    {
+      "id": "year10", "day": 3650, "dayText": "ДЕНЬ 3650", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "К концу десятого года — двести девяносто шесть квадриллионов рублей.", "caption": "ГОД 10: [296 КВАДРИЛЛИОНОВ ₽]" },
+        { "voice": "[excited] В последний день тебе платят почти три квадриллиона. За один день!", "caption": "{3 КВАДРИЛЛИОНА} ЗА ДЕНЬ" }
+      ],
+      "views": [{ "name": "rocket", "seg": 0, "sfx": [["rise_whoosh", 0, 0.35, 1.5], ["rumble", 0, 0.25, "end"], ["boom", "s1", 0.3]] }]
+    },
+    {
+      "id": "gdp", "day": 3650, "dayText": "ДЕНЬ 3650", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "Это почти полторы тысячи годовых ВВП России.", "caption": "≈ [1 500] ВВП РОССИИ" },
+        { "voice": "[serious] Таких денег просто не существует.", "caption": "ТАКИХ ДЕНЕГ {НЕ СУЩЕСТВУЕТ}" }
+      ],
+      "views": [{ "name": "gdp", "seg": 0, "sfx": [["tick", 0.2, 0.15, null, 0.05, "e0"], ["stinger", "s1", 0.3]] }]
+    },
+    {
+      "id": "lesson", "day": 3650, "dayText": "ДЕНЬ 3650", "meter": 100, "hudTone": "green",
+      "segments": [{ "voice": "Вот она — сила сложного процента.", "caption": "СИЛА [СЛОЖНОГО ПРОЦЕНТА]" }],
+      "views": [{ "name": "snowball", "seg": 0, "sfx": [["rumble", 0, 0.25, "end"]] }]
+    },
+    {
+      "id": "cta", "day": 3650, "dayText": "ДЕНЬ 3650", "meter": 100, "hudTone": "green",
+      "segments": [{ "voice": "[curious] А ты бы что выбрал?", "caption": "А ТЫ ЧТО [ВЫБРАЛ БЫ]?" }],
+      "views": [{ "name": "cta", "seg": 0, "sfx": [["bell", 0.2, 0.2]] }]
+    }
+  ]
+}
