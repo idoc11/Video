@@ -1,0 +1,68 @@
+{
+  "title": "Апгрейд. Серия 1",
+  "output": "upgrade_s01.mp4",
+  "handle": "@id0cs",
+  "hud": { "label": "ЖИЗНЬ", "invert": true },
+  "narrator": { "provider": "elevenlabs", "voice_id": "nPczCjzI2devNBz1zQrb", "model": "eleven_v3", "stability": 0.5, "tempo": 1.05 },
+  "music": { "bpm": 90, "level": 0.12 },
+  "mix": { "duck": 0.7, "sfx": 0.55, "duck_sfx": true, "bg_cap_db": -12 },
+  "wipe": "#8b5cff",
+  "gap_in_scene": 0.14,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 0.8,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4", "after_scene": "tap", "dur": 5.05, "key_color": null,
+    "src_card_y": [0, 1007], "card_h": 542, "card_top": 1000, "radius": 26, "cam_shift": 60
+  },
+  "scenes": [
+    { "id": "rain", "day": 0, "dayText": "СЕРИЯ 1", "meter": 100, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Ваня — самый невезучий парень в городе.", "caption": "ВАНЯ — [САМЫЙ НЕВЕЗУЧИЙ]" },
+        { "voice": "[sighs] Ну почему всегда я?..", "caption": "«НУ ПОЧЕМУ {ВСЕГДА Я}?..»", "voice_id": "TX3LPaxmHKxFdv7VOQHJ" }
+      ],
+      "views": [{ "name": "rain", "seg": 0, "sfx": [["water", 0, 0.3, "end"], ["thunder", 0.4, 0.3]] }] },
+    { "id": "app", "day": 0, "dayText": "СЕРИЯ 1", "meter": 100, "hudTone": "yellow",
+      "segments": [
+        { "voice": "[mysterious] Ночью на его разбитом телефоне само появляется приложение. Без названия.", "caption": "ПРИЛОЖЕНИЕ [БЕЗ НАЗВАНИЯ]" }
+      ],
+      "views": [{ "name": "room", "seg": 0, "sfx": [["drone", 0, 0.25, "end"], ["pop", "e0-1.2", 0.4]] }] },
+    { "id": "offer", "day": 0, "dayText": "СЕРИЯ 1", "meter": 100, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Хочешь улучшить свою жизнь? Нажми «Улучшить».", "caption": "«ХОЧЕШЬ [УЛУЧШИТЬ] ЖИЗНЬ?»", "voice_id": "onwK4e9ZLuTAKqWW03F9", "fx": "radio" }
+      ],
+      "views": [{ "name": "phone", "seg": 0, "sfx": [["shimmer", 0, 0.15, "end"]] }] },
+    { "id": "tap", "day": 0, "dayText": "СЕРИЯ 1", "meter": 100, "hudTone": "yellow",
+      "segments": [
+        { "voice": "Да что я теряю...", "caption": "«ДА ЧТО Я {ТЕРЯЮ}…»", "voice_id": "TX3LPaxmHKxFdv7VOQHJ" },
+        { "voice": "Он нажимает.", "caption": "ОН [НАЖИМАЕТ]" }
+      ],
+      "views": [{ "name": "tap", "seg": 0, "sfx": [["pop", "s1+0.4", 0.5], ["rise_whoosh", "s1+0.4", 0.3, 0.6]] }] },
+    { "id": "morning", "day": 0, "dayText": "СЕРИЯ 1", "meter": 100, "hudTone": "green",
+      "segments": [
+        { "voice": "[excited] Утром старый велосипед стал новеньким мотоциклом. А разбитый телефон — последним флагманом.", "caption": "ВЕЛИК → [МОТОЦИКЛ]" },
+        { "voice": "[excited] Это лучший день в моей жизни!", "caption": "«ЛУЧШИЙ ДЕНЬ [В ЖИЗНИ]!»", "voice_id": "TX3LPaxmHKxFdv7VOQHJ" }
+      ],
+      "views": [
+        { "name": "upgrade", "seg": 0, "sfx": [["bell", 0.6, 0.2], ["bell", 3.0, 0.2]] },
+        { "name": "joy", "seg": 1, "sfx": [["shimmer", 0, 0.15, "end"]] }
+      ] },
+    { "id": "cost", "day": 0, "dayText": "СЕРИЯ 1", "meter": 90, "hudTone": "red",
+      "segments": [
+        { "voice": "[mysterious] Но тут приходит уведомление.", "caption": "НОВОЕ [УВЕДОМЛЕНИЕ]" },
+        { "voice": "Улучшение оплачено. Списан один год вашей жизни.", "caption": "СПИСАНО: {1 ГОД ЖИЗНИ}", "voice_id": "onwK4e9ZLuTAKqWW03F9", "fx": "radio" }
+      ],
+      "views": [{ "name": "notify", "seg": 0, "sfx": [["pop", 0.4, 0.4], ["stinger", "s1+1.2", 0.35], ["heartbeat", "s1", 0.25, "end"]] }] },
+    { "id": "mirror", "day": 0, "dayText": "СЕРИЯ 1", "meter": 90, "hudTone": "red",
+      "segments": [
+        { "voice": "Ваня подходит к зеркалу... и видит первую седую прядь.", "caption": "ПЕРВАЯ [СЕДАЯ ПРЯДЬ]" }
+      ],
+      "views": [{ "name": "mirror", "seg": 0, "sfx": [["drone", 0, 0.2, "end"], ["stinger", "end-1.0", 0.3]] }] },
+    { "id": "cliff", "day": 0, "dayText": "СЕРИЯ 1", "meter": 90, "hudTone": "red",
+      "segments": [
+        { "voice": "Следующее улучшение доступно через двадцать четыре часа.", "caption": "СЛЕДУЮЩЕЕ — [ЧЕРЕЗ 24 ЧАСА]", "voice_id": "onwK4e9ZLuTAKqWW03F9", "fx": "radio" },
+        { "voice": "[curious] А ты бы нажал ещё раз? Продолжение — в следующей серии.", "caption": "А ТЫ БЫ [НАЖАЛ]?" }
+      ],
+      "views": [{ "name": "cliff", "seg": 0, "sfx": [["tick", 0.2, 0.25, null, 1.0, "end"]] }] }
+  ]
+}
