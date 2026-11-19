@@ -1,0 +1,117 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Шарики ×2</title>
+<style>
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+2116}
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2212}
+html,body{margin:0;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+canvas{position:absolute;left:0;top:0}
+#ui{position:absolute;inset:0;font-family:Mont,sans-serif;font-weight:900;color:#fff;text-align:center;pointer-events:none}
+#cnt{position:absolute;left:0;right:0;top:78px;font-size:230px;line-height:1;letter-spacing:-4px;text-shadow:0 0 40px currentColor,0 8px 0 rgba(0,0,0,.55);transform-origin:50% 60%}
+#sub{position:absolute;left:0;right:0;top:322px;font-size:38px;letter-spacing:12px;opacity:.85;text-shadow:0 4px 0 rgba(0,0,0,.5)}
+#cap{position:absolute;left:40px;right:40px;top:1640px;font-size:68px;line-height:1.08;text-shadow:0 6px 0 rgba(0,0,0,.6),0 0 30px rgba(0,0,0,.6);transform-origin:50% 50%}
+#cap small{display:block;margin-top:10px;font-size:40px;opacity:.9;letter-spacing:2px}
+#wm{position:absolute;left:48px;bottom:60px;font-size:28px;opacity:.55;text-align:left}
+</style></head><body><div id="stage"><canvas id="c" width="1080" height="1920"></canvas>
+<div id="ui"><div id="cnt"></div><div id="sub">ШАРИКОВ</div><div id="cap"></div><div id="wm">@id0cs</div></div></div>
+<script src="/balls/node_modules/three/build/three.min.js"></script>
+<script>
+'use strict';
+const PAL = ['#ff2d55', '#ff8a1f', '#ffd400', '#7cff3a', '#19e3a0', '#19c3ff', '#3a6bff', '#8b3dff', '#e83dff', '#ff3d9a'];
+let META, BUF, R_, scene, cam, balls, shadows, sparks, padMesh, floorMesh, bokeh = [];
+const FOV = 30, ASPECT = 1080 / 1920, BALL_R = 0.34;
+const smooth = (a, b, t) => { t = Math.min(1, Math.max(0, (t - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+window.init = async function () {
+  META = await (await fetch('/balls/data/meta.json')).json();
+  BUF = new Float32Array(await (await fetch('/balls/data/frames.bin')).arrayBuffer());
+  await document.fonts.load('900 100px Mont', 'АБВ ×0123');
+  R_ = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
+  R_.setSize(1080, 1920, false); R_.toneMapping = THREE.ACESFilmicToneMapping; R_.toneMappingExposure = 1.15; R_.outputColorSpace = THREE.SRGBColorSpace;
+  scene = new THREE.Scene();
+  // фон-градиент
+  const bg = document.createElement('canvas'); bg.width = 256; bg.height = 512; const bc = bg.getContext('2d');
+  const gr = bc.createLinearGradient(0, 0, 0, 512); gr.addColorStop(0, '#1a1240'); gr.addColorStop(.5, '#0d1230'); gr.addColorStop(1, '#070a1a'); bc.fillStyle = gr; bc.fillRect(0, 0, 256, 512);
+  scene.background = new THREE.CanvasTexture(bg); scene.background.colorSpace = THREE.SRGBColorSpace;
+  // окружение: софтбоксы
+  const env = new THREE.Scene(); env.background = new THREE.Color('#141a38');
+  for (const [x, y, z, w, h, i, c] of [[0, 7, 2, 10, 7, 7, '#ffffff'], [-9, 2, 5, 4, 12, 3.2, '#9fd8ff'], [9, 2, 5, 4, 12, 3.2, '#ffb0e8'], [0, -7, 3, 12, 4, 1.0, '#8a7bff'], [0, 0, 9, 14, 3, 2.2, '#ffffff']]) {
+    const col = new THREE.Color(c).multiplyScalar(i); const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m);
+  }
+  const pm = new THREE.PMREMGenerator(R_); scene.environment = pm.fromScene(env, .03).texture;
+  cam = new THREE.PerspectiveCamera(FOV, ASPECT, .1, 400);
+  const key = new THREE.DirectionalLight('#ffffff', 2.2); key.position.set(-6, 14, 20); scene.add(key);
+  const rim = new THREE.DirectionalLight('#6fe9ff', 1.4); rim.position.set(8, 3, 6); scene.add(rim);
+  scene.add(new THREE.AmbientLight('#8a90ff', .35));
+  // задняя стена
+  const wt = document.createElement('canvas'); wt.width = 512; wt.height = 1024; const wc = wt.getContext('2d');
+  wc.fillStyle = '#0c1126'; wc.fillRect(0, 0, 512, 1024);
+  for (const [x, y, r, c] of [[110, 180, 260, 'rgba(110,80,255,.28)'], [420, 520, 300, 'rgba(0,200,255,.18)'], [150, 860, 280, 'rgba(255,60,200,.18)'], [400, 20, 220, 'rgba(0,200,255,.14)']]) { const g = wc.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, c); g.addColorStop(1, 'rgba(0,0,0,0)'); wc.fillStyle = g; wc.fillRect(0, 0, 512, 1024); }
+  wc.strokeStyle = 'rgba(120,140,255,.07)'; wc.lineWidth = 2; for (let x = 0; x <= 512; x += 64) { wc.beginPath(); wc.moveTo(x, 0); wc.lineTo(x, 1024); wc.stroke(); } for (let y = 0; y <= 1024; y += 64) { wc.beginPath(); wc.moveTo(0, y); wc.lineTo(512, y); wc.stroke(); }
+  const wtex = new THREE.CanvasTexture(wt); wtex.colorSpace = THREE.SRGBColorSpace; wtex.wrapS = wtex.wrapT = THREE.RepeatWrapping; wtex.repeat.set(3, 6);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 240), new THREE.MeshStandardMaterial({ map: wtex, roughness: .6, metalness: .1, emissiveMap: wtex, emissive: '#ffffff', emissiveIntensity: .5 })); wall.position.set(0, -40, -1.3); scene.add(wall);
+  // конструкции
+  const neon = new THREE.MeshBasicMaterial({ color: '#3df2ff' }), neonP = new THREE.MeshBasicMaterial({ color: '#ff4fd8' });
+  const body = new THREE.MeshPhysicalMaterial({ color: '#1b2244', metalness: .65, roughness: .28, clearcoat: .6, envMapIntensity: .9 });
+  const wallMat = new THREE.MeshPhysicalMaterial({ color: '#141a36', metalness: .5, roughness: .35, clearcoat: .4 });
+  for (const s of META.segs) {
+    const [ax, ay] = s.a, [bx, by] = s.b, len = Math.hypot(bx - ax, by - ay), ang = Math.atan2(by - ay, bx - ax);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(len + s.th, s.th, 1.8), s.kind === 'wall' ? wallMat : body);
+    m.position.set((ax + bx) / 2, (ay + by) / 2, 0); m.rotation.z = ang; scene.add(m);
+    if (s.kind === 'floor') floorMesh = m;
+    if (s.kind === 'ramp') { const e = new THREE.Mesh(new THREE.BoxGeometry(len, .05, .1), neon); e.position.set(0, s.th / 2 + .01, .92); m.add(e); }
+    if (s.kind === 'wall') { const e = new THREE.Mesh(new THREE.BoxGeometry(len, .05, .1), neonP); e.position.set(0, 0, .92); m.add(e); }
+  }
+  for (const b of META.bumpers) { const m = new THREE.Mesh(new THREE.CylinderGeometry(b.r, b.r, 1.8, 48), new THREE.MeshPhysicalMaterial({ color: '#2a2f5a', metalness: .8, roughness: .2, clearcoat: 1 })); m.rotation.x = Math.PI / 2; m.position.set(b.c[0], b.c[1], 0); scene.add(m); const rg = new THREE.Mesh(new THREE.TorusGeometry(b.r * .7, .05, 12, 48), neon); rg.position.set(b.c[0], b.c[1], .95); scene.add(rg); }
+  const P = META.paddle; padMesh = new THREE.Mesh(new THREE.BoxGeometry(P.L * 2 + P.th, P.th, 1.8), new THREE.MeshPhysicalMaterial({ color: '#ff7a2a', metalness: .5, roughness: .25, clearcoat: 1, emissive: '#ff4a00', emissiveIntensity: .25 })); padMesh.position.set(P.c[0], P.c[1], 0); scene.add(padMesh);
+  // шарики
+  const tex = document.createElement('canvas'); tex.width = 256; tex.height = 128; const tc = tex.getContext('2d');
+  tc.fillStyle = '#fff'; tc.fillRect(0, 0, 256, 128); tc.fillStyle = '#b4b4b4'; tc.fillRect(0, 44, 256, 40); tc.fillStyle = '#4a4a4a'; tc.fillRect(0, 38, 256, 6); tc.fillRect(0, 84, 256, 6);
+  const map = new THREE.CanvasTexture(tex); map.colorSpace = THREE.SRGBColorSpace; map.anisotropy = 8;
+  const bmat = new THREE.MeshPhysicalMaterial({ map, roughness: .1, metalness: 0, clearcoat: 1, clearcoatRoughness: .03, envMapIntensity: 1.35, reflectivity: .6 });
+  balls = new THREE.InstancedMesh(new THREE.SphereGeometry(BALL_R, 44, 30), bmat, META.nmax); balls.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(META.nmax * 3), 3); balls.frustumCulled = false; scene.add(balls);
+  shadows = new THREE.InstancedMesh(new THREE.CircleGeometry(BALL_R * 1.15, 24), new THREE.MeshBasicMaterial({ color: '#000', transparent: true, opacity: .42, depthWrite: false }), META.nmax); shadows.frustumCulled = false; shadows.position.z = -1.2; scene.add(shadows);
+  sparks = new THREE.InstancedMesh(new THREE.SphereGeometry(.06, 8, 6), new THREE.MeshBasicMaterial({ color: '#fff' }), META.spark); sparks.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(META.spark * 3), 3); sparks.frustumCulled = false; scene.add(sparks);
+  return META.frames;
+};
+
+const dummy = new THREE.Object3D(), col = new THREE.Color();
+window.renderFrame = function (f) {
+  f = Math.min(f, META.frames - 1);
+  const per = META.per, o = f * per, H = META.hdr, N = META.nmax;
+  const cy = BUF[o], wv = BUF[o + 1], roll = BUF[o + 2], cnt = BUF[o + 3], d = BUF[o + 4], since = BUF[o + 5], trap = BUF[o + 6], simT = BUF[o + 7], cx = BUF[o + 8];
+  const Hv = wv / ASPECT, dist = Hv / (2 * Math.tan(FOV * Math.PI / 360));
+  cam.position.set(cx + Math.sin(d * .4) * .2, cy, dist); cam.lookAt(cx + Math.sin(d * .4) * .1, cy, 0); cam.rotation.z += roll; cam.updateMatrixWorld();
+  padMesh.rotation.z = META.paddle.w * simT; if (floorMesh) floorMesh.visible = !trap;
+  for (let i = 0; i < N; i++) {
+    const b = o + H + i * 5, x = BUF[b], y = BUF[b + 1];
+    if (x > 1e8) { dummy.position.set(0, 1e6, 0); dummy.scale.set(0, 0, 0); } else { dummy.position.set(x, y, 0); dummy.scale.set(1, 1, 1); }
+    dummy.rotation.set(0, 0, BUF[b + 2]); dummy.updateMatrix(); balls.setMatrixAt(i, dummy.matrix);
+    col.set(PAL[Math.min(9, Math.max(0, BUF[b + 3] | 0))]); col.multiplyScalar(1 + 1.8 * BUF[b + 4]); balls.setColorAt(i, col);
+    dummy.position.set(x + .1, y - .13, 0); dummy.rotation.set(0, 0, 0); dummy.updateMatrix(); shadows.setMatrixAt(i, dummy.matrix);
+  }
+  balls.instanceMatrix.needsUpdate = true; balls.instanceColor.needsUpdate = true; shadows.instanceMatrix.needsUpdate = true;
+  const so = o + H + N * 5;
+  for (let i = 0; i < META.spark; i++) {
+    const b = so + i * 3, a = BUF[b + 2];
+    if (a <= 0) { dummy.scale.set(0, 0, 0); dummy.position.set(0, 1e6, 0); } else { dummy.position.set(BUF[b], BUF[b + 1], .45); dummy.scale.set(a, a, a); }
+    dummy.rotation.set(0, 0, 0); dummy.updateMatrix(); sparks.setMatrixAt(i, dummy.matrix); col.set(a > .55 ? '#ffffff' : '#ffd36b'); sparks.setColorAt(i, col);
+  }
+  sparks.instanceMatrix.needsUpdate = true; sparks.instanceColor.needsUpdate = true;
+  bokeh.forEach((m, i) => { m.position.x += 0; });
+  R_.render(scene, cam);
+  // UI
+  const gi = Math.min(9, Math.round(Math.log2(Math.max(1, cnt))));
+  const cEl = document.getElementById('cnt'); cEl.textContent = '×' + Math.round(cnt); cEl.style.color = PAL[gi];
+  cEl.style.transform = `scale(${1 + .32 * Math.exp(-since * 8)})`;
+  const cap = document.getElementById('cap'), dur = META.duration; let t1 = '', t2 = '', k = 1;
+  if (d < 1.6) { t1 = 'ОДИН ШАРИК'; k = 1 + .0; }
+  else if (cnt < 128) { t1 = 'КАЖДЫЙ УДАР = <span style="color:#ffd400">×2</span>'; }
+  else if (cnt < 512) { t1 = 'ОНИ ВСЁ ЕЩЁ <span style="color:#ff4fd8">РАЗМНОЖАЮТСЯ</span>'; }
+  else if (d < dur - 3.2) { t1 = '<span style="color:#19e3a0">512</span> ШАРИКОВ'; }
+  if (d >= dur - 3.2) { t1 = 'ЕЩЁ 11 УДАРОВ —<br><span style="color:#ffd400">1 048 576</span>'; t2 = 'ХВАТИТ ЛИ ТЕБЕ МЕСТА?'; }
+  cap.innerHTML = t1 + (t2 ? `<small>${t2}</small>` : '');
+  const fadeIn = Math.min(1, Math.max(0, d / .5)), fadeOut = d > dur - .25 ? Math.max(0, (dur - d) / .25) : 1;
+  cap.style.opacity = d < 1.6 ? Math.min(1, d / .3) : 1; document.getElementById('ui').style.opacity = fadeOut;
+  return true;
+};
+</script></body></html>

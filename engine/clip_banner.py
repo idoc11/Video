@@ -24,6 +24,8 @@ ap.add_argument("--pos", default="top-right")
 ap.add_argument("--share", type=float, default=0.27)
 ap.add_argument("--pause", action="store_true")
 ap.add_argument("--duck", type=float, default=0.2)
+ap.add_argument("--fade", type=float, default=0.0, help="плавное появление баннера, сек")
+ap.add_argument("--dim", type=float, default=0.0, help="затемнение основного видео на время баннера (0.1 = лёгкое)")
 a = ap.parse_args()
 
 
@@ -63,8 +65,9 @@ mk = Image.new("L", (bw, bh), 0); ImageDraw.Draw(mk).rounded_rectangle([0, 0, bw
 T, E = a.start, a.start + D
 print(f"  баннер {bw}x{bh} = {bw * bh / (W * H):.1%} кадра, x={x} y={y}, {T:.2f}–{E:.2f} c, {'пауза' if a.pause else 'поверх'}, озвучка x{gain:.2f}")
 
+fade = f",fade=t=in:st=0:d={a.fade}:alpha=1" if a.fade else ""
 ban = (f"[1:v]fps=30,scale={bw}:{bh}:flags=lanczos,format=yuva420p[bs];[2:v]format=gray,scale={bw}:{bh}[m];"
-       f"[bs][m]alphamerge,setpts=PTS-STARTPTS+{T}/TB[b];")
+       f"[bs][m]alphamerge{fade},setpts=PTS-STARTPTS+{T}/TB[b];")
 bau = f"[1:a]aresample=44100,aformat=channel_layouts=stereo,volume={gain:.3f},adelay={int(T * 1000)}|{int(T * 1000)}[ba];"
 if a.pause:
     fc = (ban + bau +
@@ -76,9 +79,10 @@ if a.pause:
           f"[a2]atrim=start={T},asetpts=PTS-STARTPTS[ab];[aa][ab]concat=n=2:v=0:a=1[ac];"
           f"[ac][ba]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]")
 else:
+    dimf = f"eq=brightness=-{a.dim}:enable='between(t,{T},{E})'" if a.dim else "null"
     duck = f"1-{1 - a.duck}*min(1,max(0,(t-{T - .2})/0.2))*min(1,max(0,({E + .1}-t)/0.15))"
     fc = (ban + bau +
-          f"[0:v][b]overlay=x={x}:y={y}:eof_action=pass:enable='between(t,{T},{E})'[v];"
+          f"[0:v]{dimf}[d0];[d0][b]overlay=x={x}:y={y}:eof_action=pass:enable='between(t,{T},{E})'[v];"
           f"[0:a]aresample=44100,aformat=channel_layouts=stereo,volume='{duck}':eval=frame[ga];"
           f"[ga][ba]amix=inputs=2:normalize=0:duration=first,loudnorm=I=-14:TP=-1.5:LRA=11[a]")
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.src, "-i", a.banner, "-loop", "1", "-framerate", "30", "-t", f"{D:.2f}", "-i", str(mask),

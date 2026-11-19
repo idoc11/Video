@@ -7,3 +7,6 @@ engine/.cache/
 cs_top4/build/
 clip_logo/build/
 kiriki/build/
+balls/node_modules/
+balls/data/
+balls/build/
