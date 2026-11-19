@@ -10,3 +10,7 @@ kiriki/build/
 balls/node_modules/
 balls/data/
 balls/build/
+musicviz/song.mp3
+musicviz/build/
+musicviz/data/
+musicviz/analysis.json

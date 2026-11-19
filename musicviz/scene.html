@@ -1,0 +1,99 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Визуализатор</title>
+<style>
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+2116}
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2212}
+html,body{margin:0;background:#000}canvas{display:block}
+</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+'use strict';
+const CX = 540, CY = 740, R_IN = 150, R_OUT = 690, TAU = Math.PI * 2;
+let META, FEAT, ctx, STARS;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v)), sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const hsl = (h, s = 100, l = 55, a = 1) => `hsla(${((h % 360) + 360) % 360},${s}%,${l}%,${a})`;
+let rngS = 7; const rnd = () => (rngS = (rngS * 16807) % 2147483647) / 2147483647;
+
+window.init = async function () {
+  META = await (await fetch('/musicviz/data/meta.json')).json();
+  FEAT = new Float32Array(await (await fetch('/musicviz/data/feat.bin')).arrayBuffer());
+  await document.fonts.load('900 70px Mont', '0123456789 АБВ');
+  ctx = document.getElementById('c').getContext('2d');
+  STARS = Array.from({ length: 240 }, () => ({ a: rnd() * TAU, r: 120 + rnd() * 620, v: 14 + rnd() * 40, s: .8 + rnd() * 2.2, ph: rnd() * 9, h: rnd() * 360 }));
+  return META.frames;
+};
+const band = (f, k) => { f = clamp(f, 0, META.frames - 1) | 0; return FEAT[f * META.per + clamp(k | 0, 0, META.bands - 1)]; };
+const low = f => FEAT[clamp(f, 0, META.frames - 1) * META.per + META.bands], beatE = f => FEAT[clamp(f, 0, META.frames - 1) * META.per + META.bands + 1], remain = f => FEAT[clamp(f, 0, META.frames - 1) * META.per + META.bands + 2];
+
+function radii(f, rot, wsec) {
+  const N = 540, out = new Float32Array(N);
+  for (let j = 0; j < N; j++) {
+    const th = j / N * TAU, u = ((((th - rot) / TAU) % 1) + 1) % 1, idx = Math.abs(2 * u - 1) * (META.bands - 1) * .88;
+    let m = (band(f, idx - 1) + band(f, idx) * 2 + band(f, idx + 1)) / 4;
+    m = .5 + .5 * Math.pow(m, .8) * (.9 + .1 * Math.sin(j * 1.7 + f * .3));
+    let d = Math.abs(((th - rot + Math.PI) % TAU + TAU) % TAU - Math.PI);        // угловое расстояние до центра сектора
+    const s = 1 - sstep(wsec / 2 - .5, wsec / 2, d);
+    out[j] = R_IN + (R_OUT - R_IN) * s * m;
+  }
+  return out;
+}
+function pathFrom(rad, scale = 1, cx = CX, cy = CY, close = true) {
+  const N = rad.length; ctx.beginPath();
+  for (let j = 0; j <= N; j++) { const th = (j % N) / N * TAU, r = rad[j % N] * scale; j ? ctx.lineTo(cx + Math.cos(th) * r, cy + Math.sin(th) * r) : ctx.moveTo(cx + Math.cos(th) * r, cy + Math.sin(th) * r); }
+  if (close) ctx.closePath();
+}
+
+window.renderFrame = function (f) {
+  f = Math.min(f, META.frames - 1); const t = f / META.fps, dur = META.duration, be = beatE(f), lo = low(f);
+  const sp = sstep(dur - 9.0, dur - 7.0, t);                                   // переход к спирографу
+  // фон
+  ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 1080, 1920);
+  const bg = ctx.createRadialGradient(CX, CY, 50, CX, CY, 900); bg.addColorStop(0, hsl(260 + t * 10, 70, 8 + 8 * lo, 1)); bg.addColorStop(1, '#000'); ctx.fillStyle = bg; ctx.fillRect(0, 0, 1080, 1920);
+  // звёзды
+  for (const s of STARS) {
+    const r = ((s.r + s.v * t) % 700) + 100, x = CX + Math.cos(s.a + t * .05) * r, y = CY + Math.sin(s.a + t * .05) * r, tw = .5 + .5 * Math.sin(t * 3 + s.ph);
+    ctx.fillStyle = hsl(s.h, 80, 80, (.25 + .6 * tw * (.5 + be)) * (1 - sp * .7)); ctx.beginPath(); ctx.arc(x, y, s.s * (1 + .6 * be), 0, TAU); ctx.fill();
+  }
+  const pulse = 1 + .04 * be;
+  if (sp < 1) {
+    const rot = t * .75 + .35 * Math.sin(t * .6), wsec = (230 + 80 * lo) * Math.PI / 180, rad = radii(f, rot, wsec), hue = t * 45 + be * 30;
+    ctx.save(); ctx.globalAlpha = 1 - sp; ctx.translate(CX, CY); ctx.scale(pulse * (1 - sp * .85), pulse * (1 - sp * .85)); ctx.translate(-CX, -CY);
+    // шлейф
+    for (let L = 6; L >= 1; L--) {
+      const rl = radii(f - 2 * L, rot - L * .02, wsec); pathFrom(rl, 1 + .02 * L, CX, CY, false);
+      ctx.strokeStyle = hsl(hue + L * 40, 100, 62, .45 * (1 - L / 7)); ctx.lineWidth = 3; ctx.stroke();
+    }
+    // радужное кольцо внутри формы
+    pathFrom(rad); ctx.save(); ctx.clip();
+    for (let r = R_IN - 4; r <= R_OUT + 8; r += 3) { ctx.beginPath(); ctx.arc(CX, CY, r, 0, TAU); ctx.strokeStyle = hsl((r - R_IN) / (R_OUT - R_IN) * 300 + hue, 100, 56); ctx.lineWidth = 4.2; ctx.stroke(); }
+    ctx.restore();
+    ctx.globalCompositeOperation = 'lighter'; pathFrom(rad, 1, CX, CY, false); ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2.5; ctx.shadowColor = hsl(hue, 100, 60); ctx.shadowBlur = 18; ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.restore();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  if (sp > 0) {                                                                // спирограф
+    ctx.save(); ctx.globalAlpha = sp; ctx.translate(CX, CY);
+    for (let k = 0; k < 18; k++) {
+      ctx.save(); ctx.rotate(t * (.2 + k * .03) * (k % 2 ? 1 : -1)); const base = 70 + k * 25; ctx.beginPath();
+      for (let j = 0; j <= 360; j += 2) {
+        const th = j * Math.PI / 180, amp = 12 + 34 * band(f, (k * 5 + j * .26) % META.bands), r = base + amp * (.5 + .5 * Math.sin(th * (2 + k % 4) + t * (1 + k * .12))) * (1 + .5 * be);
+        j ? ctx.lineTo(Math.cos(th) * r, Math.sin(th) * r) : ctx.moveTo(Math.cos(th) * r, Math.sin(th) * r);
+      }
+      ctx.closePath(); ctx.strokeStyle = hsl(k * 21 + t * 50, 100, 60, .9); ctx.lineWidth = 3.2; ctx.shadowColor = hsl(k * 21 + t * 50, 100, 60); ctx.shadowBlur = 10; ctx.stroke(); ctx.restore();
+    }
+    ctx.shadowBlur = 0; const g = ctx.createRadialGradient(0, 0, 2, 0, 0, 60); g.addColorStop(0, '#fff'); g.addColorStop(.35, 'hsla(290,100%,70%,.95)'); g.addColorStop(1, 'rgba(160,60,255,0)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 36 + 14 * be, 0, TAU); ctx.fill(); ctx.restore();
+  }
+  // центральный круг со счётчиком
+  const ca = 1 - sstep(.1, .5, sp);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; const rr = R_IN * (1 - sp * .8) * pulse;
+    ctx.beginPath(); ctx.arc(CX, CY, rr + 10 * be, 0, TAU); ctx.strokeStyle = hsl(t * 45 + 120, 100, 65, .5 + .4 * be); ctx.lineWidth = 6; ctx.stroke();
+    ctx.beginPath(); ctx.arc(CX, CY, rr, 0, TAU); ctx.fillStyle = '#16133d'; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = `900 ${Math.round(88 * (1 + .12 * be))}px Mont`; ctx.fillText(String(remain(f) | 0), CX, CY + 4);
+    ctx.restore();
+  }
+  // подпись
+  ctx.globalAlpha = .75 * (1 - sstep(dur - 1.2, dur - .3, t)); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.font = '900 30px Mont'; ctx.fillText('Nightcrawlers ft. Mufasa & Hypeman — Friday', 540, 1862); ctx.font = '900 24px Mont'; ctx.globalAlpha *= .6; ctx.fillText('@id0cs', 540, 1900); ctx.globalAlpha = 1;
+  // вход и выход
+  const fi = 1 - clamp(t / .35), fo = clamp((t - (dur - 1.0)) / 1.0); ctx.fillStyle = `rgba(0,0,0,${Math.max(fi, fo)})`; ctx.fillRect(0, 0, 1080, 1920);
+  return true;
+};
+</script></body></html>
