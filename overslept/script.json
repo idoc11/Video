@@ -1,0 +1,267 @@
+{
+  "title": "Проспал собеседование",
+  "output": "overslept.mp4",
+  "handle": "@id0cs",
+  "style": "cinema",
+  "tag": "ПРОСПАЛ · СОБЕС",
+  "hud": {
+    "label": "ОПОЗДАНИЕ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.0,
+    "tempo": 1.04
+  },
+  "music": {
+    "bpm": 112,
+    "level": 0.1,
+    "pulse": true
+  },
+  "mix": {
+    "duck": 0.8,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "gap_in_scene": 0.08,
+  "gap_between_scenes": 0.14,
+  "lead_in": 0.1,
+  "tail": 1.0,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "wake",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "night",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 0,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[whispers] Три часа ночи. Ты наконец-то уснул... Что может пойти не так?",
+          "caption": "ТРИ ЧАСА [НОЧИ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "night",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alarm",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 10,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[shouting] ВСТАВАЙ! УЖЕ ДЕВЯТЬ ЧАСОВ!",
+          "caption": "ВСТАВАЙ! [9:00]!",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        }
+      ],
+      "views": [
+        {
+          "name": "alarm",
+          "seg": 0,
+          "sfx": [
+            [
+              "glitch",
+              0.05,
+              0.4,
+              null,
+              0.18,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wake",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 30,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[groaning] Какие девять?! [gasps] Пиздец! Я проспал собеседование!",
+          "caption": "{ПИЗДЕЦ}! СОБЕС!",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "ПИЗДЕЦ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "wake",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              1.5,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "run",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 55,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[laughs] Ты бежишь в одном носке, а прохожие смотрят на тебя, как на идиота.",
+          "caption": "В ОДНОМ [НОСКЕ]"
+        },
+        {
+          "voice": "[shouting] Блядь, где второй носок?!",
+          "caption": "ГДЕ [ВТОРОЙ]?!",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "БЛЯДЬ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "run",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.2,
+              0.2,
+              null,
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arrive",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 85,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[sarcastic] Ты приезжаешь через два часа. Красивый. Мокрый. Без носка.",
+          "caption": "КРАСИВЫЙ. МОКРЫЙ. [БЕЗ НОСКА]"
+        }
+      ],
+      "views": [
+        {
+          "name": "arrive",
+          "seg": 0,
+          "sfx": [
+            [
+              "water",
+              0,
+              0.25,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hr",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[calm] Вы опоздали на два часа. [pause] Отлично. Нам как раз нужен человек, который никуда не спешит.",
+          "caption": "НУЖЕН ЧЕЛОВЕК, КОТОРЫЙ [НЕ СПЕШИТ]",
+          "voice_id": "JBFqnCBsd6RMkjVDRZzb"
+        },
+        {
+          "voice": "[whispers] Да ну нахуй...",
+          "caption": "ДА НУ {НАХУЙ}",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "НАХУЙ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "hr",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              "s1",
+              0.25
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "day": 0,
+      "dayText": "СОБЕС",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[laughs] Иногда проспать — это стратегия.",
+          "caption": "ПРОСПАТЬ — [СТРАТЕГИЯ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "end",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.8,
+              0.3
+            ],
+            [
+              "bell",
+              1.5,
+              0.2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
