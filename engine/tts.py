@@ -245,6 +245,8 @@ def main():
                 seg_out["words"] = word_times(seg["voice"], a, t)
             if seg.get("bleep"):
                 seg_out["bleep"] = seg["bleep"]
+            if seg.get("fade"):  # маты без цензуры: в субтитрах часть букв затухает
+                seg_out["fade"] = [x.upper().replace("Ё", "Е") for x in seg["fade"]]
             segs.append(seg_out)
             chunks.append(a)
             t += len(a) / SR

@@ -1,0 +1,333 @@
+{
+  "title": "Остались только кирики и газява",
+  "output": "kiriki.mp4",
+  "handle": "@id0cs",
+  "style": "cinema",
+  "tag": "ВЫЖИВАНИЕ · ДЕНЬ",
+  "hud": {
+    "label": "ЗАПАСЫ",
+    "invert": true
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.45,
+    "tempo": 1.05
+  },
+  "music": {
+    "bpm": 76,
+    "level": 0.1
+  },
+  "mix": {
+    "duck": 0.75,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.2,
+  "lead_in": 0.1,
+  "tail": 1.0,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "cold",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 0,
+      "dayText": "ПОСЛЕДНЕЕ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[serious] Магазины закрыты. Холодильники пусты. Остались только кирики и газява.",
+          "caption": "ОСТАЛИСЬ ТОЛЬКО [КИРИКИ] И {ГАЗЯВА}"
+        }
+      ],
+      "views": [
+        {
+          "name": "hook",
+          "seg": 0,
+          "sfx": [
+            [
+              "wind",
+              0,
+              0.3,
+              "end"
+            ],
+            [
+              "drone",
+              0,
+              0.15,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shelf",
+      "day": 14,
+      "dayText": "ДЕНЬ 14",
+      "meter": 40,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Четырнадцатый день. Я пересчитал всё по три раза.",
+          "caption": "ЧЕТЫРНАДЦАТЫЙ — [ПЕРЕСЧИТАЛ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "shelf",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.5,
+              0.3
+            ],
+            [
+              "tick",
+              1.0,
+              0.2,
+              null,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eat",
+      "day": 14,
+      "dayText": "ДЕНЬ 14",
+      "meter": 35,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[disgusted] Блядь, опять кирики.",
+          "caption": "{БЛЯДЬ}, ОПЯТЬ [КИРИКИ]",
+          "fade": [
+            "БЛЯДЬ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "eat",
+          "seg": 0,
+          "sfx": [
+            [
+              "crash",
+              0.4,
+              0.3
+            ],
+            [
+              "pop",
+              1.2,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soda",
+      "day": 15,
+      "dayText": "ДЕНЬ 15",
+      "meter": 30,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Газява тёплая. Ну какая же ты сука, газява.",
+          "caption": "ГАЗЯВА [ТЁПЛАЯ]",
+          "fade": [
+            "СУКА"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "soda",
+          "seg": 0,
+          "sfx": [
+            [
+              "pour",
+              0.3,
+              0.3,
+              "end"
+            ],
+            [
+              "bell",
+              1.8,
+              0.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cold",
+      "day": 19,
+      "dayText": "ДЕНЬ 19",
+      "meter": 20,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Отопление отключили. Градусник за окном показывает минус тридцать.",
+          "caption": "ОТОПЛЕНИЕ: {ОТКЛЮЧИЛИ}"
+        },
+        {
+          "voice": "Я сижу в куртке и считаю, на сколько дней хватит.",
+          "caption": "СЧИТАЮ, [НА СКОЛЬКО] ДНЕЙ"
+        }
+      ],
+      "views": [
+        {
+          "name": "cold",
+          "seg": 0,
+          "sfx": [
+            [
+              "wind",
+              0,
+              0.4,
+              "end"
+            ],
+            [
+              "heartbeat",
+              "s1",
+              0.25,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hall",
+      "day": 22,
+      "dayText": "ДЕНЬ 22",
+      "meter": 12,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[whispers] Пачки начинают говорить. Ты ещё жив, шептали они.",
+          "caption": "«ТЫ ЕЩЁ ЖИВ?»",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        },
+        {
+          "voice": "Да пошли вы нахуй, галлюцинации.",
+          "caption": "{НАХУЙ}, ГАЛЛЮЦИНАЦИИ",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "НАХУЙ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "hall",
+          "seg": 0,
+          "sfx": [
+            [
+              "glitch",
+              0.3,
+              0.3,
+              null,
+              0.35,
+              1.4
+            ]
+          ]
+        },
+        {
+          "name": "hall2",
+          "seg": 1,
+          "sfx": [
+            [
+              "boom",
+              0.1,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "last",
+      "day": 25,
+      "dayText": "ДЕНЬ 25",
+      "meter": 5,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "Последняя бутылка. Последний пакет.",
+          "caption": "ПОСЛЕДНЯЯ [БУТЫЛКА]"
+        }
+      ],
+      "views": [
+        {
+          "name": "last",
+          "seg": 0,
+          "sfx": [
+            [
+              "heartbeat",
+              0,
+              0.3,
+              "end"
+            ],
+            [
+              "tick",
+              1.0,
+              0.2,
+              null,
+              0.3,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "day": 25,
+      "dayText": "ДЕНЬ 25",
+      "meter": 0,
+      "hudTone": "red",
+      "segments": [
+        {
+          "voice": "[curious] Что бы ты взял на последний ужин? Пиши в комментариях.",
+          "caption": "ЧТО БЫ ТЫ [ВЗЯЛ] НА ПОСЛЕДНИЙ УЖИН?"
+        }
+      ],
+      "views": [
+        {
+          "name": "end",
+          "seg": 0,
+          "sfx": [
+            [
+              "drone",
+              0,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

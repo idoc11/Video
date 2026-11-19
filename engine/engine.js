@@ -327,7 +327,9 @@ function cinemaCaption(seg, t) {
     const w = clean(W[i][0]), key = w.replace(/[^А-ЯЁA-Z0-9]/g, ''), done = i <= wi, now = i === wi;
     const col = now ? '#ffe14a' : acc.has(key) && done ? '#ff5a5a' : '#fff';
     const st = back ? `opacity:${done ? 1 : .35};` : `color:${col};opacity:${done ? 1 : .42};`;
-    return `<span style="display:inline-block;${st}transform:scale(${now ? 1.1 : 1});margin:0 .12em">${w}</span>`;
+    const fadeHit = (seg.fade || []).some(x => key.startsWith(x.replace(/[^А-ЯЁA-Z0-9]/g, '')));
+    const inner = fadeHit ? [...w].map((ch, k) => `<span style="opacity:${k % 2 ? .22 : 1}">${ch}</span>`).join('') : w;
+    return `<span style="display:inline-block;${st}transform:scale(${now ? 1.1 : 1});margin:0 .12em">${inner}</span>`;
   };
   const c = chunks[ci];
   return { key: ci + ':' + wi + ':' + seg.start, back: c.map(i => span(i, true)).join(' '), front: c.map(i => span(i, false)).join(' ') };
