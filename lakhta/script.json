@@ -1,0 +1,235 @@
+{
+  "title": "Лахта-центр",
+  "output": "lakhta.mp4",
+  "handle": "@id0cs",
+  "style": "cinema",
+  "tag": "ГОРОД · ФАКТЫ",
+  "hud": {
+    "label": "ВЫСОТА",
+    "invert": false
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.5,
+    "tempo": 1.05
+  },
+  "music": {
+    "bpm": 90,
+    "level": 0.1
+  },
+  "mix": {
+    "duck": 0.75,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "gap_in_scene": 0.12,
+  "gap_between_scenes": 0.2,
+  "lead_in": 0.1,
+  "tail": 1.0,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "build",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[curious] Самое высокое здание Европы когда-то стояло в Петербурге, на берегу залива.",
+          "caption": "САМОЕ ВЫСОКОЕ [В ЕВРОПЕ] — В ПЕТЕРБУРГЕ"
+        }
+      ],
+      "views": [
+        {
+          "name": "hook",
+          "seg": 0,
+          "sfx": [
+            [
+              "whoosh",
+              0,
+              0.3
+            ],
+            [
+              "shimmer",
+              0.4,
+              0.12,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "height",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "Лахта-центр — четыреста шестьдесят два метра и восемьдесят семь этажей.",
+          "caption": "[462 МЕТРА] И [87 ЭТАЖЕЙ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "height",
+          "seg": 0,
+          "sfx": [
+            [
+              "rise_whoosh",
+              0.2,
+              0.3,
+              1.2
+            ],
+            [
+              "bell",
+              1.6,
+              0.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "Сначала его хотели построить в историческом центре. Протесты остановили проект.",
+          "caption": "ПРОТЕСТЫ [ОСТАНОВИЛИ] ПРОЕКТ"
+        },
+        {
+          "voice": "[serious] Башню перенесли на окраину, в Лахту.",
+          "caption": "ПЕРЕНЕСЛИ [В ЛАХТУ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "history",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.4,
+              0.3
+            ]
+          ]
+        },
+        {
+          "name": "move",
+          "seg": 1,
+          "sfx": [
+            [
+              "whoosh",
+              0,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "build",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 60,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[tired] Строили её почти десять лет.",
+          "caption": "ПОЧТИ [ДЕСЯТЬ ЛЕТ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "build",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.2,
+              0.2,
+              null,
+              0.25,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "view",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[excited] Наверху есть смотровая площадка. С неё видно город и Финский залив.",
+          "caption": "СМОТРОВАЯ [ПЛОЩАДКА]"
+        }
+      ],
+      "views": [
+        {
+          "name": "view",
+          "seg": 0,
+          "sfx": [
+            [
+              "shimmer",
+              0,
+              0.2,
+              "end"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "day": 0,
+      "dayText": "ФАКТЫ",
+      "meter": 100,
+      "hudTone": "green",
+      "segments": [
+        {
+          "voice": "[curious] Как думаешь, стоило ли строить такую башню в Петербурге? Пиши в комментариях.",
+          "caption": "СТОИЛО ЛИ [СТРОИТЬ]?"
+        }
+      ],
+      "views": [
+        {
+          "name": "cta",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              0.2,
+              0.2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
