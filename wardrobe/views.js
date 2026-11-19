@@ -58,8 +58,15 @@ VIEWS.fall = { shakes: () => [[1.0, 26, .5], [2.0, 20, .5]], draw(lv, vd, t) {
   return s;
 } };
 VIEWS.end = { draw(lv, vd, t) {
-  let s = sunburst('#ff9a1f', '#e2600a', t * .12) + guy({ ...ME, x: 540, y: 820, s: 1.05, legs: false, mouth: 'smile', brow: 'raised', pose: 'hold', t });
-  s += cat(860, 1190, .55, 0) + plank(200, 1220, 240, 60, 8);
-  [[200, 560], [900, 520]].forEach(([x, y], i) => { s += at(x, y + Math.sin(t * 4 + i) * 12, pop(lv, .3 + i * .15), txt(0, 0, '?', 130, '#fff', { stroke: OL, sw: 16 }), 12 * Math.sin(t * 3 + i)); });
+  let s = room(t) + `<rect x="-700" y="-700" width="2480" height="3300" fill="#000" opacity=".18"/>`;
+  s += plank(190, 1270, 260, 60, 8) + plank(900, 1290, 240, 60, -10, '#c4915a') + bolt(120, 1330, .8, 30);
+  // коробка с котом
+  const sleep = clamp((lv - 1.0) / .6);
+  s += `<g transform="translate(560,1150)"><path d="M-260,0 L-230,-210 L230,-210 L260,0Z" fill="#c9a06a" stroke="${OL}" stroke-width="9"/><path d="M-230,-210 L-290,-300 L-120,-300 L-90,-210Z M230,-210 L290,-300 L120,-300 L90,-210Z" fill="#b88a55" stroke="${OL}" stroke-width="8" stroke-linejoin="round"/>`;
+  s += `<g transform="translate(0,-170) scale(.85)"><ellipse cx="0" cy="40" rx="150" ry="100" fill="#8a8f9e" stroke="${OL}" stroke-width="8"/><path d="M-95,-40 L-80,-110 L-40,-50 M40,-50 L80,-110 L95,-40" fill="#8a8f9e" stroke="${OL}" stroke-width="8" stroke-linejoin="round"/><path d="M-60,-6 Q-40,${f(10 + 8 * (1 - sleep))} -20,-6 M20,-6 Q40,${f(10 + 8 * (1 - sleep))} 60,-6" fill="none" stroke="${OL}" stroke-width="8" stroke-linecap="round"/><path d="M-16,14 L16,14 L0,30Z" fill="#ff9aaa" stroke="${OL}" stroke-width="5" stroke-linejoin="round"/></g>`;
+  s += `<path d="M-260,0 L-240,-120 L240,-120 L260,0Z" fill="#d9ad74" stroke="${OL}" stroke-width="8"/></g>`;
+  if (sleep > 0) for (let i = 0; i < 3; i++) { const q = ((lv * .6 + i / 3) % 1); s += txt(760 + q * 110, 800 - q * 280, 'Z', 70 + i * 22, '#fff', { stroke: OL, sw: 10, op: f(sleep * (1 - q)) }); }
+  s += guy({ ...ME, x: 210, y: 960, s: .55, legs: false, mouth: 'flat', brow: 'tired', tired: 1, lid: .55, pose: 'down', t });
+  s += at(540, 380, pop(lv, 2.4), `<rect x="-290" y="-60" width="580" height="120" rx="26" fill="#111427" stroke="#ffd23a" stroke-width="7"/>` + txt(0, 4, 'КОТ 1 : 0 ШКАФ', 58, '#ffd23a'), -3);
   return s;
 } };
