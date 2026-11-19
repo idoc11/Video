@@ -1,0 +1,274 @@
+{
+  "title": "Шкаф за пять минут",
+  "output": "wardrobe.mp4",
+  "handle": "@id0cs",
+  "style": "cinema",
+  "tag": "ШКАФ · 5 МИНУТ",
+  "hud": {
+    "label": "СБОРКА",
+    "invert": false
+  },
+  "narrator": {
+    "provider": "elevenlabs",
+    "voice_id": "nPczCjzI2devNBz1zQrb",
+    "model": "eleven_v3",
+    "stability": 0.35,
+    "tempo": 1.06
+  },
+  "music": {
+    "bpm": 110,
+    "level": 0.1,
+    "pulse": true
+  },
+  "mix": {
+    "duck": 0.75,
+    "sfx": 0.5,
+    "duck_sfx": true,
+    "bg_cap_db": -14
+  },
+  "gap_in_scene": 0.1,
+  "gap_between_scenes": 0.16,
+  "lead_in": 0.1,
+  "tail": 1.0,
+  "banner": {
+    "file": "../assets/banner_rubup.mp4",
+    "after_scene": "bolt",
+    "dur": 5.05,
+    "key_color": null,
+    "src_card_y": [
+      0,
+      1007
+    ],
+    "card_h": 542,
+    "card_top": 1000,
+    "radius": 26,
+    "cam_shift": 60
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 0,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[laughs] Ты решил собрать шкаф за пять минут. Сука, как же ты ошибался.",
+          "caption": "ШКАФ ЗА [5 МИНУТ]",
+          "fade": [
+            "СУКА"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "hook",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.3,
+              0.4
+            ],
+            [
+              "boom",
+              2.6,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "manual",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 5,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Шаг первый. Вставьте деталь А в деталь Б.",
+          "caption": "ДЕТАЛЬ А → ДЕТАЛЬ Б",
+          "voice_id": "onwK4e9ZLuTAKqWW03F9",
+          "fx": "radio"
+        },
+        {
+          "voice": "[confused] Какая нахуй деталь Б?",
+          "caption": "КАКАЯ {НАХУЙ} Б?",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "НАХУЙ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "manual",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.4,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bolt",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 40,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Через два часа остался один лишний болт.",
+          "caption": "ЛИШНИЙ [БОЛТ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "bolt",
+          "seg": 0,
+          "sfx": [
+            [
+              "tick",
+              0.3,
+              0.2,
+              null,
+              0.5,
+              "end"
+            ],
+            [
+              "stinger",
+              1.8,
+              0.3
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rage",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 70,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[shouting] Блядь, откуда он взялся?!",
+          "caption": "ОТКУДА ОН [ВЗЯЛСЯ]?!",
+          "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+          "fade": [
+            "БЛЯДЬ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "rage",
+          "seg": 0,
+          "sfx": [
+            [
+              "boom",
+              0.05,
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "done",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 99,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "Шкаф стоит. Криво. Держится на честном слове и одной ёбаной скобе.",
+          "caption": "НА [ЧЕСТНОМ СЛОВЕ]",
+          "fade": [
+            "ЕБАНОЙ"
+          ]
+        }
+      ],
+      "views": [
+        {
+          "name": "done",
+          "seg": 0,
+          "sfx": [
+            [
+              "pop",
+              0.5,
+              0.3
+            ],
+            [
+              "tick",
+              2.5,
+              0.2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fall",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 0,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[excited] Дверца падает. Шкаф падает. Кот в шоке.",
+          "caption": "КОТ В [ШОКЕ]"
+        }
+      ],
+      "views": [
+        {
+          "name": "fall",
+          "seg": 0,
+          "sfx": [
+            [
+              "crash",
+              1.0,
+              0.5
+            ],
+            [
+              "crash",
+              2.0,
+              0.4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "day": 0,
+      "dayText": "СБОРКА",
+      "meter": 0,
+      "hudTone": "yellow",
+      "segments": [
+        {
+          "voice": "[curious] А ты когда-нибудь собирал мебель без мата? Пиши в комментариях.",
+          "caption": "БЕЗ [МАТА]?"
+        }
+      ],
+      "views": [
+        {
+          "name": "end",
+          "seg": 0,
+          "sfx": [
+            [
+              "bell",
+              0.2,
+              0.2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}
