@@ -1,0 +1,305 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Грузчики и пианино</title>
+<style>
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-cyrillic-900-normal.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+2116}
+@font-face{font-family:Mont;font-weight:900;src:url(/engine/fonts/montserrat-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+20AC,U+2212}
+html,body{margin:0;background:#000}#stage{position:relative;width:1080px;height:1920px;overflow:hidden}canvas{position:absolute;left:0;top:0}
+#ui{position:absolute;inset:0;font-family:Mont,sans-serif;font-weight:900;color:#fff;pointer-events:none}
+#tag{position:absolute;left:48px;top:96px;font-size:26px;letter-spacing:3px;background:rgba(0,0,0,.45);padding:10px 18px 10px 24px;border-left:6px solid #ff3b3b}
+#cap{position:absolute;left:40px;right:150px;top:1450px;text-align:center;font-size:72px;line-height:1.1;text-shadow:0 6px 0 rgba(0,0,0,.7),0 0 28px rgba(0,0,0,.6)}
+#cap span{display:inline-block;margin:0 .1em}
+#sfx{position:absolute;left:0;right:0;top:560px;text-align:center;font-size:190px;color:#ffe14a;-webkit-text-stroke:14px #1d1530;paint-order:stroke fill;text-shadow:0 10px 0 rgba(0,0,0,.4)}
+#wm{position:absolute;left:48px;top:150px;font-size:24px;opacity:.55}
+#vg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+#fade{position:absolute;inset:0;background:#000;opacity:0}
+</style></head><body><div id="stage"><canvas id="c" width="1080" height="1920"></canvas><div id="vg"></div>
+<div id="ui"><div id="tag">ПЕРЕЕЗД · 5 ЭТАЖ</div><div id="wm">@id0cs</div><div id="sfx"></div><div id="cap"></div></div><div id="fade"></div></div>
+<script src="/balls/node_modules/three/build/three.min.js"></script>
+<script>
+'use strict';
+const RISE = .6, RUN = .9, NST = 14, TH = Math.atan2(RISE, RUN), CT = Math.cos(TH), ST = Math.sin(TH);
+const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const lerp = (a, b, t) => a + (b - a) * t, clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const stairH = x => { if (x <= 0) return 0; const u = x / RUN, k = Math.floor(u), f = u - k; return k >= NST ? NST * RISE : RISE * (k + sm(0, .12, f)); };
+const rotOf = a => Math.atan2(Math.cos(a), -Math.sin(a));       // угол направления (cos,sin) → rotation.z сегмента, висящего вниз
+function ik(l1, l2, dx, dy, sgn) {
+  const h = Math.hypot(dx, dy) + 1e-9, d = Math.min(h, (l1 + l2) * .999), tx = dx * d / h, ty = dy * d / h, a = Math.atan2(ty, tx);
+  const b = Math.acos(clamp((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1)), a1 = a + sgn * b;
+  const a2 = Math.atan2(ty - l1 * Math.sin(a1), tx - l1 * Math.cos(a1)); return [rotOf(a1), rotOf(a2)];
+}
+let M, R_, scene, cam, G1, V1, pianoG, partsMesh = [], dustM = [], sim, L = [], keyLight;
+const mats = {}; const mat = (c, o = {}) => { const k = c + JSON.stringify(o); return mats[k] || (mats[k] = new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: .6, metalness: 0 }, o))); };
+const box = (w, h, d, m, cast = true) => { const x = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); x.castShadow = cast; x.receiveShadow = true; return x; };
+const cap = (r, len, m) => { const x = new THREE.Mesh(new THREE.CapsuleGeometry(r, len, 6, 14), m); x.castShadow = true; return x; };
+const sph = (r, m, sx = 1, sy = 1, sz = 1) => { const x = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), m); x.scale.set(sx, sy, sz); x.castShadow = true; return x; };
+
+function makeGuy(o) {
+  const g = new THREE.Group(), skin = mat(o.skin), shirt = mat(o.shirt), pants = mat(o.pants), shoe = mat('#1d1d24'), W = { root: g };
+  W.body = new THREE.Group(); g.add(W.body);
+  const torso = cap(.29 * o.w, .3, shirt); torso.position.y = .4; W.body.add(torso);
+  const vest = o.vest ? box(.62 * o.w, .52, .6 * o.w, mat(o.vest)) : null; if (vest) { vest.position.set(0, .4, 0); W.body.add(vest); }
+  const pel = sph(.25, pants, 1, .8, 1.1); pel.position.y = 0; W.body.add(pel);
+  W.legs = [];
+  for (const z of [.14, -.14]) {
+    const th = new THREE.Group(); th.position.set(0, 0, z); W.body.add(th); const t1 = cap(.125, .26, pants); t1.position.y = -.25; th.add(t1);
+    const sh = new THREE.Group(); sh.position.y = -.5; th.add(sh); const s1 = cap(.105, .27, pants); s1.position.y = -.25; sh.add(s1);
+    const ft = box(.34, .13, .17, shoe); ft.position.set(.08, -.52, 0); sh.add(ft); W.legs.push({ th, sh });
+  }
+  W.arms = [];
+  for (const z of [.36 * o.w, -.36 * o.w]) {
+    const up = new THREE.Group(); up.position.set(0, .66, z); W.body.add(up); const u1 = cap(.095, .24, o.sleeve ? mat(o.sleeve) : shirt); u1.position.y = -.21; up.add(u1);
+    const fo = new THREE.Group(); fo.position.y = -.42; up.add(fo); const f1 = cap(.082, .22, skin); f1.position.y = -.2; fo.add(f1); const hd = sph(.105, skin); hd.position.y = -.42; fo.add(hd); W.arms.push({ up, fo, hd });
+  }
+  W.head = new THREE.Group(); W.head.position.y = 1.13; W.head.rotation.y = -.75; W.body.add(W.head);
+  const hs = sph(.31, skin, 1, 1.04, 1); W.head.add(hs);
+  if (o.hair) { const h = new THREE.Mesh(new THREE.SphereGeometry(.325, 24, 14, 0, Math.PI * 2, 0, Math.PI * .5), mat(o.hair)); h.position.y = .03; h.rotation.z = .12; h.castShadow = true; W.head.add(h); }
+  if (o.beard) { const b = new THREE.Mesh(new THREE.SphereGeometry(.322, 24, 12, Math.PI * .1, Math.PI * 1.8, Math.PI * .7, Math.PI * .3), mat(o.beard)); b.scale.set(1.0, 1.05, 1.02); W.head.add(b); }
+  const eyeW = mat('#ffffff', { roughness: .3 }), eyeB = mat('#16121e', { roughness: .3 });
+  W.eyes = [];
+  for (const z of [.13, -.13]) { const e = new THREE.Group(); e.position.set(.255, .07, z); W.head.add(e); const w = sph(.085, eyeW, .6, 1, 1); e.add(w); const p = sph(.045, eyeB, .6, 1, 1); p.position.x = .045; e.add(p); W.eyes.push(e); }
+  W.brows = [];
+  for (const z of [.13, -.13]) { const b = box(.05, .03, .13, mat(o.brow || '#2a1a10')); b.position.set(.29, .2, z); W.head.add(b); W.brows.push(b); }
+  W.mouth = sph(.075, mat('#4a0f1c', { roughness: .4 }), .5, .5, 1.6); W.mouth.position.set(.28, -.1, 0); W.head.add(W.mouth);
+  const nose = sph(.05, skin); nose.position.set(.32, 0, 0); W.head.add(nose);
+  if (o.stache) { const s = box(.05, .04, .2, mat(o.stache)); s.position.set(.3, -.04, 0); W.head.add(s); }
+  if (o.cap) { const c = new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, .1, 24), mat(o.cap)); c.position.y = .27; c.castShadow = true; W.head.add(c); const v = box(.22, .03, .32, mat(o.cap)); v.position.set(.3, .24, 0); W.head.add(v); }
+  g.scale.setScalar(o.scale || 1); W.hip = .98 * (o.scale || 1);
+  return W;
+}
+function face(W, f) {   // f: mouth 0..1, brow угол (рад, + = злые), eye размер
+  W.mouth.scale.set(.5, .2 + .9 * f.mouth, 1.6 - .3 * f.mouth);
+  W.brows[0].rotation.x = -f.brow; W.brows[1].rotation.x = f.brow; W.brows.forEach(b => b.position.y = .2 + .04 * (f.lift || 0));
+  W.eyes.forEach(e => e.scale.set(1, f.eye, f.eye));
+}
+
+function buildSofa() {
+  const g = new THREE.Group(), teal = mat('#1f6f78', { roughness: .85 }), light = mat('#3a9aa6', { roughness: .9 }), dark = mat('#1a5f67', { roughness: .85 });
+  const base = box(1.9, .5, .9, teal); base.position.y = -.35; g.add(base);
+  for (const x of [-.62, 0, .62]) { const c = box(.6, .2, .66, light); c.position.set(x, .0, .1); g.add(c); }
+  const back = box(1.9, .7, .22, teal); back.position.set(0, .25, -.32); g.add(back);
+  for (const x of [-.86, .86]) { const a = box(.2, .62, .9, dark); a.position.set(x, -.04, 0); g.add(a); }
+  for (const x of [-.8, .8]) for (const z of [-.3, .3]) { const l = box(.1, .2, .1, mat('#3a2418')); l.position.set(x, -.7, z); g.add(l); }
+  for (const x of [-.55, .5]) { const p = box(.55, .3, .12, mat(x < 0 ? '#e5484d' : '#ffd23a', { roughness: .8 })); p.position.set(x, .28, -.12); p.rotation.z = x < 0 ? .12 : -.1; g.add(p); }
+  return g;
+}
+function sofaParts() {
+  const P = [{ s: [1.9, .4, .9], col: '#1f6f78' }, { s: [1.9, .6, .2], col: '#1f6f78' }, { s: [.2, .55, .9], col: '#1a5f67' }, { s: [.2, .55, .9], col: '#1a5f67' }];
+  for (let i = 0; i < 3; i++) P.push({ s: [.6, .2, .6], col: '#3a9aa6' }); for (let i = 0; i < 4; i++) P.push({ s: [.1, .2, .1], col: '#3a2418' });
+  P.push({ s: [.55, .3, .12], col: '#e5484d' }, { s: [.55, .3, .12], col: '#ffd23a' }, { s: [.24, .06, .07], col: '#111111' });
+  for (let i = 0; i < 28; i++) P.push({ s: [.16, .03, .16], col: '#ffd23a' }); for (let i = 0; i < 3; i++) P.push({ s: [.3, .06, .12], col: '#e5484d' });
+  return P;
+}
+function wallTexture() {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 512; const x = c.getContext('2d'); x.fillStyle = '#9cc2bd'; x.fillRect(0, 0, 512, 512);
+  for (let i = 0; i < 16; i++) { x.fillStyle = i % 2 ? '#8fb7b2' : '#a9cdc8'; x.fillRect(i * 32, 0, 32, 512); }
+  x.fillStyle = 'rgba(140,100,60,.35)'; for (let i = 0; i < 8; i++) for (let j = 0; j < 8; j++) { x.beginPath(); x.arc(i * 64 + 32 + (j % 2) * 32, j * 64 + 32, 6, 0, 7); x.fill(); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(6, 3); return t;
+}
+function keysTexture() {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 128; const x = c.getContext('2d'); x.fillStyle = '#f6f2e6'; x.fillRect(0, 0, 1024, 128);
+  x.strokeStyle = '#3a3a3a'; x.lineWidth = 2; for (let i = 0; i <= 36; i++) { x.beginPath(); x.moveTo(i * 1024 / 36, 0); x.lineTo(i * 1024 / 36, 128); x.stroke(); }
+  x.fillStyle = '#17141c'; for (let i = 0; i < 36; i++) if ([0, 1, 3, 4, 5].includes(i % 7)) x.fillRect((i + .68) * 1024 / 36, 0, 1024 / 36 * .62, 80);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+
+// ───────── физика обломков (детерминированно, один раз при загрузке) ─────────
+function buildDebris() {
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const P = [], sizes = [[1.9, .12, .8], [.1, 1.2, .8], [.1, 1.2, .8], [1.8, 1.1, .08], [1.0, .5, .08], [.5, .9, .08], [1.5, .2, .5], [.16, .9, .16], [.16, .9, .16], [.3, .15, .3]];
+  for (let i = 0; i < 10; i++) P.push({ s: sizes[i], col: i < 9 ? ['#3a2418', '#4a2e1e', '#2e1c12'][i % 3] : '#c9a24a' });
+  for (let i = 0; i < 16; i++) P.push({ s: [.07, .045, .62], col: '#f6f2e6', key: 1 }); for (let i = 0; i < 9; i++) P.push({ s: [.05, .05, .36], col: '#17141c', key: 1 });
+  if (M.prop === 'sofa') { P.length = 0; sofaParts().forEach(q => P.push(q)); } const cx = M.x_crash, N = P.length, dt = 1 / 120, steps = Math.ceil((M.duration - M.t_crash + 1) / dt); const S = [];
+  for (let i = 0; i < N; i++) {
+    const a = rnd() * 6.28, sp = 3 + rnd() * 8;
+    S.push({ x: cx + (rnd() - .5) * 1.8, y: .6 + rnd() * 1.0, z: (rnd() - .5) * 1.2, vx: -1.2 + Math.cos(a) * sp * .8, vy: 3 + rnd() * 8, vz: (rnd() - .5) * 3, rz: rnd() * 6, rx: rnd() * 6, wz: (rnd() - .5) * 14, wx: (rnd() - .5) * 9, rest: false, h: Math.max(.03, Math.min(...P[i].s) / 2) });
+  }
+  const tracks = P.map(() => new Float32Array(steps * 6));
+  for (let k = 0; k < steps; k++) for (let i = 0; i < N; i++) {
+    const p = S[i];
+    if (!p.rest) {
+      p.vy -= 9.8 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.rz += p.wz * dt; p.rx += p.wx * dt;
+      const g = Math.max(0, stairH(p.x)) + p.h; if (p.x > 0 && p.y < g - .05 && p.vx > 0) p.vx *= -.4;
+      if (p.y < g) { p.y = g; if (Math.abs(p.vy) > 1.2) { p.vy *= -.38; p.vx *= .7; p.vz *= .7; p.wz *= .6; p.wx *= .6; } else { p.vy = 0; p.vx *= .86; p.vz *= .86; p.wz *= .8; p.wx *= .8; if (Math.hypot(p.vx, p.vz) < .15) { p.rest = true; p.rz = Math.round(p.rz / (Math.PI / 2)) * Math.PI / 2; p.rx = Math.round(p.rx / (Math.PI / 2)) * Math.PI / 2; } } }
+      if (p.x < -6.0) { p.x = -6.0; p.vx = Math.abs(p.vx) * .4; } if (Math.abs(p.z) > 1.7) { p.z = Math.sign(p.z) * 1.7; p.vz *= -.4; }
+    }
+    tracks[i].set([p.x, p.y, p.z, p.rz, p.rx, 0], k * 6);
+  }
+  return { P, tracks, dt, steps };
+}
+
+window.init = async function () {
+  M = await (await fetch('/movers2/data/meta.json')).json(); document.getElementById('tag').textContent = M.tag || 'ПЕРЕЕЗД'; await document.fonts.load('900 70px Mont', 'АБВ ёЁ');
+  R_ = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
+  R_.setSize(1080, 1920, false); R_.toneMapping = THREE.ACESFilmicToneMapping; R_.toneMappingExposure = 1.1; R_.outputColorSpace = THREE.SRGBColorSpace; R_.shadowMap.enabled = true; R_.shadowMap.type = THREE.PCFSoftShadowMap;
+  scene = new THREE.Scene(); scene.background = new THREE.Color('#2a2438'); scene.fog = new THREE.Fog('#2a2438', 30, 70);
+  cam = new THREE.PerspectiveCamera(30, 1080 / 1920, .1, 200);
+  scene.add(new THREE.HemisphereLight('#ffe9c8', '#3a3050', .75));
+  keyLight = new THREE.DirectionalLight('#fff1d8', 2.4); keyLight.position.set(6, 16, 14); keyLight.castShadow = true; keyLight.shadow.mapSize.set(2048, 2048); const sc = keyLight.shadow.camera; sc.left = -9; sc.right = 9; sc.top = 9; sc.bottom = -9; sc.near = 1; sc.far = 60; keyLight.shadow.bias = -.0004; keyLight.shadow.normalBias = .03; scene.add(keyLight); scene.add(keyLight.target);
+  const fill = new THREE.DirectionalLight('#7fa8ff', .7); fill.position.set(-10, 6, 10); scene.add(fill);
+  // подъезд
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(80, 40), new THREE.MeshStandardMaterial({ map: wallTexture(), roughness: .9 })); wall.position.set(5, 14, -2.2); wall.receiveShadow = true; scene.add(wall);
+  const skirt = box(80, .5, .1, mat('#5a3f2a')); skirt.position.set(5, .25, -2.12); scene.add(skirt);
+  const floor = box(60, .3, 6, mat('#6b6470', { roughness: .45 })); floor.position.set(-18, -.15, 0); scene.add(floor);
+  for (let k = 1; k <= NST; k++) { const st = box(RUN, k * RISE, 3.6, mat(k % 2 ? '#8a7f8f' : '#948a99', { roughness: .5 })); st.position.set((k - .5) * RUN, k * RISE / 2, 0); scene.add(st); const nz = box(RUN, .07, .12, mat('#d9d2c2')); nz.position.set((k - .5) * RUN, k * RISE + .035, 1.78); scene.add(nz); }
+  const slab = box(160, 40, 30, mat('#1c1826')); slab.position.set(-18, -20.35, 10); scene.add(slab);
+  const top = box(14, .3, 6, mat('#6b6470')); top.position.set(NST * RUN + 7, NST * RISE - .15, 0); scene.add(top);
+  // перила
+  const rail = box(Math.hypot(NST * RUN, NST * RISE) + 1, .1, .1, mat('#2a1c12', { metalness: .3 })); rail.position.set(NST * RUN / 2, NST * RISE / 2 + 1.4, -1.5); rail.rotation.z = TH; scene.add(rail);
+  for (let k = 0; k <= NST; k += 1) { const p = box(.07, 1.3, .07, mat('#2a1c12')); p.position.set(k * RUN + .3, stairH(k * RUN + .3) + .75, -1.5); scene.add(p); }
+  const pil = box(.7, 12, 3.6, mat('#7a727f')); pil.position.set(-6.7, 5.9, 0); scene.add(pil);
+  for (let k = 1; k <= 3; k++) { const wd = box(2.4, 3.2, .1, mat('#9fd0ff', { emissive: '#9fd0ff', emissiveIntensity: .35, roughness: .2 })); wd.position.set(k * 7 - 6, 6 + k * 1.5, -2.1); scene.add(wd); const fr = box(2.7, 3.5, .08, mat('#4a3426')); fr.position.set(k * 7 - 6, 6 + k * 1.5, -2.15); scene.add(fr); }
+  const door = box(2.2, 3.4, .12, mat('#6b3a1e')); door.position.set(NST * RUN + 5, NST * RISE + 1.7, -2.1); scene.add(door); const mt = box(1.8, .06, 1.0, mat('#a0332a')); mt.position.set(-2.6, .03, 1.2); scene.add(mt);
+  // пианино
+  pianoG = new THREE.Group(); const wood = mat('#3a2418', { roughness: .35, metalness: .1 });
+  const pb = box(1.9, 1.2, .8, wood); pianoG.add(pb); const lid = box(1.96, .08, .86, mat('#4e3020', { roughness: .3 })); lid.position.y = .64; pianoG.add(lid);
+  const ks = new THREE.Mesh(new THREE.PlaneGeometry(1.5, .2), new THREE.MeshStandardMaterial({ map: keysTexture(), roughness: .35 })); ks.position.set(0, .05, .405); pianoG.add(ks);
+  const shelf = box(1.6, .06, .16, mat('#2a1810')); shelf.position.set(0, .13, .46); pianoG.add(shelf);
+  const pad = box(.5, .06, .1, mat('#c9a24a', { metalness: .8, roughness: .3 })); pad.position.set(0, -.5, .43); pianoG.add(pad);
+  for (const lx of [-.8, .8]) { const lg = box(.12, .2, .6, wood); lg.position.set(lx, -.65, 0); pianoG.add(lg); }
+  scene.add(pianoG);
+  if (M.prop === 'sofa') { scene.remove(pianoG); pianoG = buildSofa(); scene.add(pianoG); }
+  // обломки
+  sim = buildDebris();
+  sim.P.forEach(p => { const m = box(p.s[0], p.s[1], p.s[2], mat(p.col, { roughness: .4 })); m.visible = false; scene.add(m); partsMesh.push(m); });
+  for (let i = 0; i < 22; i++) { const d = new THREE.Mesh(new THREE.SphereGeometry(1, 14, 10), new THREE.MeshBasicMaterial({ color: '#d9cfc0', transparent: true, opacity: 0, depthWrite: false })); d.visible = false; scene.add(d); dustM.push(d); }
+  V1 = makeGuy({ skin: '#f2c19a', shirt: '#9aa3b2', sleeve: '#9aa3b2', vest: '#ff8a1f', pants: '#2f4f8f', hair: '#4a2a15', stache: '#3a2210', cap: '#ff8a1f', brow: '#2a1a10', w: 1, scale: 1 });
+  G1 = makeGuy({ skin: '#e0a47a', shirt: '#4a8f5a', sleeve: '#4a8f5a', pants: '#3a3a44', beard: '#3a2a1c', brow: '#1a1210', w: 1.18, scale: 1.1 });
+  V1.keyM = M.prop === 'sofa' ? box(.12, .46, .06, mat('#16161c', { roughness: .4 })) : box(.07, .6, .1, mat('#f6f2e6', { roughness: .3 })); V1.keyM.position.set(0, -.68, 0); V1.arms[0].fo.add(V1.keyM); V1.keyM.visible = false;
+  scene.add(V1.root); scene.add(G1.root);
+  return Math.ceil(M.duration * 30);
+};
+
+// ───────── поза персонажа: ноги и руки через IK ─────────
+function poseGuy(W, o) {
+  // o: x (мировой x бёдер), fac (±1), phase, amp, lift, lean, hipY, hands: [[wx,wy]|null, ...] , armSw
+  const g = W.root, s = g.scale.x; g.scale.x = Math.abs(s) * o.fac; const sc = Math.abs(s);
+  W.body.rotation.z = o.lean || 0;
+  const cosL = Math.cos(o.lean || 0), sinL = Math.sin(o.lean || 0);
+  const hipWorld = [o.x, o.hipY];
+  g.position.set(o.x, o.hipY, o.z || 0);
+  for (let i = 0; i < 2; i++) {
+    const ph = o.phase + i * Math.PI, fx = o.x + o.fac * (o.amp * Math.sin(ph)), lift = Math.max(0, Math.cos(ph)) * o.lift;
+    const fy = stairH(fx) + .13 * sc + lift;                        // ступня
+    const lx = (fx - o.x) * o.fac / sc, ly = (fy - o.hipY) / sc;    // в локали (до учёта наклона корпуса: бёдра повёрнуты вместе с корпусом)
+    const rx = lx * cosL + ly * sinL, ry = -lx * sinL + ly * cosL;   // обратный поворот
+    const [r1, r2] = ik(.5, .5, rx, ry + .02, 1); W.legs[i].th.rotation.z = r1; W.legs[i].sh.rotation.z = r2 - r1;
+  }
+  for (let i = 0; i < 2; i++) {
+    const h = o.hands && o.hands[i];
+    let tx, ty;
+    if (o.hl && h) { tx = h[0]; ty = h[1]; }
+    else if (h) { const sh = [o.x + o.fac * Math.sin(o.lean || 0) * -.66 * sc * 0, 0]; tx = (h[0] - o.x) * o.fac / sc; ty = (h[1] - o.hipY) / sc; }
+    else { const sw = Math.sin(o.phase + (i ? 0 : Math.PI)) * (o.armSw || .2); tx = .1 + sw; ty = .66 - .78; }
+    const sx = 0, sy = .66; const rx = (tx - sx) * cosL + (ty - sy) * sinL, ry = -(tx - sx) * sinL + (ty - sy) * cosL;
+    const [r1, r2] = ik(.42, .4, rx, ry, -1); W.arms[i].up.rotation.z = r1; W.arms[i].fo.rotation.z = r2 - r1;
+  }
+}
+
+function speaking(who, t) { for (const l of M.lines) if (l.who === who && t >= l.start && t <= l.end) return .35 + .65 * Math.abs(Math.sin(t * 15 + l.start)); return 0; }
+const camKeys = [[0, 2.6, 2.6, 15, -.8], [3.6, 3.8, 3.4, 15.5, -.8], [8, 7.0, 6.0, 15.5, -1.0], [11.0, 9.4, 7.6, 15.0, -1.0]];
+function keyCam(t) {
+  if (t >= camKeys[camKeys.length - 1][0]) return camKeys[camKeys.length - 1].slice(1);
+  let a = camKeys[0], b = camKeys[1];
+  for (let i = 0; i < camKeys.length - 1; i++) if (t >= camKeys[i][0] && t < camKeys[i + 1][0]) { a = camKeys[i]; b = camKeys[i + 1]; break; }
+  const u = sm(a[0], b[0], t); return [lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u), lerp(a[4], b[4], u)];
+}
+function pianoCenter(t) {
+  if (t < M.t_r) { const xv = M.x_v0 + M.v_walk * t, lo = [xv + .55, stairH(xv) + 1.0]; return { x: lo[0] + .457, y: lo[1] + .97 }; }
+  const p = pianoState(t); return { x: p.x, y: p.y };
+}
+function camAt(t) {
+  const Tc = M.t_crash, Tr = M.t_r; let out = keyCam(t);
+  if (t > Tr - 1.4) { const pc = pianoCenter(Math.min(t, Tc)), fol = [pc.x - .7, pc.y - .6, lerp(15, 20, sm(Tr - .5, Tr + .8, t)) - 6 * sm(Tc - .7, Tc, t), -1.2]; const b = sm(Tr - 1.4, Tr - .4, t); out = out.map((v, i) => lerp(v, fol[i], b)); }
+  if (t > Tc) { const aft = [-3.4 + Math.sin(t * .4) * .12, lerp(-.5, -.1, sm(19, 20.4, t)), lerp(16.5, 14.8, sm(19, 20.4, t)), -.4], b = sm(Tc, Tc + .9, t); out = out.map((v, i) => lerp(v, aft[i], b)); }
+  return out;
+}
+function pianoState(t) {   // центр и угол пианино, скольжение и положение перед крушением
+  const tau = t - M.t_r; if (tau < 0) return null;
+  let D, x, y, rot = TH;
+  if (tau <= M.tau1) { D = .5 * M.a_sl * tau * tau; x = M.xp0 - CT * D; y = M.yp0 - ST * D + Math.abs(Math.sin(tau * 11)) * .1; }
+  else { const tt = tau - M.tau1, off = M.v1 * tt - .5 * M.d_fl * tt * tt; x = M.x1 - off; y = .6 + Math.abs(Math.sin(tt * 12)) * .04; rot = TH * Math.max(0, 1 - tt * 4); }
+  return { x, y, rot, tau };
+}
+
+window.renderFrame = function (f) {
+  const t = f / 30, dur = M.duration, Tc = M.t_crash, Tr = M.t_r;
+  // ── Витя
+  const walking = t < Tr, xV0 = M.x_v0 + M.v_walk * Math.min(t, Tr);
+  const pn = pianoState(t);
+  let v = { x: xV0, fac: 1, phase: t * 2 * Math.PI / 1.8, amp: .3, lift: .28, lean: .1, hipY: 0, hands: null, z: 0, armSw: .15 }, vFace = { mouth: .15, brow: .35, eye: .85, lift: 0 };
+  const carry = (xb, yb) => ({ lo: [xb + .55, yb + 1.0], hi: [xb + .55 + 1.58, yb + 1.0 + 1.05] });
+  if (walking) {
+    const footY = (stairH(xV0 - .3) + stairH(xV0 + .3)) / 2; v.hipY = footY + .99 - .04 * Math.cos(v.phase * 2);
+    const hl = carry(xV0, footY); v.hands = [hl.lo, [hl.lo[0] + .05, hl.lo[1] + .05]]; v.lean = .12;
+    vFace = { mouth: .12 + .1 * speaking('vit', t), brow: .55, eye: .8, lift: 0 }; const sp = speaking('vit', t); if (sp) vFace.mouth = sp;
+  }
+  let vRot = 0, vVisible = true;
+  if (!walking) {
+    const tau = t - Tr, ground = stairH(xV0) + .99; v.lean = 0; v.armSw = 0; v.amp = .1; v.lift = .0;
+    if (t < Tc) {
+      const hit = clamp((tau - .22) / .15);                                  // в момент удара пианино подхватывает Витю
+      const hands = carry(xV0, stairH(xV0)); const rel = 1 - sm(0, .25, tau);
+      const px = pn.x - CT * 1.35 * hit + (1 - hit) * (xV0 - pn.x + 0), py = pn.y - ST * 1.35 * hit;
+      v.x = hit > 0 ? lerp(xV0, pn.x - CT * 1.3, hit) : xV0; v.hipY = hit > 0 ? lerp(ground, pn.y - ST * 1.3 - .2, hit) : ground;
+      v.phase = 0; v.hands = hit > 0 ? [[v.x + .2 + Math.sin(tau * 18) * .5, v.hipY + 1.1 + Math.cos(tau * 17) * .5], [v.x - .1 + Math.cos(tau * 16) * .5, v.hipY + .9 + Math.sin(tau * 19) * .5]] : [[xV0 + .5, ground + .1], [xV0 + .5, ground + .1]];
+      vRot = hit * (tau - .22) * 9.0; vFace = { mouth: 1, brow: -.5, eye: 1.45, lift: 1 };
+      if (speaking('vit', t)) vFace.mouth = speaking('vit', t);
+    } else {
+      const tt = t - Tc, fall = sm(0, .7, tt), lie = sm(.5, 1.1, tt);
+      v.x = lerp(M.x_crash - 1.3, -4.75, 1 - Math.exp(-tt * 5)); v.hipY = lerp(Math.max(.8, pn ? .9 : .9), .26, fall) + (1 - fall) * Math.abs(Math.sin(tt * 14)) * .0;
+      vRot = lerp(Math.PI * .45, Math.PI / 2, lie) + (1 - lie) * 0; v.phase = 0; v.amp = .0; v.lift = 0;
+      const raise = sm(21.9, 22.5, t) * (1 - sm(24.2, 24.8, t));
+      v.hl = true; v.hands = [[lerp(.1, 1.0, raise), lerp(-.12, .66, raise)], [.1, -.12]];
+      vFace = { mouth: .2 + .8 * speaking('vit', t), brow: -.3 + .5 * sm(22.5, 23, t), eye: lerp(.35, .75, sm(19, 20.5, t)), lift: 0 };
+    }
+  }
+  poseGuy(V1, v); V1.keyM.visible = t > Tc + 6.0 && t < 25.5; V1.root.rotation.z = vRot; V1.root.position.y = v.hipY; face(V1, vFace);
+  if (t >= Tc && !walking) { V1.legs.forEach((l, i) => { l.th.rotation.z = .3 + i * .5; l.sh.rotation.z = -.2 - i * .3; }); }
+  // ── Геннадий
+  const xG0 = xV0 + 1.58 + .5 - .5; let gx = xG0, gfac = 1, gph = t * 2 * Math.PI / 1.8, gamp = .3, glift = .28, glean = .1, ghands = null, gFace = { mouth: .1, brow: .6, eye: .8, lift: 0 }, ghip = 0, gSw = .15;
+  if (walking) {
+    gx = xG0; const fy = (stairH(gx - .3) + stairH(gx + .3)) / 2; ghip = (fy + 1.09 - .04 * Math.cos(gph * 2)); const hl = carry(M.x_v0 + M.v_walk * t, stairH(M.x_v0 + M.v_walk * t)); ghands = [[hl.hi[0] - .35, hl.hi[1] - .55], [hl.hi[0] - .3, hl.hi[1] - .5]];
+    const sp = speaking('gen', t); gFace = { mouth: .12 + .88 * sp, brow: .65, eye: .75, lift: 0 }; glean = .14;
+  } else if (t < 14.85) {
+    const xg = M.x_v0 + M.v_walk * Tr + 1.58, tau = t - Tr; gx = xg; ghip = (stairH(gx - .3) + stairH(gx + .3)) / 2 + 1.16; gph = 0; gamp = .05; glift = 0; glean = 0; gSw = 0;
+    const rel = sm(0, .5, tau); const hl = carry(M.x_v0 + M.v_walk * Tr, stairH(M.x_v0 + M.v_walk * Tr)); const wave = Math.sin(tau * 8) * .2 * (1 - sm(1.5, 2.5, tau));
+    const up = sm(1.5, 2.5, tau);
+    ghands = [[lerp(hl.hi[0] - .35, gx + .15, rel) + 0, lerp(hl.hi[1] - .55, ghip - .4, rel) + up * (.4 + wave)], [lerp(hl.hi[0] - .3, gx + .15, rel), lerp(hl.hi[1] - .5, ghip - .1, rel) + up * .5]];
+    gFace = { mouth: .9, brow: -.55, eye: 1.4, lift: 1 };
+  } else if (t < 19.6) {
+    const u = sm(14.85, 19.5, t), tt = t - 14.85; const x0 = M.x_v0 + M.v_walk * Tr + 1.58; gx = lerp(x0, -2.5, u); gfac = -1; gph = tt * 2 * Math.PI / .52; gamp = .46; glift = .38; glean = -.28; gSw = .5;
+    const fy = (stairH(gx - .3) + stairH(gx + .3)) / 2; ghip = fy + 1.1 - .06 * Math.abs(Math.sin(gph)); gFace = { mouth: .8, brow: .9, eye: .9, lift: 0 };
+    ghands = [[gx - gfac * -.5 * .0 + gfac * (.45 + Math.sin(gph) * .5), ghip + .1 + Math.cos(gph) * .3], [gx + gfac * (.45 - Math.sin(gph) * .5), ghip + .1 - Math.cos(gph) * .3]];
+  } else {
+    gx = -2.5; gfac = -1; gph = 0; gamp = .05; glift = 0; glean = .06; gSw = 0; ghip = 1.17; const sp = speaking('gen', t);
+    const pt = sm(20.0, 20.4, t) * (1 - sm(21.6, 22.0, t));
+    ghands = [[gx + gfac * (.7 + .1 * Math.sin(t * 9) * sp), ghip + .35 + .5 * pt + .2 * sp], [gx + gfac * .3, ghip - .3]];
+    gFace = { mouth: .2 + .8 * sp, brow: .95, eye: .85, lift: 0 };
+  }
+  poseGuy(G1, { x: gx, fac: gfac, phase: gph, amp: gamp, lift: glift, lean: glean, hipY: ghip, hands: ghands, armSw: gSw, z: .55 }); G1.root.position.y = ghip; face(G1, gFace);
+  V1.root.position.z = -.3; G1.root.position.z = .1;
+  // ── пианино и обломки
+  const carrying = t < Tr + .0 || (pn && t < Tc);
+  pianoG.visible = !!(t < Tc);
+  if (t < Tr) { const hl = carry(xV0, stairH(xV0)), cx = hl.lo[0] + .457, cy = hl.lo[1] + 1.026 - .0; pianoG.position.set(cx - .02, cy - .9, 0); pianoG.rotation.z = TH; pianoG.position.y = hl.lo[1] + 1.026 - .06; pianoG.position.x = hl.lo[0] + .457; }
+  else if (pn) { pianoG.position.set(pn.x, pn.y, 0); pianoG.rotation.z = pn.rot + (t - Tr > .2 ? (1 - Math.exp(-(t - Tr) * 2)) * -.15 * Math.sin((t - Tr) * 5) : 0); }
+  const kk = Math.floor(clamp((t - Tc) / sim.dt, 0, sim.steps - 1));
+  partsMesh.forEach((m, i) => { m.visible = t >= Tc; if (t >= Tc) { const a = sim.tracks[i], b = kk * 6; m.position.set(a[b], a[b + 1], a[b + 2]); m.rotation.set(a[b + 4], 0, a[b + 3]); } });
+  dustM.forEach((d, i) => { const tt = t - Tc - i * .05; if (tt < 0 || tt > 3.4) { d.visible = false; return; } d.visible = true; const r = Math.min(2.2, (.45 + i % 4 * .18) * (1 + tt * .9)), a = i * 2.4; d.position.set(M.x_crash - 1 + Math.cos(a) * tt * 1.4 * (i % 3 ? 1 : -1), .3 + tt * .55 + (i % 5) * .12, Math.sin(a * 1.7) * 1.2); d.scale.set(r, r * .75, r); d.material.opacity = .3 * Math.exp(-tt * 1.1) * Math.min(1, tt * 6); });
+  // ── камера
+  let [tx, ty, dist, shx] = camAt(t); let shake = 0; if (t >= Tc) shake = .45 * Math.exp(-(t - Tc) * 5.0) * (Math.sin(t * 90) + .5 * Math.cos(t * 63)); if (t > Tr + .25 && t < Tc) shake += .06 * Math.sin(t * 40);
+  const el = 1.2 + 3.0 * sm(Tc, Tc + 1.0, t); cam.position.set(tx + shx + shake * .4, ty + el + shake, dist); cam.lookAt(tx, ty, 0); cam.updateMatrixWorld();
+  keyLight.position.set(tx + 6, ty + 14, 14); keyLight.target.position.set(tx, ty, 0); keyLight.target.updateMatrixWorld();
+  R_.render(scene, cam);
+  // ── интерфейс: субтитры-караоке
+  const capEl = document.getElementById('cap'); let html = '';
+  for (const l of M.lines) if (t >= l.start - .05 && t <= l.end + .3) {
+    const W = l.words, chunks = []; let c = []; W.forEach((w, i) => { c.push(i); if (c.length >= 4 || (/[.,!?…—:]$/.test(w[0]) && c.length >= 2) || i === W.length - 1) { chunks.push(c); c = []; } });
+    let ci = 0; chunks.forEach((cc, k) => { if (t >= W[cc[0]][1] - .05) ci = k; }); let wi = -1; W.forEach((w, i) => { if (t >= w[1] - .03) wi = i; });
+    html = chunks[ci].map(i => { const w = W[i][0].replace(/[«»"]/g, '').toUpperCase(), now = i === wi, done = i <= wi; const inner = W[i][3] ? [...w].map((ch, k) => `<span style="opacity:${k % 2 ? .22 : 1};margin:0">${ch}</span>`).join('') : w; return `<span style="color:${now ? '#ffe14a' : (W[i][3] && done ? '#ff5a5a' : '#fff')};opacity:${done ? 1 : .4};transform:scale(${now ? 1.1 : 1})">${inner}</span>`; }).join(' ');
+  }
+  capEl.innerHTML = html;
+  const sfx = document.getElementById('sfx'), sT = t - Tc; sfx.textContent = sT > 0 && sT < 1.2 ? 'БАБАХ!' : (t > Tr + .4 && t < Tr + 1.1 ? 'ААА!' : ''); sfx.style.transform = `scale(${sT > 0 && sT < 1.2 ? 1 + .5 * Math.exp(-sT * 8) : 1}) rotate(-6deg)`; sfx.style.opacity = sT > .9 ? Math.max(0, (1.2 - sT) / .3) : 1;
+  document.getElementById('fade').style.opacity = Math.max(1 - t / .4, t > dur - .8 ? (t - (dur - .8)) / .8 : 0);
+  return true;
+};
+</script></body></html>

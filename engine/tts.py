@@ -91,6 +91,7 @@ def synth(seg, dflt, cache, fresh):
     if fresh or not out.exists():
         best, score = None, -1
         takes = 2 if o["provider"] == "elevenlabs" else 5   # ElevenLabs платный по символам — максимум 2 дубля
+        takes = min(takes, int(__import__("os").environ.get("TTS_MAX_TAKES", takes)))
         for take in range(takes if asr() else 1):
             a = render_take_el(seg, o, cache, key) if o["provider"] == "elevenlabs" else render_take(seg, o, cache, key)
             sc_ = clarity(a, seg["voice"]) if asr() else 1
