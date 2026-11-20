@@ -15,3 +15,6 @@ musicviz/build/
 musicviz/data/
 musicviz/analysis.json
 musicviz/friday_*.mp4
+marble/data/
+marble/build/
+marble/marble_*.mp4
