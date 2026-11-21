@@ -24,3 +24,5 @@ movers/movers_*.mp4
 movers2/data/
 movers2/build/
 movers2/movers2_*.mp4
+fishing/*.mp4
+fishing/*.mask.png
