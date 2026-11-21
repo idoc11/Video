@@ -1,0 +1,124 @@
+▸ озвучка
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 1, разборчивость 99%: День второй. Максим повесил на холодильник замок. 
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  lock         0.00 →   3.80
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 1, разборчивость 99%: Решил начать бегать. Пробежал двести метров и чуть
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  run          3.80 →   6.83
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 5, разборчивость 86%: В зале тренер сказал: жми сто кило. Макс ответил: 
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  gym          6.83 →  15.71
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 1, разборчивость 100%: Ночью холодильник молчал. И это было страшнее всег
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  dark        15.71 →  18.71
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 5, разборчивость 96%: И тут Макс понял: ключ он спрятал в колбасе.
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  key         18.71 →  21.13
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+    дубль 5, разборчивость 93%: Замок он сломал. Колбасу съел. А холодильник тепер
+/project/sherpa-onnx/csrc/offline-stream.cc:AcceptWaveformImpl:151 Creating a resampler:
+   in_sample_rate: 44100
+   output_sample_rate: 16000
+
+  end2        21.13 →  26.01
+  итого 26.01 c
+▸ кадры
+  150/781 кадров
+  300/781 кадров
+  450/781 кадров
+  600/781 кадров
+  750/781 кадров
+  781 кадров за 25.1 c
+▸ звук
+  баннер 10.77–15.82 c, звук x0.68
+  фон: пик -13.2 дБ относительно голоса
+  mix.wav 26.01 c
+▸ монтаж
+  баннер: 1032x542 = 27.0% экрана, 10.77–15.82 c
+  ✔ /home/user/Video/diet2/diet2.mp4
