@@ -1,0 +1,282 @@
+{
+ "handle": "@id0cs",
+ "style": "cinema",
+ "music": {
+  "bpm": 112,
+  "level": 0.1,
+  "pulse": true
+ },
+ "mix": {
+  "duck": 0.75,
+  "sfx": 0.5,
+  "duck_sfx": true,
+  "bg_cap_db": -14
+ },
+ "gap_in_scene": 0.1,
+ "gap_between_scenes": 0.16,
+ "lead_in": 0.1,
+ "tail": 1.0,
+ "banner": {
+  "file": "../assets/banner_rubup.mp4",
+  "after_scene": "talk",
+  "dur": 5.05,
+  "key_color": null,
+  "src_card_y": [
+   0,
+   1007
+  ],
+  "card_h": 542,
+  "card_top": 1000,
+  "radius": 26,
+  "cam_shift": 60
+ },
+ "title": "Первый день диеты",
+ "output": "diet.mp4",
+ "tag": "ДИЕТА · ДЕНЬ 1",
+ "hud": {
+  "label": "ДИЕТА",
+  "invert": false
+ },
+ "narrator": {
+  "speaker": "dmitri",
+  "ls": 0.86,
+  "pitch": 1.0,
+  "range": 1.45,
+  "humanize": true,
+  "tempo": 1.04
+ },
+ "scenes": [
+  {
+   "id": "hook",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 0,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Первый день диеты. Я твёрдо решил: больше никакой жратвы.",
+     "caption": "ДИЕТА. [ДЕНЬ ПЕРВЫЙ]"
+    }
+   ],
+   "views": [
+    {
+     "name": "hook",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "stinger",
+       3.2,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "salad",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 20,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "На завтрак мне дали салат. Три листика. Сука, это еда или гербарий?",
+     "caption": "ЕДА ИЛИ [ГЕРБАРИЙ]?",
+     "fade": [
+      "СУКА"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "salad",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.5,
+       0.4
+      ],
+      [
+       "boom",
+       2.5,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "night",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 55,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "В три часа ночи холодильник начал со мной разговаривать.",
+     "caption": "В [3 ЧАСА НОЧИ]"
+    }
+   ],
+   "views": [
+    {
+     "name": "night",
+     "seg": 0,
+     "sfx": [
+      [
+       "tick",
+       0.3,
+       0.2
+      ],
+      [
+       "stinger",
+       2.2,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "talk",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 75,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Макс. Иди сюда. У меня тут колбаса.",
+     "caption": "«МАКС. ИДИ СЮДА. {КОЛБАСА}»",
+     "speaker": "denis",
+     "ls": 1.05,
+     "pitch": 0.8,
+     "range": 1.6,
+     "fx": "reverb"
+    }
+   ],
+   "views": [
+    {
+     "name": "talk",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.3
+      ],
+      [
+       "bell",
+       2.2,
+       0.2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rage",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 95,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Блядь, я же держался шесть часов! Нахуй эту диету!",
+     "caption": "ДЕРЖАЛСЯ [6 ЧАСОВ]!",
+     "fade": [
+      "БЛЯДЬ",
+      "НАХУЙ"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "rage",
+     "seg": 0,
+     "sfx": [
+      [
+       "boom",
+       0.3,
+       0.4
+      ],
+      [
+       "pop",
+       1.2,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "scale",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 100,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Утром я встал на весы. Плюс два кило. Диета удалась.",
+     "caption": "ПЛЮС [ДВА КИЛО]"
+    }
+   ],
+   "views": [
+    {
+     "name": "scale",
+     "seg": 0,
+     "sfx": [
+      [
+       "tick",
+       0.2,
+       0.2
+      ],
+      [
+       "boom",
+       2.6,
+       0.4
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 100,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Холодильник выиграл. Опять. Я это дело так не оставлю, сука.",
+     "caption": "ХОЛОДИЛЬНИК [ВЫИГРАЛ]",
+     "fade": [
+      "СУКА"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "end",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.3
+      ],
+      [
+       "bell",
+       3.4,
+       0.2
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}
