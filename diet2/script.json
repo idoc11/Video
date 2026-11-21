@@ -1,0 +1,245 @@
+{
+ "handle": "@id0cs",
+ "style": "cinema",
+ "music": {
+  "bpm": 112,
+  "level": 0.1,
+  "pulse": true
+ },
+ "mix": {
+  "duck": 0.75,
+  "sfx": 0.5,
+  "duck_sfx": true,
+  "bg_cap_db": -14
+ },
+ "gap_in_scene": 0.1,
+ "gap_between_scenes": 0.16,
+ "lead_in": 0.1,
+ "tail": 1.0,
+ "banner": {
+  "file": "../assets/banner_rubup.mp4",
+  "after_scene": "gym",
+  "dur": 5.05,
+  "key_color": null,
+  "src_card_y": [
+   0,
+   1007
+  ],
+  "card_h": 542,
+  "card_top": 1000,
+  "radius": 26,
+  "cam_shift": 60
+ },
+ "title": "Диета 2",
+ "output": "diet2.mp4",
+ "tag": "ДИЕТА · ДЕНЬ 2",
+ "hud": {
+  "label": "ДИЕТА",
+  "invert": false
+ },
+ "narrator": {
+  "speaker": "dmitri",
+  "ls": 0.86,
+  "pitch": 1.0,
+  "range": 1.45,
+  "humanize": true,
+  "tempo": 1.04
+ },
+ "scenes": [
+  {
+   "id": "lock",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 10,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "День второй. Максим повесил на холодильник замок. Нахуй такие соблазны.",
+     "caption": "НА ХОЛОДИЛЬНИКЕ [ЗАМОК]",
+     "fade": [
+      "НАХУЙ"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "lock",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "stinger",
+       3.2,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "run",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 30,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Решил начать бегать. Пробежал двести метров и чуть не сдох.",
+     "caption": "ДВЕСТИ [МЕТРОВ]"
+    }
+   ],
+   "views": [
+    {
+     "name": "run",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "boom",
+       3,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gym",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 50,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "В зале тренер сказал: жми сто кило. Макс ответил: сука, я тут за инстой.",
+     "caption": "ЖМИ [СТО КИЛО]",
+     "fade": [
+      "СУКА"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "gym",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "boom",
+       3.4,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dark",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 65,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Ночью холодильник молчал. И это было страшнее всего.",
+     "caption": "ХОЛОДИЛЬНИК [МОЛЧАЛ]"
+    }
+   ],
+   "views": [
+    {
+     "name": "dark",
+     "seg": 0,
+     "sfx": [
+      [
+       "tick",
+       0.3,
+       0.2
+      ],
+      [
+       "stinger",
+       2.4,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "key",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 85,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "И тут Макс понял: ключ он спрятал в колбасе.",
+     "caption": "КЛЮЧ — [В КОЛБАСЕ]"
+    }
+   ],
+   "views": [
+    {
+     "name": "key",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "bell",
+       1.8,
+       0.3
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "end2",
+   "day": 0,
+   "dayText": "ДИЕТА",
+   "meter": 100,
+   "hudTone": "yellow",
+   "segments": [
+    {
+     "voice": "Замок он сломал. Колбасу съел. А холодильник теперь смотрит с укором. Блядь.",
+     "caption": "СМОТРИТ С [УКОРОМ]",
+     "fade": [
+      "БЛЯДЬ"
+     ]
+    }
+   ],
+   "views": [
+    {
+     "name": "end2",
+     "seg": 0,
+     "sfx": [
+      [
+       "pop",
+       0.3,
+       0.4
+      ],
+      [
+       "bell",
+       4.2,
+       0.2
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}
