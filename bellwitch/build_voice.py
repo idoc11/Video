@@ -39,12 +39,13 @@ for i, (who, v, txt, fade, gap) in enumerate(L):
     else:
         chunks.append(np.zeros(int(gap * SR), np.float32)); t += gap
     a = tts.synth({"voice": txt, **v}, dflt | v, cache, False)
+    tgt = {'narr': .12, 'bet': .13, 'wit': .085}[who]; act = a[np.abs(a) > .01]; a = a * (tgt / (np.sqrt((act ** 2).mean()) + 1e-9)); a = np.tanh(a * 1.2) / 1.2   # одинаковая громкость реплик, мягкий лимитер
     words = tts.word_times(txt, a, t)
     out.append(dict(who=who, start=round(t, 3), end=round(t + len(a) / SR, 3), text=txt, words=[[w, s, e, False] for w, s, e in words]))
     chunks.append(a); t += len(a) / SR
     print(f"  {i:2} {who:4} {out[-1]['start']:6.2f}–{out[-1]['end']:6.2f}  {txt[:55]}")
 tail = 2.6; chunks.append(np.zeros(int(tail * SR), np.float32)); DUR = t + tail
-voice = np.concatenate(chunks); voice = voice / (np.abs(voice).max() + 1e-9) * .92
+voice = np.concatenate(chunks); voice = voice / max(1, np.abs(voice).max() / .95)
 (ROOT / "data/meta.json").write_text(json.dumps(dict(duration=round(DUR, 2), lines=out, banner_start=round(banner_start, 2), banner_dur=BANNER_DUR), ensure_ascii=False))
 with wave.open(str(ROOT / "build/voice.wav"), "wb") as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((voice * 32767).astype(np.int16).tobytes())
 print(f"✔ {DUR:.1f} с, баннер с {banner_start:.2f}")
