@@ -29,7 +29,7 @@ with wave.open(str(ROOT / "build/voice.wav")) as w: v = np.frombuffer(w.readfram
 voice = np.zeros(n); voice[:min(n, len(v))] = v[:n]
 tt = np.arange(n) / SR
 # напряжение 0..1 по ходу рассказа
-tens = np.interp(tt, [0, 14, 22, 45, 60, 66, 85, 93, 99, DUR], [.15, .3, .45, .8, .75, .5, .7, .9, 1.0, .6])
+tens = np.interp(tt, [0, S(2), S(5), S(9), S(12), M['cut'], S(13), S(15), S(17), S(18), DUR], [.15, .3, .5, .8, .85, .3, .45, .7, .9, 1.0, .6])
 # дрон и диссонансный «смычковый» пад
 drone = (np.sin(2 * np.pi * 55 * tt) + .8 * np.sin(2 * np.pi * 58.3 * tt + np.sin(tt * .3)) + .4 * np.sin(2 * np.pi * 110.4 * tt) + .25 * np.sin(2 * np.pi * 164.8 * tt * (1 + .004 * np.sin(tt * .7)))) * (.35 + .65 * tens) * .06
 pad = sum(np.sin(2 * np.pi * f * tt + k + np.sin(tt * (.2 + .05 * k))) for k, f in enumerate([220, 233.1, 311.1, 349.2])) * np.clip(tens - .35, 0, 1) * .014
@@ -64,7 +64,7 @@ for k, ts in enumerate(np.arange(S(11) + .5, re_ + .8, .24)): place(bandn(.14, 1
 def heart(t0, t1, bpm, g):
     ts_ = t0
     while ts_ < t1: place(thump(55, .22, 1.0), ts_, g); place(thump(48, .2, .7), ts_ + .19, g * .8); ts_ += 60 / bpm
-heart(S(9) + .6, S(12) + 1.5, 118, .5); heart(M["banner_start"], M["banner_start"] + 5.5, 92, .22); heart(S(13), E(15), 52, .35); heart(S(17) + 2, E(18) + .3, 100, .5)
+heart(S(9) + .6, S(12) + 1.5, 118, .5); [heart(b_, b_ + 5.5, 80, .2) for b_ in M['banners']]; heart(S(13), E(15), 52, .35); heart(S(17) + 2, E(18) + .3, 100, .5)
 # шлёпок и удар
 sT = S(8) + 3.5; place(add(bandn(.12, 3000, .8) * np.exp(-T(.12) * 40) * 2.2, thump(90, .3, 1.0)), sT, .9, pan=-.3)
 # пузырёк, свеча

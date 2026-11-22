@@ -210,7 +210,6 @@ function buildShots() {
   P(S(10), 'forest', [-5, 1.1, 3], [-.5, 1.0, 0], [0, 0, 0], .05);
   P(S(11), 'forest', [-4.5, 1.0, 1.3], [0, .9, 0], [0, 0, 0], .05);
   P(S(12) - .6, 'forest', [7, 1.1, .5], [0, 1.2, 0], [-.3, 0, 0], .05);
-  P(M.banner_start - .5, 'forest', [4.2, 1.0, 1.4], [0, 1.0, 0], [-.4, .1, -.3], .05);
   P(S(13), 'dead', [-3.4, 2.2, 3.4], [-.6, 1.0, -1.2], [.2, 0, -.2], .02);
   P(S(14), 'dead', [-4.2, 2.6, -.4], [-3.6, 2.6, -3.5], [-.15, 0, -.3], .02);
   P(S(15) - .3, 'dead', [-3.2, 1.9, .6], [-1.8, 1.3, -1.2], [.3, 0, -.1], .02);
@@ -316,7 +315,7 @@ function render(t) {
   }
   capEl.innerHTML = html;
   document.getElementById('sfx').textContent = '';
-  const fade = document.getElementById('fade'); const fi = Math.max(1 - t / 1.2, 0); const fo = t > E(18) + .8 ? clamp((t - E(18) - .8) / .15) : 0; fade.style.opacity = Math.max(fi, fo);
+  const fade = document.getElementById('fade'); let fi = Math.max(1 - t / 1.2, 0); if (t > M.cut - .8) fi = Math.max(fi, clamp((t - (M.cut - .8)) / .8)); if (t > M.part2_start - .2) fi = t < M.part2_start ? 1 : Math.max(fi * 0, clamp(1 - (t - M.part2_start) / .8)) ; const fo = t > E(18) + .8 ? clamp((t - E(18) - .8) / .15) : 0; fade.style.opacity = Math.max(fi, fo);
   return true;
 }
 function speak(who, t) { for (const l of M.lines) if (l.who === who && t >= l.start && t <= l.end) return .3 + .7 * Math.abs(Math.sin(t * 15 + l.start)); return 0; }
