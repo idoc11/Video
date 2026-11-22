@@ -55,7 +55,7 @@ dT = S(6) + 1.9; place(add(thump(45, .9, 1.8), bandn(.5, 1200, .8) * np.exp(-T(.
 for i, l in enumerate(M["lines"]):
     if l["who"] != "wit": continue
     a, b = int(l["start"] * SR), int(l["end"] * SR); seg = voice[a:b][::-1]
-    place(seg * .35, l["start"] - .15, 1.0, pan=-.6); place(np.roll(seg, 4000) * .25, l["start"] + .05, 1.0, pan=.6)
+    place(seg * .10, l["start"] - .25, 1.0, pan=-.6)
 # шаги по листьям + шаги «невидимого»
 rs = S(10) + .5; re_ = S(12) - .5
 for k, ts in enumerate(np.arange(rs, re_, .24)): place(add(bandn(.12, 1800, 1.0) * np.exp(-T(.12) * 25) * 1.2, thump(110, .1, .4)), ts, .35, pan=.2 * (-1) ** k)
@@ -90,7 +90,7 @@ revL = fftconvolve(L, ir, "full")[:n] * .045; revR = fftconvolve(R, ir[::-1], "f
 bg = np.stack([L + revL, R + revR], 1)
 ve = np.sqrt(np.convolve(voice ** 2, np.ones(3000) / 3000, mode="same")); env = np.clip(ve / .08, 0, 1)
 bg *= (1 - .45 * env)[:, None]
-vr = fftconvolve(voice, ir[:int(.9 * SR)], "full")[:n] * .03
+vr = np.zeros(n)
 out = bg + np.stack([voice + vr, voice + vr], 1) * 1.2; out = out / (np.abs(out).max() + 1e-9) * .93
 with wave.open(str(ROOT / "build/audio.wav"), "wb") as w: w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((out * 32767).astype(np.int16).tobytes())
 print(f"✔ audio.wav {DUR:.1f} с")

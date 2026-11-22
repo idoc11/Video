@@ -179,7 +179,7 @@ function buildYard() {
 window.init = async function () {
   M = await (await fetch('/bellwitch/data/meta.json')).json(); await document.fonts.load('900 70px Mont', 'АБВ ёЁ');
   R_ = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, preserveDrawingBuffer: true });
-  R_.setSize(1080, 1920, false); R_.toneMapping = THREE.ACESFilmicToneMapping; R_.toneMappingExposure = 1.55; R_.outputColorSpace = THREE.SRGBColorSpace; R_.shadowMap.enabled = true; R_.shadowMap.type = THREE.PCFSoftShadowMap;
+  R_.setSize(1080, 1920, false); R_.toneMapping = THREE.ACESFilmicToneMapping; R_.toneMappingExposure = 1.75; R_.outputColorSpace = THREE.SRGBColorSpace; R_.shadowMap.enabled = true; R_.shadowMap.type = THREE.PCFSoftShadowMap;
   scene = new THREE.Scene(); scene.background = new THREE.Color('#070a12'); scene.fog = new THREE.FogExp2('#0a0f1a', .03);
   cam = new THREE.PerspectiveCamera(34, 1080 / 1920, .1, 300);
   scene.add(new THREE.HemisphereLight('#6a7aaa', '#2a2018', 1.25));

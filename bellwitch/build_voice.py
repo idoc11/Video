@@ -5,9 +5,9 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent; sys.path.insert(0, str(ROOT.parent / "engine"))
 import tts
 SR = 44100
-NARR = dict(speaker="ruslan", ls=1.08, pitch=.86, range=1.5, humanize=True, fx="air")                 # низкий документальный голос
-BET = dict(speaker="irina", ls=.95, pitch=1.3, range=2.2, humanize=True)                              # испуганная девочка
-WIT = dict(speaker="irina", ls=1.35, pitch=.5, range=1.1, fx="reverb", ns=.9, nw=1.0)                 # шёпот ведьмы: низко, медленно, с эхом
+NARR = dict(speaker="ruslan", ls=1.02, pitch=.88, range=1.5)                 # низкий документальный голос
+BET = dict(speaker="irina", ls=.92, pitch=1.3, range=2.2)                              # испуганная девочка
+WIT = dict(speaker="irina", ls=1.2, pitch=.55, range=1.2)                 # шёпот ведьмы: низко, медленно, с эхом
 L = [  # кто, голос, текст, мат-приставки, пауза перед репликой
     ("narr", NARR, "Теннесси. Тысяча восемьсот семнадцатый год. Ферма Джона Белла.", [], .6),
     ("narr", NARR, "Однажды вечером Джон увидел на поле странное существо. Собаку с телом кролика. Он выстрелил.", [], .7),
